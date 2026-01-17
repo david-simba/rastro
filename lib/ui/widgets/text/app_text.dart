@@ -33,7 +33,7 @@ class AppText extends StatelessWidget {
       maxLines: maxLines,
       overflow: overflow,
       style: baseStyle.copyWith(
-        fontWeight: bold ? FontWeight.bold : baseStyle.fontWeight,
+        fontWeight: bold ? FontWeight.w500 : baseStyle.fontWeight,
         color: color ?? baseStyle.color,
       ),
     );

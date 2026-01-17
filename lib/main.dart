@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:rastro/ui/widgets/text/app_text.dart';
+import 'package:rastro/ui/widgets/text/index.dart';
+import 'package:rastro/ui/widgets/text_field/app_text_field.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 import 'package:rastro/ui/widgets/button/index.dart';
@@ -40,70 +43,71 @@ class HomeView extends ConsumerWidget {
     final String value = ref.watch(helloWorldProvider);
 
     return Scaffold(
-      appBar: AppBar(title: const Text('Rastro UI')),
       body: Padding(
         padding: const EdgeInsets.all(20.0),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            AppButton(
-              text: "Mostrar Error",
-              variant: ButtonVariant.danger,
-              onPressed: () {
-                AppToast.show(
-                  context,
-                  title: "Error",
-                  message: "Opps! Something went wrong.",
-                  variant: ToastVariant.error,
-                );
-              },
-            ),
-            const SizedBox(height: 10),
-
-            AppButton(
-              text: "Mostrar Warning",
-              variant: ButtonVariant.black,
-              bold: false,
-              onPressed: () {
-                AppToast.show(
-                  context,
-                  title: "Warning",
-                  message: "Please check your connection.",
-                  variant: ToastVariant.warning,
-                );
-              },
-            ),
-            const SizedBox(height: 10),
-
-            AppButton(
-              text: "Mostrar Success",
-              variant: ButtonVariant.primary,
-              onPressed: () {
-                AppToast.show(
-                  context,
-                  title: "Success",
-                  message: value,
-                  variant: ToastVariant.success,
-                );
-              },
-            ),
-            const SizedBox(height: 10),
-
-            AppButton(
-              text: "Mostrar info",
-              variant: ButtonVariant.primary,
-              onPressed: () {
-                AppToast.show(
-                  context,
-                  title: "Success",
-                  message: value,
-                  variant: ToastVariant.info,
-                );
-              },
-            ),
-          ],
+        child: SingleChildScrollView(
+          child: ConstrainedBox(
+          constraints: BoxConstraints(
+          minHeight: MediaQuery.of(context).size.height - 40,
         ),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            mainAxisSize: MainAxisSize.max,
+            children: [
+              AppText(
+                "Rastro Example Form UI",
+                variant: TextVariant.title,
+              ),
+              SizedBox(height: 30,),
+              AppTextField(
+                label: value,
+                hint: value,
+              ),
+              SizedBox(height: 20,),
+              AppTextField(
+                label: "Correo electronico",
+                hint: "Hola",
+                keyboardType: TextInputType.numberWithOptions(),
+              ),
+              SizedBox(height: 20),
+              Row(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Expanded(
+                    child: AppTextField(
+                      label: "Correo electronico",
+                      hint: "Hola",
+                      errorText: "Error",
+                    ),
+                  ),
+                  const SizedBox(width: 10),
+                  Expanded(
+                    child: AppTextField(
+                      label: "Contraseña",
+                      hint: "Hola",
+                    ),
+                  ),
+                ],
+              ),
+              SizedBox(height: 20),
+              AppTextField(
+                label: "Password",
+                hint: "12312",
+                obscureText: true,
+                maxLines: 1,
+              ),
+              SizedBox(height: 20),
+              AppButton(
+                  text: "Submit",
+                  variant: ButtonVariant.black,
+                  onPressed: () => {
+                    AppToast.show(context, title: "Value", message: value, variant: ToastVariant.error)
+                  })
+            ],
+          ),
+        )
       ),
-    );
+    ));
   }
 }

@@ -13,7 +13,7 @@ extension ToastVariantExtension on ToastVariant {
     ToastVariant.success: AppColors.success,
     ToastVariant.warning: AppColors.warning,
     ToastVariant.error: AppColors.danger,
-    ToastVariant.info: AppColors.info,
+    ToastVariant.info: AppColors.primary,
   };
 
   static final _iconMap = <ToastVariant, IconData>{
@@ -23,6 +23,6 @@ extension ToastVariantExtension on ToastVariant {
     ToastVariant.info: Icons.info,
   };
 
-  Color get color => _colorMap[this] ?? AppColors.info;
+  Color get color => _colorMap[this] ?? AppColors.primary;
   IconData get icon => _iconMap[this] ?? Icons.info;
 }
