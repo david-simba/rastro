@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:rastro/ui/widgets/text/index.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 part 'main.g.dart';
@@ -11,24 +12,42 @@ String helloWorld(Ref ref) {
 
 void main() {
   runApp(
-    ProviderScope(
+    const ProviderScope(
       child: MyApp(),
     ),
   );
 }
 
-class MyApp extends ConsumerWidget {
+class MyApp extends StatelessWidget {
   const MyApp({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return const MaterialApp(
+      debugShowCheckedModeBanner: false,
+      home: HomeView(),
+    );
+  }
+}
+
+class HomeView extends ConsumerWidget {
+  const HomeView({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final String value = ref.watch(helloWorldProvider);
 
-    return MaterialApp(
-      home: Scaffold(
-        appBar: AppBar(title: const Text('Quito Mobility')),
-        body: Center(
-          child: Text(value),
+    return Scaffold(
+      body: SizedBox(
+        width: double.infinity,
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            AppText("Rastro App", align: TextAlign.center, variant: TextVariant.title),
+            SizedBox(height: 10),
+            AppText(value, align: TextAlign.center),
+          ],
         ),
       ),
     );
