@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'index.dart';
+import 'text_variant.dart';
 
 class AppText extends StatelessWidget {
   final String text;
