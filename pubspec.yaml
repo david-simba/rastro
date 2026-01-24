@@ -14,6 +14,7 @@ dependencies:
   flutter_riverpod: ^3.1.0
   flutter_dotenv: ^6.0.0
   mapbox_maps_flutter: ^2.17.0
+  path_provider: ^2.1.5
 
 dev_dependencies:
   flutter_test:
@@ -26,6 +27,7 @@ flutter:
 
   assets:
     - .env.dev
+    - assets/models/
 
   fonts:
     - family: Poppins
