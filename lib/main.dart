@@ -6,7 +6,7 @@ import 'package:rastro/features/map/screens/map_screen.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  await dotenv.load(fileName: '.env.dev');
+  await dotenv.load(fileName: "assets/config/.env.dev");
   MapboxOptions.setAccessToken(dotenv.env['MAPBOX_ACCESS_TOKEN'] ?? '');
 
   runApp(
