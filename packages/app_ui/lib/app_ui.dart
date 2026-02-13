@@ -1,5 +1,6 @@
 export 'src/theme/colors.dart';
 export 'src/theme/typography.dart';
+export 'src/widgets/bottom_sheet/app_bottom_sheet.dart';
 export 'src/widgets/button/app_button.dart';
 export 'src/widgets/button/button_variant.dart';
 export 'src/widgets/text/app_text.dart';
