@@ -14,5 +14,10 @@ class MockLiveMapDataSource implements LiveMapDataSource {
   );
 
   @override
+  List<MapModel> get models => const [
+    MapModel(id: 'bus_24', latitude: -0.19954, longitude: -78.4925),
+  ];
+
+  @override
   double get zoom => 19;
 }

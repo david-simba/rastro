@@ -30,7 +30,7 @@ class MapboxLayerService {
               'type': 'Point',
               'coordinates': [position.lng, position.lat],
             },
-            'properties': {},
+            'properties': {'modelId': modelId},
           },
         ],
       };
