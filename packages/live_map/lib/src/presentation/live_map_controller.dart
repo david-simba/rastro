@@ -1,0 +1,49 @@
+import 'package:live_map/src/core/live_map_event.dart';
+import 'package:live_map/src/core/state/live_map_state.dart';
+import 'package:live_map/src/core/live_map_store.dart';
+
+class LiveMapController {
+  LiveMapStore? _store;
+
+  bool get isReady =>
+      _store != null && _store!.state.lifecycle != MapLifecycle.idle;
+
+  void bind(LiveMapStore store) {
+    _store = store;
+  }
+
+  // ---------------------------------------------------------------------------
+  // Original public API (backward-compatible)
+  // ---------------------------------------------------------------------------
+
+  Future<void> flyTo({
+    required double latitude,
+    required double longitude,
+    double? zoom,
+  }) async {
+    dispatch(CameraFlyTo(latitude: latitude, longitude: longitude, zoom: zoom));
+  }
+
+  // ---------------------------------------------------------------------------
+  // New capabilities
+  // ---------------------------------------------------------------------------
+
+  LiveMapState get state {
+    assert(_store != null, 'Controller not bound to store');
+    return _store!.state;
+  }
+
+  Stream<LiveMapState> get stateStream {
+    assert(_store != null, 'Controller not bound to store');
+    return _store!.stateStream;
+  }
+
+  Stream<T> select<T>(T Function(LiveMapState) selector) {
+    assert(_store != null, 'Controller not bound to store');
+    return _store!.select(selector);
+  }
+
+  void dispatch(LiveMapEvent event) {
+    _store?.dispatch(event);
+  }
+}
