@@ -8,7 +8,7 @@ import 'package:path_provider/path_provider.dart';
 
 import 'package:live_map/src/core/live_map_event.dart';
 import 'package:live_map/src/core/live_map_store.dart';
-import 'package:live_map/src/data/live_map_data_source.dart';
+import 'package:live_map/src/domain/types/map_types.dart';
 import 'package:live_map/src/infrastructure/mapbox_adapter.dart';
 
 class MapboxRenderer {

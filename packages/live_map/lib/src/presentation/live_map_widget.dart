@@ -3,11 +3,11 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:mapbox_maps_flutter/mapbox_maps_flutter.dart';
 
-import 'package:live_map/src/config/live_map_config.dart';
+import 'package:live_map/src/domain/types/map_types.dart';
+import 'package:live_map/src/domain/entities/live_map_config.dart';
 import 'package:live_map/src/core/live_map_event.dart';
 import 'package:live_map/src/core/state/live_map_state.dart';
 import 'package:live_map/src/core/live_map_store.dart';
-import 'package:live_map/src/data/live_map_data_source.dart';
 import 'package:live_map/src/infrastructure/mapbox_adapter.dart';
 import 'package:live_map/src/infrastructure/mapbox_renderer.dart';
 import 'package:live_map/src/modules/camera/camera_handler.dart';

@@ -1,4 +1,4 @@
-import 'package:live_map/src/data/live_map_data_source.dart';
+import 'package:live_map/src/domain/types/map_types.dart';
 
 enum ModelLayerStatus { none, loading, loaded, failed }
 

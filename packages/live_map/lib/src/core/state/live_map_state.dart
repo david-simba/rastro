@@ -1,5 +1,5 @@
-import 'package:live_map/src/config/live_map_config.dart';
-import 'package:live_map/src/data/live_map_data_source.dart';
+import 'package:live_map/src/domain/types/map_types.dart';
+import 'package:live_map/src/domain/entities/live_map_config.dart';
 
 import 'package:live_map/src/core/state/camera_state.dart';
 import 'package:live_map/src/core/state/lifecycle_state.dart';
@@ -19,7 +19,6 @@ class LiveMapState {
   final MapStyleMode styleMode;
   final MapDimensionMode dimensionMode;
   final ModelConfig? modelConfig;
-  final LiveMapDataSource dataSource;
 
   const LiveMapState({
     required this.lifecycle,
@@ -29,25 +28,22 @@ class LiveMapState {
     required this.styleMode,
     required this.dimensionMode,
     this.modelConfig,
-    required this.dataSource,
   });
 
   factory LiveMapState.fromConfig(LiveMapConfig config) {
-    final ds = config.dataSource;
     return LiveMapState(
       lifecycle: MapLifecycle.idle,
       camera: CameraState(
-        latitude: ds.cameraPosition.latitude,
-        longitude: ds.cameraPosition.longitude,
-        zoom: ds.zoom,
+        latitude: config.initialLatitude,
+        longitude: config.initialLongitude,
+        zoom: config.initialZoom,
         pitch: config.dimensionMode == MapDimensionMode.threeD ? 65.0 : 0.0,
       ),
-      models: ModelsState(models: ds.models),
+      models: ModelsState(models: config.initialModels),
       tracking: const TrackingState(),
       styleMode: config.styleMode,
       dimensionMode: config.dimensionMode,
       modelConfig: config.modelConfig,
-      dataSource: ds,
     );
   }
 
@@ -59,7 +55,6 @@ class LiveMapState {
     MapStyleMode? styleMode,
     MapDimensionMode? dimensionMode,
     ModelConfig? Function()? modelConfig,
-    LiveMapDataSource? dataSource,
   }) {
     return LiveMapState(
       lifecycle: lifecycle ?? this.lifecycle,
@@ -69,7 +64,6 @@ class LiveMapState {
       styleMode: styleMode ?? this.styleMode,
       dimensionMode: dimensionMode ?? this.dimensionMode,
       modelConfig: modelConfig != null ? modelConfig() : this.modelConfig,
-      dataSource: dataSource ?? this.dataSource,
     );
   }
 
@@ -83,8 +77,7 @@ class LiveMapState {
           tracking == other.tracking &&
           styleMode == other.styleMode &&
           dimensionMode == other.dimensionMode &&
-          modelConfig == other.modelConfig &&
-          dataSource == other.dataSource;
+          modelConfig == other.modelConfig;
 
   @override
   int get hashCode => Object.hash(
@@ -95,6 +88,5 @@ class LiveMapState {
         styleMode,
         dimensionMode,
         modelConfig,
-        dataSource,
       );
 }

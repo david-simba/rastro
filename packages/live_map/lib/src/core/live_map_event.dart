@@ -1,5 +1,4 @@
-import 'package:live_map/src/config/live_map_config.dart';
-import 'package:live_map/src/data/live_map_data_source.dart';
+import 'package:live_map/src/domain/types/map_types.dart';
 
 sealed class LiveMapEvent {
   const LiveMapEvent();

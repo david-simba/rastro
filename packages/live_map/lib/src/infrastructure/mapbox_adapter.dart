@@ -1,5 +1,5 @@
 import 'package:mapbox_maps_flutter/mapbox_maps_flutter.dart';
-import 'package:live_map/src/config/live_map_config.dart';
+import 'package:live_map/src/domain/types/map_types.dart';
 
 class MapboxAdapter {
   MapboxMap? _map;

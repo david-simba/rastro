@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:app_ui/app_ui.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
@@ -16,8 +18,15 @@ Future<void> main() async {
   );
 }
 
-class HomePage extends StatelessWidget {
+class HomePage extends StatefulWidget {
   const HomePage({super.key});
+
+  @override
+  State<HomePage> createState() => _HomePageState();
+}
+
+class _HomePageState extends State<HomePage> {
+  final _controller = LiveMapController();
 
   @override
   Widget build(BuildContext context) {
@@ -31,15 +40,21 @@ class HomePage extends StatelessWidget {
             scale: [2.5, 2.5, 2.5],
             rotation: [0, 0, 112],
           ),
-          dataSource: MockLiveMapDataSource(),
+          initialLatitude: -0.1994,
+          initialLongitude: -78.4925,
+          initialZoom: 19,
+          initialModels: [
+            MapModel(id: 'bus-1', latitude: -0.19954, longitude: -78.4925),
+          ],
         ),
+        controller: _controller,
         onModelTap: (model) {
           AppBottomSheet.show(
             context: context,
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                AppText(model.id, bold: true,),
+                AppText(model.id, bold: true),
                 const SizedBox(height: 8),
               ],
             ),

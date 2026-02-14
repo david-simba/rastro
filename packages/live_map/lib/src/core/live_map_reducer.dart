@@ -1,7 +1,6 @@
-import 'package:live_map/src/config/live_map_config.dart';
+import 'package:live_map/src/domain/types/map_types.dart';
 import 'package:live_map/src/core/live_map_event.dart';
 import 'package:live_map/src/core/state/live_map_state.dart';
-import 'package:live_map/src/data/live_map_data_source.dart';
 
 LiveMapState liveMapReducer(LiveMapState state, LiveMapEvent event) {
   return switch (event) {
