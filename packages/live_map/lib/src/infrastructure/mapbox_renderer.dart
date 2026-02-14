@@ -61,6 +61,9 @@ class MapboxRenderer {
     try {
       await _adapter.updateStyleAppearance(state.styleMode);
       await _adapter.hideDefaultLayers();
+      if (state.waypoints.isNotEmpty) {
+        await _adapter.drawWaypoints(state.waypoints);
+      }
     } catch (e) {
       debugPrint('MapboxRenderer: error applying initial style config: $e');
     }

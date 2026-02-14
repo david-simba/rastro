@@ -1,9 +1,9 @@
-import 'dart:async';
-
 import 'package:app_ui/app_ui.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:live_map/live_map.dart';
+
+import 'package:rastro/services/simulation_service.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -27,6 +27,20 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   final _controller = LiveMapController();
+  late final MovementSimulationService _simulation;
+
+  @override
+  void initState() {
+    super.initState();
+    _simulation = MovementSimulationService(_controller);
+    _simulation.start();
+  }
+
+  @override
+  void dispose() {
+    _simulation.stop();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -34,18 +48,23 @@ class _HomePageState extends State<HomePage> {
       body: LiveMapWidget(
         config: LiveMapConfig(
           styleMode: MapStyleMode.day,
-          dimensionMode: MapDimensionMode.threeD,
+          dimensionMode: MapDimensionMode.twoD,
           modelConfig: ModelConfig(
             modelPath: 'assets/models/bus.glb',
             scale: [2.5, 2.5, 2.5],
             rotation: [0, 0, 112],
           ),
-          initialLatitude: -0.1994,
-          initialLongitude: -78.4925,
+          initialLatitude: -0.1996,
+          initialLongitude: -78.4930,
           initialZoom: 19,
           initialModels: [
-            MapModel(id: 'bus-1', latitude: -0.19954, longitude: -78.4925),
+            MapModel(
+              id: 'bus-1',
+              latitude: -0.1996,
+              longitude: -78.4930,
+            ),
           ],
+          waypoints: MovementSimulationService.waypoints,
         ),
         controller: _controller,
         onModelTap: (model) {

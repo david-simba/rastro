@@ -19,6 +19,7 @@ class LiveMapState {
   final MapStyleMode styleMode;
   final MapDimensionMode dimensionMode;
   final ModelConfig? modelConfig;
+  final List<MapModel> waypoints;
 
   const LiveMapState({
     required this.lifecycle,
@@ -28,6 +29,7 @@ class LiveMapState {
     required this.styleMode,
     required this.dimensionMode,
     this.modelConfig,
+    this.waypoints = const [],
   });
 
   factory LiveMapState.fromConfig(LiveMapConfig config) {
@@ -44,6 +46,7 @@ class LiveMapState {
       styleMode: config.styleMode,
       dimensionMode: config.dimensionMode,
       modelConfig: config.modelConfig,
+      waypoints: config.waypoints,
     );
   }
 
@@ -55,6 +58,7 @@ class LiveMapState {
     MapStyleMode? styleMode,
     MapDimensionMode? dimensionMode,
     ModelConfig? Function()? modelConfig,
+    List<MapModel>? waypoints,
   }) {
     return LiveMapState(
       lifecycle: lifecycle ?? this.lifecycle,
@@ -64,6 +68,7 @@ class LiveMapState {
       styleMode: styleMode ?? this.styleMode,
       dimensionMode: dimensionMode ?? this.dimensionMode,
       modelConfig: modelConfig != null ? modelConfig() : this.modelConfig,
+      waypoints: waypoints ?? this.waypoints,
     );
   }
 
@@ -77,7 +82,8 @@ class LiveMapState {
           tracking == other.tracking &&
           styleMode == other.styleMode &&
           dimensionMode == other.dimensionMode &&
-          modelConfig == other.modelConfig;
+          modelConfig == other.modelConfig &&
+          waypoints == other.waypoints;
 
   @override
   int get hashCode => Object.hash(
@@ -88,5 +94,6 @@ class LiveMapState {
         styleMode,
         dimensionMode,
         modelConfig,
+        Object.hashAll(waypoints),
       );
 }

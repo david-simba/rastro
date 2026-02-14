@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:mapbox_maps_flutter/mapbox_maps_flutter.dart';
 import 'package:live_map/src/domain/types/map_types.dart';
 
@@ -79,6 +81,44 @@ class MapboxAdapter {
         ..modelType = ModelType.COMMON_3D
         ..modelScale = scale
         ..modelRotation = rotation,
+    );
+  }
+
+  // ---------------------------------------------------------------------------
+  // Waypoints
+  // ---------------------------------------------------------------------------
+
+  Future<void> drawWaypoints(List<MapModel> waypoints) async {
+    final map = _map;
+    if (map == null || waypoints.isEmpty) return;
+
+    const sourceId = 'waypoints-source';
+    const layerId = 'waypoints-layer';
+
+    if (await sourceExists(sourceId)) return;
+
+    final geoJson = jsonEncode({
+      'type': 'FeatureCollection',
+      'features': waypoints.map((w) => {
+        'type': 'Feature',
+        'geometry': {
+          'type': 'Point',
+          'coordinates': [w.longitude, w.latitude],
+        },
+        'properties': {'id': w.id},
+      }).toList(),
+    });
+
+    await addGeoJsonSource(sourceId, geoJson);
+
+    if (await layerExists(layerId)) return;
+
+    await map.style.addLayer(
+      CircleLayer(id: layerId, sourceId: sourceId)
+        ..circleRadius = 6.0
+        ..circleColor = 0xFF6B7280
+        ..circleStrokeWidth = 2.0
+        ..circleStrokeColor = 0xFFFFFFFF,
     );
   }
 

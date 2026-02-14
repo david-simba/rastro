@@ -20,6 +20,7 @@ class LiveMapConfig {
   final double initialLongitude;
   final double initialZoom;
   final List<MapModel> initialModels;
+  final List<MapModel> waypoints;
 
   const LiveMapConfig({
     required this.styleMode,
@@ -29,5 +30,6 @@ class LiveMapConfig {
     required this.initialLongitude,
     this.initialZoom = 15.0,
     this.initialModels = const [],
+    this.waypoints = const [],
   });
 }
