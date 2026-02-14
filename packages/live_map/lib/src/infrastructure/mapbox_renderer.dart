@@ -8,6 +8,7 @@ import 'package:path_provider/path_provider.dart';
 
 import 'package:live_map/src/core/live_map_event.dart';
 import 'package:live_map/src/core/live_map_store.dart';
+import 'package:live_map/src/data/live_map_data_source.dart';
 import 'package:live_map/src/infrastructure/mapbox_adapter.dart';
 
 class MapboxRenderer {
@@ -56,16 +57,12 @@ class MapboxRenderer {
 
     try {
       final modelUrl = await _loadModelToTempFile(modelConfig.modelPath);
-      final ds = state.dataSource;
 
       if (await _adapter.sourceExists(_sourceId)) return;
 
       await _adapter.addStyleModel('model', modelUrl);
 
-      final geoJson = _buildModelGeoJson(
-        ds.modelPosition.longitude,
-        ds.modelPosition.latitude,
-      );
+      final geoJson = _buildModelGeoJson(state.models.models);
       await _adapter.addGeoJsonSource(_sourceId, geoJson);
 
       if (await _adapter.layerExists(_layerId)) return;
@@ -118,19 +115,19 @@ class MapboxRenderer {
   // Helpers
   // ---------------------------------------------------------------------------
 
-  String _buildModelGeoJson(double longitude, double latitude) {
+  String _buildModelGeoJson(List<MapModel> models) {
     final geoJson = {
       'type': 'FeatureCollection',
-      'features': [
-        {
+      'features': models.map((m) {
+        return {
           'type': 'Feature',
           'geometry': {
             'type': 'Point',
-            'coordinates': [longitude, latitude],
+            'coordinates': [m.longitude, m.latitude],
           },
-          'properties': {'modelId': 'model'},
-        },
-      ],
+          'properties': {'modelId': m.id},
+        };
+      }).toList(),
     };
     return jsonEncode(geoJson);
   }

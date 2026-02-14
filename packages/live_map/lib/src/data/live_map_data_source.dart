@@ -22,7 +22,6 @@ class MapModel {
 
 abstract class LiveMapDataSource {
   MapPosition get cameraPosition;
-  MapPosition get modelPosition;
   List<MapModel> get models;
   double get zoom;
 }
