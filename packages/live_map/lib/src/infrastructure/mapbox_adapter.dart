@@ -1,4 +1,5 @@
 import 'package:mapbox_maps_flutter/mapbox_maps_flutter.dart';
+import 'package:live_map/src/config/live_map_config.dart';
 
 class MapboxAdapter {
   MapboxMap? _map;
@@ -6,10 +7,6 @@ class MapboxAdapter {
   void bind(MapboxMap map) {
     _map = map;
   }
-
-  // ---------------------------------------------------------------------------
-  // Camera
-  // ---------------------------------------------------------------------------
 
   void flyTo(double lat, double lng, double? zoom) {
     final map = _map;
@@ -35,19 +32,11 @@ class MapboxAdapter {
     );
   }
 
-  // ---------------------------------------------------------------------------
-  // Style models
-  // ---------------------------------------------------------------------------
-
   Future<void> addStyleModel(String modelId, String modelUrl) async {
     final map = _map;
     if (map == null) return;
     await map.style.addStyleModel(modelId, modelUrl);
   }
-
-  // ---------------------------------------------------------------------------
-  // Sources
-  // ---------------------------------------------------------------------------
 
   Future<bool> sourceExists(String sourceId) async {
     final map = _map;
@@ -68,10 +57,6 @@ class MapboxAdapter {
     if (map == null) return;
     await map.style.setStyleSourceProperty(sourceId, 'data', geoJson);
   }
-
-  // ---------------------------------------------------------------------------
-  // Layers
-  // ---------------------------------------------------------------------------
 
   Future<bool> layerExists(String layerId) async {
     final map = _map;
@@ -97,9 +82,42 @@ class MapboxAdapter {
     );
   }
 
-  // ---------------------------------------------------------------------------
-  // Lifecycle
-  // ---------------------------------------------------------------------------
+  // TODO: Integrate with a time-service or Location
+  Future<void> updateStyleAppearance(MapStyleMode mode) async {
+    final map = _map;
+    if (map == null) return;
+
+    await map.style.setStyleTransition(
+      TransitionOptions(duration: 500, delay: 0),
+    );
+
+    final theme = mode == MapStyleMode.day ? 'day' : 'night';
+    await map.style.setStyleImportConfigProperty(
+      'basemap',
+      'lightPreset',
+      theme,
+    );
+  }
+
+  Future<void> hideDefaultLayers() async {
+    final map = _map;
+    if (map == null) return;
+    await map.style.setStyleImportConfigProperty(
+      'basemap',
+      'showPointOfInterestLabels',
+      false,
+    );
+    await map.style.setStyleImportConfigProperty(
+      'basemap',
+      'showRoadLabels',
+      true,
+    );
+    await map.style.setStyleImportConfigProperty(
+      'basemap',
+      'showPlaceLabels',
+      true,
+    );
+  }
 
   void dispose() {
     _map = null;

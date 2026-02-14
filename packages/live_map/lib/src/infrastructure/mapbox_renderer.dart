@@ -32,6 +32,12 @@ class MapboxRenderer {
     _subscriptions.add(
       _store.eventBus.on<TrackingPositionReceived>(_onTrackingPositionReceived),
     );
+    _subscriptions.add(
+      _store.eventBus.on<MapStyleLoaded>(_onMapStyleLoaded),
+    );
+    _subscriptions.add(
+      _store.eventBus.on<StyleModeChanged>(_onStyleModeChanged),
+    );
   }
 
   // ---------------------------------------------------------------------------
@@ -44,6 +50,28 @@ class MapboxRenderer {
 
   void _onCameraMoveTo(CameraMoveTo event) {
     _adapter.easeTo(event.latitude, event.longitude, event.zoom);
+  }
+
+  // ---------------------------------------------------------------------------
+  // Style appearance
+  // ---------------------------------------------------------------------------
+
+  Future<void> _onMapStyleLoaded(MapStyleLoaded event) async {
+    final state = _store.state;
+    try {
+      await _adapter.updateStyleAppearance(state.styleMode);
+      await _adapter.hideDefaultLayers();
+    } catch (e) {
+      debugPrint('MapboxRenderer: error applying initial style config: $e');
+    }
+  }
+
+  Future<void> _onStyleModeChanged(StyleModeChanged event) async {
+    try {
+      await _adapter.updateStyleAppearance(event.styleMode);
+    } catch (e) {
+      debugPrint('MapboxRenderer: error updating style appearance: $e');
+    }
   }
 
   // ---------------------------------------------------------------------------
