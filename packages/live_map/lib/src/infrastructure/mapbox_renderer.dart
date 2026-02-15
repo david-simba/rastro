@@ -52,7 +52,12 @@ class MapboxRenderer {
   }
 
   void _onCameraMoveTo(CameraMoveTo event) {
-    _adapter.easeTo(event.latitude, event.longitude, event.zoom);
+    _adapter.easeTo(
+      event.latitude,
+      event.longitude,
+      event.zoom,
+      bearing: event.bearing,
+    );
   }
 
   // ---------------------------------------------------------------------------
@@ -142,7 +147,7 @@ class MapboxRenderer {
             'type': 'Point',
             'coordinates': [m.longitude, m.latitude],
           },
-          'properties': {'modelId': m.id},
+          'properties': {'modelId': m.id, 'modelBearing': m.bearing},
         };
       }).toList(),
     };
@@ -168,7 +173,7 @@ class MapboxRenderer {
             'type': 'Point',
             'coordinates': [m.longitude, m.latitude],
           },
-          'properties': {'modelId': m.id},
+          'properties': {'modelId': m.id, 'modelBearing': m.bearing},
         };
       }).toList(),
     };

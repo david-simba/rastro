@@ -40,11 +40,13 @@ final class CameraMoveTo extends LiveMapEvent {
   final double latitude;
   final double longitude;
   final double? zoom;
+  final double? bearing;
 
   const CameraMoveTo({
     required this.latitude,
     required this.longitude,
     this.zoom,
+    this.bearing,
   });
 }
 
@@ -121,11 +123,13 @@ final class TrackingPositionReceived extends LiveMapEvent {
   final String modelId;
   final double latitude;
   final double longitude;
+  final double bearing;
 
   const TrackingPositionReceived({
     required this.modelId,
     required this.latitude,
     required this.longitude,
+    this.bearing = 0.0,
   });
 }
 

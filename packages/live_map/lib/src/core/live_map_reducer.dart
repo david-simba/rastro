@@ -72,8 +72,9 @@ LiveMapState liveMapReducer(LiveMapState state, LiveMapEvent event) {
       :final modelId,
       :final latitude,
       :final longitude,
+      :final bearing,
     ) =>
-      _updateModelPosition(state, modelId, latitude, longitude),
+      _updateModelPosition(state, modelId, latitude, longitude, bearing),
 
     // Config
     StyleModeChanged(:final styleMode) =>
@@ -92,10 +93,16 @@ LiveMapState _updateModelPosition(
   String modelId,
   double latitude,
   double longitude,
+  double bearing,
 ) {
   final updatedModels = state.models.models.map((m) {
     if (m.id == modelId) {
-      return MapModel(id: m.id, latitude: latitude, longitude: longitude);
+      return MapModel(
+        id: m.id,
+        latitude: latitude,
+        longitude: longitude,
+        bearing: bearing,
+      );
     }
     return m;
   }).toList();

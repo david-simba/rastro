@@ -83,7 +83,7 @@ class _MyAppState extends State<MyApp> {
           modelConfig: ModelConfig(
             modelPath: 'assets/models/bus.glb',
             scale: [2.5, 2.5, 2.5],
-            rotation: [0, 0, 112],
+            rotation: [0, 0, 0],
           ),
           initialLatitude: -0.1987990,
           initialLongitude: -78.4982523,

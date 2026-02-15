@@ -8,11 +8,13 @@ class MapModel {
   final String id;
   final double latitude;
   final double longitude;
+  final double bearing;
 
   const MapModel({
     required this.id,
     required this.latitude,
     required this.longitude,
+    this.bearing = 0.0,
   });
 
   bool isNear(double lat, double lng, {double threshold = defaultThreshold}) {

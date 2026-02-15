@@ -4,6 +4,13 @@ import 'package:mapbox_maps_flutter/mapbox_maps_flutter.dart';
 import 'package:live_map/src/domain/types/map_types.dart';
 
 class MapboxAdapter {
+  // Offset (degrees) added to the data-driven bearing to compensate for GLB
+  // models whose "front" does not face geographic North (bearing 0).
+  // For example, if a bus.glb asset faces East by default, set this to 270
+  // so that a 0° bearing (North) renders correctly.
+  // Adjust this value if the model appears rotated after changing the GLB file.
+  static const double _kModelBearingOffset = 0.0;
+
   MapboxMap? _map;
 
   void bind(MapboxMap map) {
@@ -22,13 +29,14 @@ class MapboxAdapter {
     );
   }
 
-  void easeTo(double lat, double lng, double? zoom) {
+  void easeTo(double lat, double lng, double? zoom, {double? bearing}) {
     final map = _map;
     if (map == null) return;
     map.easeTo(
       CameraOptions(
         center: Point(coordinates: Position(lng, lat)),
         zoom: zoom,
+        bearing: bearing,
       ),
       null,
     );
@@ -79,8 +87,21 @@ class MapboxAdapter {
       ModelLayer(id: layerId, sourceId: sourceId)
         ..modelId = modelId
         ..modelType = ModelType.COMMON_3D
-        ..modelScale = scale
-        ..modelRotation = rotation,
+        ..modelScale = scale,
+    );
+
+    // Data-driven Z rotation: absolute bearing from each feature's
+    // 'modelBearing' property, plus a static offset that corrects for the
+    // GLB asset's default facing direction (_kModelBearingOffset).
+    // rotation[0] and rotation[1] are the static X/Y tilt from ModelConfig.
+    await map.style.setStyleLayerProperty(
+      layerId,
+      'model-rotation',
+      [
+        rotation[0],
+        rotation[1],
+        ['+', ['get', 'modelBearing'], _kModelBearingOffset, 180],
+      ],
     );
   }
 
