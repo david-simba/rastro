@@ -14,6 +14,9 @@ Future<void> main() async {
     MaterialApp(
       debugShowCheckedModeBanner: true,
       home: const HomePage(),
+      theme: ThemeData(
+        fontFamily: 'Poppins',
+      ),
     ),
   );
 }
