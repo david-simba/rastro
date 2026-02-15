@@ -5,15 +5,23 @@ import 'package:live_map/live_map.dart';
 
 import 'package:rastro/services/simulation_service.dart';
 
+import 'app_config.dart';
+
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await dotenv.load(fileName: "assets/config/.env.dev");
-  LiveMapWidget.setAccessToken(dotenv.env['MAPBOX_ACCESS_TOKEN'] ?? '');
+
+  final config = AppConfig(
+    appEnv: dotenv.env['APP_ENV'] ?? 'development',
+    mapboxToken: dotenv.env['MAPBOX_ACCESS_TOKEN'] ?? '',
+  );
+
+  LiveMapWidget.setAccessToken(config.mapboxToken);
 
   runApp(
     MaterialApp(
-      debugShowCheckedModeBanner: true,
-      home: const HomePage(),
+      debugShowCheckedModeBanner: !config.isProduction,
+      home: MyApp(config: config),
       theme: ThemeData(
         fontFamily: 'Poppins',
       ),
@@ -21,14 +29,16 @@ Future<void> main() async {
   );
 }
 
-class HomePage extends StatefulWidget {
-  const HomePage({super.key});
+class MyApp extends StatefulWidget {
+  final AppConfig config;
+
+  const MyApp({super.key, required this.config});
 
   @override
-  State<HomePage> createState() => _HomePageState();
+  State<MyApp> createState() => _MyAppState();
 }
 
-class _HomePageState extends State<HomePage> {
+class _MyAppState extends State<MyApp> {
   final _controller = LiveMapController();
   late final MovementSimulationService _simulation;
   var _dimensionMode = MapDimensionMode.twoD;
@@ -107,11 +117,12 @@ class _HomePageState extends State<HomePage> {
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            AppFloatingButton(
-              onPressed: _showEventDebugSheet,
-              variant: ButtonVariant.black,
-              icon: Icons.bug_report,
-            ),
+            if (widget.config.isDevelopment)
+              AppFloatingButton(
+                onPressed: _showEventDebugSheet,
+                variant: ButtonVariant.black,
+                icon: Icons.bug_report,
+              ),
             AppFloatingButton(
               onPressed: _toggleDimension,
               variant: ButtonVariant.black,
