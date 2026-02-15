@@ -1,16 +1,17 @@
 import 'dart:async';
-import 'dart:convert';
-import 'dart:io';
 
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
-import 'package:path_provider/path_provider.dart';
+import 'package:flutter/scheduler.dart';
 
 import 'package:live_map/src/core/live_map_event.dart';
 import 'package:live_map/src/core/live_map_store.dart';
-import 'package:live_map/src/domain/types/map_types.dart';
 import 'package:live_map/src/infrastructure/mapbox_adapter.dart';
+import 'package:live_map/src/infrastructure/utils/asset_loader_service.dart';
+import 'package:live_map/src/infrastructure/utils/geojson_builder.dart';
+import 'package:live_map/src/infrastructure/utils/model_interpolator.dart';
 
+/// Wires [LiveMapStore] events to the [MapboxAdapter] and drives per-frame
+/// model interpolation via a [Ticker].
 class MapboxRenderer {
   final LiveMapStore _store;
   final MapboxAdapter _adapter;
@@ -19,28 +20,26 @@ class MapboxRenderer {
   static const String _sourceId = 'model-source';
   static const String _layerId = 'model-layer';
 
+  // Must match the simulation tick interval so each position jump is smoothly
+  // interpolated over the gap between ticks.
+  static const Duration _animDuration = Duration(milliseconds: 200);
+
+  late final Ticker _ticker;
+  Duration _lastTickElapsed = Duration.zero;
+  final Map<String, ModelInterpolator> _lerps = {};
+
   MapboxRenderer(this._store, this._adapter) {
-    _subscriptions.add(
+    _ticker = Ticker(_onAnimationTick);
+
+    _subscriptions.addAll([
       _store.eventBus.on<CameraFlyTo>(_onCameraFlyTo),
-    );
-    _subscriptions.add(
       _store.eventBus.on<CameraMoveTo>(_onCameraMoveTo),
-    );
-    _subscriptions.add(
       _store.eventBus.on<ModelLayerRequested>(_onModelLayerRequested),
-    );
-    _subscriptions.add(
       _store.eventBus.on<TrackingPositionReceived>(_onTrackingPositionReceived),
-    );
-    _subscriptions.add(
       _store.eventBus.on<MapStyleLoaded>(_onMapStyleLoaded),
-    );
-    _subscriptions.add(
       _store.eventBus.on<StyleModeChanged>(_onStyleModeChanged),
-    );
-    _subscriptions.add(
       _store.eventBus.on<DimensionModeChanged>(_onDimensionModeChanged),
-    );
+    ]);
   }
 
   // ---------------------------------------------------------------------------
@@ -61,7 +60,7 @@ class MapboxRenderer {
   }
 
   // ---------------------------------------------------------------------------
-  // Style appearance
+  // Style / Dimension
   // ---------------------------------------------------------------------------
 
   Future<void> _onMapStyleLoaded(MapStyleLoaded event) async {
@@ -85,13 +84,8 @@ class MapboxRenderer {
     }
   }
 
-  // ---------------------------------------------------------------------------
-  // Dimension mode
-  // ---------------------------------------------------------------------------
-
   void _onDimensionModeChanged(DimensionModeChanged event) {
-    final pitch = _store.state.camera.pitch;
-    _adapter.setPitch(pitch);
+    _adapter.setPitch(_store.state.camera.pitch);
   }
 
   // ---------------------------------------------------------------------------
@@ -104,13 +98,15 @@ class MapboxRenderer {
     if (modelConfig == null) return;
 
     try {
-      final modelUrl = await _loadModelToTempFile(modelConfig.modelPath);
+      final modelUrl = await AssetLoaderService.loadToTempFile(
+        modelConfig.modelPath,
+      );
 
       if (await _adapter.sourceExists(_sourceId)) return;
 
       await _adapter.addStyleModel('model', modelUrl);
 
-      final geoJson = _buildModelGeoJson(state.models.models);
+      final geoJson = ModelGeoJsonBuilder.fromModels(state.models.models);
       await _adapter.addGeoJsonSource(_sourceId, geoJson);
 
       if (await _adapter.layerExists(_layerId)) return;
@@ -131,65 +127,57 @@ class MapboxRenderer {
   }
 
   // ---------------------------------------------------------------------------
-  // Tracking
+  // Tracking – frame-level interpolation
   // ---------------------------------------------------------------------------
 
-  Future<void> _onTrackingPositionReceived(
-    TrackingPositionReceived event,
-  ) async {
-    final state = _store.state;
-    final geoJson = {
-      'type': 'FeatureCollection',
-      'features': state.models.models.map((m) {
-        return {
-          'type': 'Feature',
-          'geometry': {
-            'type': 'Point',
-            'coordinates': [m.longitude, m.latitude],
-          },
-          'properties': {'modelId': m.id, 'modelBearing': m.bearing},
-        };
-      }).toList(),
-    };
+  void _onTrackingPositionReceived(TrackingPositionReceived event) {
+    final existing = _lerps[event.modelId];
 
-    try {
-      await _adapter.updateSourceData(_sourceId, jsonEncode(geoJson));
-    } catch (e) {
-      debugPrint('MapboxRenderer: error updating model position: $e');
+    // Start a new lerp from the current rendered position (mid-animation or
+    // final) toward the just-received target.  On the very first event
+    // `existing` is null so from == to (instant snap).
+    _lerps[event.modelId] = ModelInterpolator(
+      fromLat: existing?.lat ?? event.latitude,
+      fromLng: existing?.lng ?? event.longitude,
+      fromBearing: existing?.bearing ?? event.bearing,
+      toLat: event.latitude,
+      toLng: event.longitude,
+      toBearing: event.bearing,
+      duration: _animDuration,
+    );
+
+    if (!_ticker.isActive) {
+      _lastTickElapsed = Duration.zero;
+      _ticker.start();
     }
   }
 
   // ---------------------------------------------------------------------------
-  // Helpers
+  // Animation tick (~60 fps)
   // ---------------------------------------------------------------------------
 
-  String _buildModelGeoJson(List<MapModel> models) {
-    final geoJson = {
-      'type': 'FeatureCollection',
-      'features': models.map((m) {
-        return {
-          'type': 'Feature',
-          'geometry': {
-            'type': 'Point',
-            'coordinates': [m.longitude, m.latitude],
-          },
-          'properties': {'modelId': m.id, 'modelBearing': m.bearing},
-        };
-      }).toList(),
-    };
-    return jsonEncode(geoJson);
-  }
+  void _onAnimationTick(Duration elapsed) {
+    final dt = elapsed - _lastTickElapsed;
+    _lastTickElapsed = elapsed;
 
-  static Future<String> _loadModelToTempFile(String assetPath) async {
-    final data = await rootBundle.load(assetPath);
-    final dir = await getTemporaryDirectory();
-    final fileName = assetPath.split('/').last;
-    final file = File('${dir.path}/$fileName');
-
-    if (!await file.exists()) {
-      await file.writeAsBytes(data.buffer.asUint8List());
+    bool anyActive = false;
+    for (final lerp in _lerps.values) {
+      if (!lerp.isDone) {
+        lerp.elapsed += dt;
+        anyActive = true;
+      }
     }
-    return 'file://${file.path}';
+
+    final geoJson = ModelGeoJsonBuilder.fromInterpolated(
+      _store.state.models.models,
+      _lerps,
+    );
+    _adapter.updateSourceData(_sourceId, geoJson);
+
+    if (!anyActive) {
+      _ticker.stop();
+      _lastTickElapsed = Duration.zero;
+    }
   }
 
   // ---------------------------------------------------------------------------
@@ -197,6 +185,8 @@ class MapboxRenderer {
   // ---------------------------------------------------------------------------
 
   void dispose() {
+    _ticker.dispose();
+    _lerps.clear();
     for (final sub in _subscriptions) {
       sub.cancel();
     }
