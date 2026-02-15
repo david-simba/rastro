@@ -1,9 +1,11 @@
+import 'package:live_map/src/domain/types/map_types.dart';
 import 'package:live_map/src/core/live_map_event.dart';
 import 'package:live_map/src/core/state/live_map_state.dart';
 import 'package:live_map/src/core/live_map_store.dart';
 
 class LiveMapController {
   LiveMapStore? _store;
+  List<LiveMapEvent> get eventHistory => _store?.eventHistory ?? [];
 
   bool get isReady =>
       _store != null && _store!.state.lifecycle != MapLifecycle.idle;
@@ -45,5 +47,9 @@ class LiveMapController {
 
   void dispatch(LiveMapEvent event) {
     _store?.dispatch(event);
+  }
+
+  void toggleDimensionMode(MapDimensionMode mode) {
+    dispatch(DimensionModeChanged(dimensionMode: mode));
   }
 }

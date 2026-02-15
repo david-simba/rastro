@@ -16,8 +16,12 @@ class LiveMapStore {
   final EventBus eventBus;
   final _stateController = StreamController<LiveMapState>.broadcast();
   final List<StoreMiddleware> _middlewares = [];
+  final List<LiveMapEvent> _eventHistory = [];
+  static const int _maxHistorySize = 20;
 
   LiveMapStore(this._state) : eventBus = EventBus();
+
+  List<LiveMapEvent> get eventHistory => List.unmodifiable(_eventHistory);
 
   LiveMapState get state => _state;
 
@@ -32,6 +36,11 @@ class LiveMapStore {
   }
 
   void dispatch(LiveMapEvent event) {
+    _eventHistory.insert(0, event);
+    if (_eventHistory.length > _maxHistorySize) {
+      _eventHistory.removeLast();
+    }
+
     final previous = _state;
     _state = liveMapReducer(_state, event);
 

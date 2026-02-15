@@ -26,7 +26,7 @@ class MovementSimulationService {
     _lat = waypoints[0].latitude;
     _lng = waypoints[0].longitude;
 
-    _timer = Timer.periodic(const Duration(milliseconds: 100), (_) {
+    _timer = Timer.periodic(const Duration(milliseconds: 200), (_) {
       _tick();
     });
   }

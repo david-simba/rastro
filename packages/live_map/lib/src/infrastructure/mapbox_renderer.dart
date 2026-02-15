@@ -38,6 +38,9 @@ class MapboxRenderer {
     _subscriptions.add(
       _store.eventBus.on<StyleModeChanged>(_onStyleModeChanged),
     );
+    _subscriptions.add(
+      _store.eventBus.on<DimensionModeChanged>(_onDimensionModeChanged),
+    );
   }
 
   // ---------------------------------------------------------------------------
@@ -75,6 +78,15 @@ class MapboxRenderer {
     } catch (e) {
       debugPrint('MapboxRenderer: error updating style appearance: $e');
     }
+  }
+
+  // ---------------------------------------------------------------------------
+  // Dimension mode
+  // ---------------------------------------------------------------------------
+
+  void _onDimensionModeChanged(DimensionModeChanged event) {
+    final pitch = _store.state.camera.pitch;
+    _adapter.setPitch(pitch);
   }
 
   // ---------------------------------------------------------------------------
