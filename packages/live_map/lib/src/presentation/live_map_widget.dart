@@ -10,10 +10,10 @@ import 'package:live_map/src/core/state/live_map_state.dart';
 import 'package:live_map/src/core/live_map_store.dart';
 import 'package:live_map/src/infrastructure/mapbox_adapter.dart';
 import 'package:live_map/src/infrastructure/mapbox_renderer.dart';
-import 'package:live_map/src/modules/camera/camera_handler.dart';
-import 'package:live_map/src/modules/interaction/interaction_handler.dart';
-import 'package:live_map/src/modules/model/model_handler.dart';
-import 'package:live_map/src/modules/tracking/tracking_handler.dart';
+import 'package:live_map/src/application/camera/camera_handler.dart';
+import 'package:live_map/src/application/interaction/interaction_handler.dart';
+import 'package:live_map/src/application/model/model_handler.dart';
+import 'package:live_map/src/application/tracking/tracking_handler.dart';
 import 'package:live_map/src/presentation/live_map_controller.dart';
 
 class LiveMapWidget extends StatefulWidget {
