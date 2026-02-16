@@ -20,26 +20,23 @@ class MapControls extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final notifier = ref.read(mapNotifierProvider.notifier);
 
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 16),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          if (showDebug)
-            AppFloatingButton(
-              onPressed: () => _showEventDebugSheet(context, notifier),
-              variant: ButtonVariant.black,
-              icon: Icons.bug_report,
-            ),
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      children: [
+        if (showDebug)
           AppFloatingButton(
-            onPressed: notifier.toggleDimension,
+            onPressed: () => _showEventDebugSheet(context, notifier),
             variant: ButtonVariant.black,
-            icon: dimensionMode == MapDimensionMode.twoD
-                ? Icons.threed_rotation_sharp
-                : Icons.layers,
+            icon: Icons.bug_report,
           ),
-        ],
-      ),
+        AppFloatingButton(
+          onPressed: notifier.toggleDimension,
+          variant: ButtonVariant.black,
+          icon: dimensionMode == MapDimensionMode.twoD
+              ? Icons.threed_rotation_sharp
+              : Icons.layers,
+        ),
+      ],
     );
   }
 

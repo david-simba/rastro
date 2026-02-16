@@ -29,13 +29,19 @@ class _MapScreenState extends ConsumerState<MapScreen> {
     final config = ref.watch(appConfigProvider);
     final mapState = ref.watch(mapNotifierProvider);
 
-    return Scaffold(
-      body: MapView(onModelTap: _showVehicleInfo),
-      floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
-      floatingActionButton: MapControls(
-        showDebug: config.isDevelopment,
-        dimensionMode: mapState.dimensionMode,
-      ),
+    return Stack(
+      children: [
+        MapView(onModelTap: _showVehicleInfo),
+        Positioned(
+          left: 16,
+          right: 16,
+          bottom: 16,
+          child: MapControls(
+            showDebug: config.isDevelopment,
+            dimensionMode: mapState.dimensionMode,
+          ),
+        ),
+      ],
     );
   }
 
