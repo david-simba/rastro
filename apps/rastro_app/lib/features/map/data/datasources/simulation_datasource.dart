@@ -17,6 +17,7 @@ class SimulationDatasource {
 
   final _controller = StreamController<VehiclePosition>.broadcast();
   Timer? _timer;
+  bool _isDisposed = false;
   int _currentIndex = 0;
   late double _lat;
   late double _lng;
@@ -24,6 +25,9 @@ class SimulationDatasource {
   Stream<VehiclePosition> get positionStream => _controller.stream;
 
   void start() {
+    if (_isDisposed) return;
+    if (_timer != null) return;
+
     _currentIndex = 0;
     _lat = routeWaypoints[0].latitude;
     _lng = routeWaypoints[0].longitude;
@@ -34,6 +38,8 @@ class SimulationDatasource {
   }
 
   void _tick() {
+    if (_isDisposed) return;
+
     final targetIndex = (_currentIndex + 1) % routeWaypoints.length;
     final target = routeWaypoints[targetIndex];
 
@@ -71,6 +77,8 @@ class SimulationDatasource {
   }
 
   void dispose() {
+    if (_isDisposed) return;
+    _isDisposed = true;
     stop();
     _controller.close();
   }

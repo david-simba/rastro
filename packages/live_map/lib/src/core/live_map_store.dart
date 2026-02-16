@@ -35,7 +35,11 @@ class LiveMapStore {
     _middlewares.add(middleware);
   }
 
+  bool get isClosed => _stateController.isClosed;
+
   void dispatch(LiveMapEvent event) {
+    if (_stateController.isClosed) return;
+
     _eventHistory.insert(0, event);
     if (_eventHistory.length > _maxHistorySize) {
       _eventHistory.removeLast();
