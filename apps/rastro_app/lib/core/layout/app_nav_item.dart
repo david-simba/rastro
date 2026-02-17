@@ -29,13 +29,13 @@ class NavItem extends StatelessWidget {
         duration: _duration,
         curve: _curve,
         alignment: Alignment.center,
-        padding: const EdgeInsets.symmetric(vertical: 8),
+        padding: const EdgeInsets.symmetric(horizontal: 10),
         margin: const EdgeInsets.all(4),
         decoration: BoxDecoration(
           color: isSelected ? activeColor : Colors.transparent,
           borderRadius: BorderRadius.circular(24),
         ),
-        child: Column(
+        child: Row(
           mainAxisSize: MainAxisSize.min,
           children: [
             AnimatedSwitcher(
@@ -49,18 +49,18 @@ class NavItem extends StatelessWidget {
                 color: isSelected ? Colors.white : inactiveColor,
               ),
             ),
-            const SizedBox(height: 4),
+            const SizedBox(width: 6),
             AnimatedDefaultTextStyle(
               duration: _duration,
               curve: _curve,
               style: TextStyle(
                 color: isSelected ? Colors.white : inactiveColor,
                 fontWeight: isSelected ? FontWeight.w600 : FontWeight.w400,
-                fontSize: 11,
+                fontSize: 12,
               ),
               child: AppText(
                 tab.label,
-                variant: TextVariant.caption,
+                variant: TextVariant.label,
                 color: isSelected ? Colors.white : inactiveColor,
                 bold: isSelected,
               ),

@@ -53,15 +53,15 @@ class _NavBarBackground extends StatelessWidget {
       child: BackdropFilter(
         filter: ImageFilter.blur(sigmaX: 24, sigmaY: 24),
         child: Container(
-          height: 64,
+          height: 56,
           decoration: BoxDecoration(
             gradient: LinearGradient(
               begin: Alignment.topLeft,
               end: Alignment.bottomCenter,
               colors: [
-                const Color(0xFFF2F2F2).withValues(alpha: 0.65),
+                const Color(0xFFFFFFEE).withValues(alpha: 0.65),
                 const Color(0xFFE6E6E6).withValues(alpha: 0.75),
-                const Color(0xFFF2F2F2).withValues(alpha: 0.65),
+                const Color(0xFFF2F2F2).withValues(alpha: 0.85),
               ],
             ),
             borderRadius: BorderRadius.circular(32),
