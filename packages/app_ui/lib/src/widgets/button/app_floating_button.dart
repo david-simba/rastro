@@ -24,6 +24,7 @@ class AppFloatingButton extends StatelessWidget {
         onPressed: onPressed,
         backgroundColor: variant.backgroundColor,
         foregroundColor: variant.textColor,
+        shape: const CircleBorder(),
         elevation: 4,
         child: Icon(icon),
       ),
