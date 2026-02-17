@@ -20,6 +20,7 @@ class AppBottomSheet extends StatelessWidget {
   }) {
     return showModalBottomSheet<T>(
       context: context,
+      useRootNavigator: true,
       isDismissible: isDismissible,
       enableDrag: enableDrag,
       isScrollControlled: true,
@@ -43,12 +44,19 @@ class AppBottomSheet extends StatelessWidget {
         borderRadius: BorderRadius.vertical(top: Radius.circular(16)),
       ),
       child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           AppBottomSheetHeader(showCloseButton: showCloseButton),
           Expanded(
-            child: SingleChildScrollView(
-              padding: const EdgeInsets.fromLTRB(16, 0, 16, 16),
-              child: child,
+            child: SizedBox(
+              width: double.infinity,
+              child: SingleChildScrollView(
+                padding: const EdgeInsets.fromLTRB(16, 0, 16, 16),
+                child: Align(
+                  alignment: Alignment.topLeft,
+                  child: child,
+                ),
+              ),
             ),
           ),
         ],

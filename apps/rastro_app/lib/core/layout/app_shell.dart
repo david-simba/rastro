@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import 'package:rastro/core/layout/app_bottom_nav_bar.dart';
+import 'app_bottom_nav_bar.dart';
 
 class AppShell extends StatelessWidget {
   final Widget child;
@@ -10,6 +10,7 @@ class AppShell extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      extendBody: true,
       body: child,
       bottomNavigationBar: const AppBottomNavBar(),
     );

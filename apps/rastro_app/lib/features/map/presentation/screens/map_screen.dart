@@ -33,9 +33,8 @@ class _MapScreenState extends ConsumerState<MapScreen> {
       children: [
         MapView(onModelTap: _showVehicleInfo),
         Positioned(
-          left: 16,
-          right: 16,
-          bottom: 16,
+          top: 110,
+          right: 10,
           child: MapControls(
             showDebug: config.isDevelopment,
             dimensionMode: mapState.dimensionMode,
