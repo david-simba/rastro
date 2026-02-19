@@ -9,6 +9,8 @@ class AppButton extends StatelessWidget {
   final double? width;
   final double? height;
   final bool bold;
+  final IconData? leftIcon;
+  final IconData? rightIcon;
 
   const AppButton({
     required this.text,
@@ -17,6 +19,8 @@ class AppButton extends StatelessWidget {
     this.width,
     this.height,
     this.bold = true,
+    this.leftIcon,
+    this.rightIcon,
     super.key,
   });
 
@@ -37,11 +41,25 @@ class AppButton extends StatelessWidget {
       child: ElevatedButton(
         onPressed: onPressed,
         style: style,
-        child: AppText(
-          text,
-          bold: bold,
-          color: variant.textColor,
-          align: TextAlign.center,
+        child: Row(
+          mainAxisSize: MainAxisSize.min,
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            if (leftIcon != null) ...[
+              Icon(leftIcon, size: 16, color: variant.textColor),
+              const SizedBox(width: 6),
+            ],
+            AppText(
+              text,
+              bold: bold,
+              color: variant.textColor,
+              align: TextAlign.center,
+            ),
+            if (rightIcon != null) ...[
+              const SizedBox(width: 6),
+              Icon(rightIcon, size: 16, color: variant.textColor),
+            ],
+          ],
         ),
       ),
     );

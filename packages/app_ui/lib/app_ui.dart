@@ -1,4 +1,5 @@
 export 'src/theme/colors.dart';
+export 'src/widgets/card/app_image_card.dart';
 export 'src/theme/typography.dart';
 export 'src/widgets/bottom_nav/app_floating_nav_bar.dart';
 export 'src/widgets/bottom_nav/bottom_nav_item_data.dart';

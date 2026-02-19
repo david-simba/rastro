@@ -1,25 +1,23 @@
 import 'package:app_ui/app_ui.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
 
-class HomeScreen extends StatefulWidget {
+import 'package:rastro/core/routing/app_routes.dart';
+import 'package:rastro/features/home/presentation/widgets/map_preview_card.dart';
+import 'package:rastro/features/home/presentation/widgets/section_separator.dart';
+
+class HomeScreen extends ConsumerStatefulWidget {
   const HomeScreen({super.key});
 
   @override
-  State<HomeScreen> createState() => _HomeScreenState();
+  ConsumerState<HomeScreen> createState() => _HomeScreenState();
 }
 
-class _HomeScreenState extends State<HomeScreen> {
+class _HomeScreenState extends ConsumerState<HomeScreen> {
   late final TextEditingController _searchController;
 
   static const double _horizontalPadding = 20.0;
-  static const double _searchBarTopPadding = 16.0;
-  static const EdgeInsets _searchBarPadding = EdgeInsets.fromLTRB(
-    _horizontalPadding,
-    _searchBarTopPadding,
-    _horizontalPadding,
-    0,
-  );
-
   static const Color _backgroundColor = Color(0xFFFBFAF8);
 
   @override
@@ -43,26 +41,23 @@ class _HomeScreenState extends State<HomeScreen> {
     return Scaffold(
       backgroundColor: _backgroundColor,
       body: SafeArea(
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Padding(
-              padding: _searchBarPadding,
-              child: AppSearchBar(
+        child: SingleChildScrollView(
+          padding: const EdgeInsets.symmetric(horizontal: _horizontalPadding),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              const SizedBox(height: 16),
+              AppSearchBar(
                 controller: _searchController,
                 onChanged: _onSearchChanged,
               ),
-            ),
-            Expanded(
-              child: Center(
-                child: AppText(
-                  'Rastro',
-                  variant: TextVariant.title,
-                  bold: true,
-                ),
+              const SizedBox(height: 24),
+              const SectionSeparator('Your Map'),
+              MapPreviewCard(
+                onPressed: () => context.go(AppRoutes.map),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );
