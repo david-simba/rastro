@@ -1,5 +1,6 @@
 import 'package:app_ui/app_ui.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_lucide/flutter_lucide.dart';
 
 class MapPreviewCard extends StatelessWidget {
   final VoidCallback onPressed;
@@ -28,7 +29,7 @@ class MapPreviewCard extends StatelessWidget {
                 onPressed: onPressed,
                 width: 172,
                 height: 40,
-                leftIcon: Icons.near_me_outlined,
+                leftIcon: LucideIcons.navigation,
               ),
             ],
           ),
@@ -45,7 +46,7 @@ class _LocationLabel extends StatelessWidget {
       mainAxisSize: MainAxisSize.min,
       children: [
         const Icon(
-          Icons.location_on_outlined,
+          LucideIcons.map_pin,
           size: 16,
           color: Colors.white,
         ),

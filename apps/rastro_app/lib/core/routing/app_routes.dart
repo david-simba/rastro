@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_lucide/flutter_lucide.dart';
 
 class AppRouteItem {
   final String path;
@@ -22,14 +23,14 @@ abstract final class AppRoutes {
     AppRouteItem(
       path: home,
       label: 'Home',
-      icon: Icons.home_outlined,
-      activeIcon: Icons.home,
+      icon: LucideIcons.house,
+      activeIcon: LucideIcons.house,
     ),
     AppRouteItem(
       path: map,
       label: 'Map',
-      icon: Icons.map_outlined,
-      activeIcon: Icons.map,
+      icon: LucideIcons.map,
+      activeIcon: LucideIcons.map,
     ),
   ];
 }
