@@ -1,5 +1,3 @@
-enum MapStyleMode { day, night }
-
 enum MapDimensionMode { twoD, threeD }
 
 class MapModel {

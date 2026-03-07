@@ -16,7 +16,6 @@ class LiveMapState {
   final CameraState camera;
   final ModelsState models;
   final TrackingState tracking;
-  final MapStyleMode styleMode;
   final MapDimensionMode dimensionMode;
   final ModelConfig? modelConfig;
   final List<MapModel> waypoints;
@@ -26,7 +25,6 @@ class LiveMapState {
     required this.camera,
     required this.models,
     required this.tracking,
-    required this.styleMode,
     required this.dimensionMode,
     this.modelConfig,
     this.waypoints = const [],
@@ -43,7 +41,6 @@ class LiveMapState {
       ),
       models: ModelsState(models: config.initialModels),
       tracking: const TrackingState(),
-      styleMode: config.styleMode,
       dimensionMode: config.dimensionMode,
       modelConfig: config.modelConfig,
       waypoints: config.waypoints,
@@ -55,7 +52,6 @@ class LiveMapState {
     CameraState? camera,
     ModelsState? models,
     TrackingState? tracking,
-    MapStyleMode? styleMode,
     MapDimensionMode? dimensionMode,
     ModelConfig? Function()? modelConfig,
     List<MapModel>? waypoints,
@@ -65,7 +61,6 @@ class LiveMapState {
       camera: camera ?? this.camera,
       models: models ?? this.models,
       tracking: tracking ?? this.tracking,
-      styleMode: styleMode ?? this.styleMode,
       dimensionMode: dimensionMode ?? this.dimensionMode,
       modelConfig: modelConfig != null ? modelConfig() : this.modelConfig,
       waypoints: waypoints ?? this.waypoints,
@@ -80,7 +75,6 @@ class LiveMapState {
           camera == other.camera &&
           models == other.models &&
           tracking == other.tracking &&
-          styleMode == other.styleMode &&
           dimensionMode == other.dimensionMode &&
           modelConfig == other.modelConfig &&
           waypoints == other.waypoints;
@@ -91,7 +85,6 @@ class LiveMapState {
         camera,
         models,
         tracking,
-        styleMode,
         dimensionMode,
         modelConfig,
         Object.hashAll(waypoints),

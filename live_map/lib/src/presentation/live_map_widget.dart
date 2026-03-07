@@ -42,7 +42,6 @@ class _LiveMapWidgetState extends State<LiveMapWidget> {
   late final MapboxRenderer _renderer;
   late final LiveMapController _controller;
   StreamSubscription<ModelSelected>? _modelSelectedSub;
-  Timer? _styleCycleTimer;
 
   @override
   void initState() {
@@ -71,16 +70,6 @@ class _LiveMapWidgetState extends State<LiveMapWidget> {
         widget.onModelTap?.call(event.model);
       });
     }
-
-    // TODO: Replace fixed timer with a system clock-based sync.
-    _styleCycleTimer = Timer.periodic(const Duration(seconds: 5), (_) {
-      if (!mounted) return;
-      final current = _store.state.styleMode;
-      final next = current == MapStyleMode.day
-          ? MapStyleMode.night
-          : MapStyleMode.day;
-      _store.dispatch(StyleModeChanged(styleMode: next));
-    });
   }
 
   String get _styleUri => MapboxStyles.STANDARD;
@@ -137,7 +126,6 @@ class _LiveMapWidgetState extends State<LiveMapWidget> {
 
   @override
   void dispose() {
-    _styleCycleTimer?.cancel();
     _store.dispatch(const MapDisposed());
     _modelSelectedSub?.cancel();
     _renderer.dispose();

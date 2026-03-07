@@ -137,12 +137,6 @@ final class TrackingPositionReceived extends LiveMapEvent {
 // Config
 // ---------------------------------------------------------------------------
 
-final class StyleModeChanged extends LiveMapEvent {
-  final MapStyleMode styleMode;
-
-  const StyleModeChanged({required this.styleMode});
-}
-
 final class DimensionModeChanged extends LiveMapEvent {
   final MapDimensionMode dimensionMode;
 

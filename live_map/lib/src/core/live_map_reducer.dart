@@ -76,9 +76,6 @@ LiveMapState liveMapReducer(LiveMapState state, LiveMapEvent event) {
     ) =>
       _updateModelPosition(state, modelId, latitude, longitude, bearing),
 
-    // Config
-    StyleModeChanged(:final styleMode) =>
-      state.copyWith(styleMode: styleMode),
     DimensionModeChanged(:final dimensionMode) => state.copyWith(
         dimensionMode: dimensionMode,
         camera: state.camera.copyWith(

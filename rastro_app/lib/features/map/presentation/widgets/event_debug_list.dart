@@ -64,8 +64,6 @@ class EventDebugList extends StatelessWidget {
         :final longitude,
       ) =>
         'Position: $modelId (${latitude.toStringAsFixed(5)}, ${longitude.toStringAsFixed(5)})',
-      StyleModeChanged(:final styleMode) =>
-        'StyleModeChanged: ${styleMode.name}',
       DimensionModeChanged(:final dimensionMode) =>
         'DimensionModeChanged: ${dimensionMode.name}',
     };

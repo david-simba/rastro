@@ -53,7 +53,6 @@ class MapNotifier extends Notifier<MapState> {
     final waypoints = _repository.waypoints;
 
     return LiveMapConfig(
-      styleMode: MapStyleMode.day,
       dimensionMode: state.dimensionMode,
       modelConfig: const ModelConfig(
         modelPath: 'assets/models/bus.glb',

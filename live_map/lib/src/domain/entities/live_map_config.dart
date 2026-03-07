@@ -13,7 +13,6 @@ class ModelConfig {
 }
 
 class LiveMapConfig {
-  final MapStyleMode styleMode;
   final MapDimensionMode dimensionMode;
   final ModelConfig? modelConfig;
   final double initialLatitude;
@@ -23,7 +22,6 @@ class LiveMapConfig {
   final List<MapModel> waypoints;
 
   const LiveMapConfig({
-    required this.styleMode,
     required this.dimensionMode,
     this.modelConfig,
     required this.initialLatitude,

@@ -87,7 +87,9 @@ class MapboxAdapter {
       ModelLayer(id: layerId, sourceId: sourceId)
         ..modelId = modelId
         ..modelType = ModelType.COMMON_3D
-        ..modelScale = scale,
+        ..modelScale = scale
+        ..modelCastShadows = false
+        ..modelReceiveShadows = false,
     );
 
     // Data-driven Z rotation: absolute bearing from each feature's
@@ -153,23 +155,6 @@ class MapboxAdapter {
         ..circleColor = 0xFF6B7280
         ..circleStrokeWidth = 2.0
         ..circleStrokeColor = 0xFFFFFFFF,
-    );
-  }
-
-  // TODO: Integrate with a time-service or Location
-  Future<void> updateStyleAppearance(MapStyleMode mode) async {
-    final map = _map;
-    if (map == null) return;
-
-    await map.style.setStyleTransition(
-      TransitionOptions(duration: 500, delay: 0),
-    );
-
-    final theme = mode == MapStyleMode.day ? 'day' : 'night';
-    await map.style.setStyleImportConfigProperty(
-      'basemap',
-      'lightPreset',
-      theme,
     );
   }
 
