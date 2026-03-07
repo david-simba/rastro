@@ -3,7 +3,6 @@ import 'dart:convert';
 import 'package:live_map/src/domain/types/map_types.dart';
 import 'package:live_map/src/infrastructure/utils/model_interpolator.dart';
 
-/// Builds GeoJSON FeatureCollection strings for the model source layer.
 class ModelGeoJsonBuilder {
   const ModelGeoJsonBuilder._();
 

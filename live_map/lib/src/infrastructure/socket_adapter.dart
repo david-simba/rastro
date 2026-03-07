@@ -16,14 +16,9 @@ class SocketAdapter {
     );
   }
 
-  void _onTrackingStarted(TrackingStarted event) {
-    // Future: open WebSocket connection
-    // On each message, dispatch TrackingPositionReceived
-  }
+  void _onTrackingStarted(TrackingStarted event) {}
 
-  void _onTrackingStopped(TrackingStopped event) {
-    // Future: close WebSocket connection
-  }
+  void _onTrackingStopped(TrackingStopped event) {}
 
   void dispose() {
     for (final sub in _subscriptions) {

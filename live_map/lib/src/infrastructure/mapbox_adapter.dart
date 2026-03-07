@@ -4,11 +4,9 @@ import 'package:mapbox_maps_flutter/mapbox_maps_flutter.dart';
 import 'package:live_map/src/domain/types/map_types.dart';
 
 class MapboxAdapter {
-  // Offset (degrees) added to the data-driven bearing to compensate for GLB
-  // models whose "front" does not face geographic North (bearing 0).
-  // For example, if a bus.glb asset faces East by default, set this to 270
-  // so that a 0° bearing (North) renders correctly.
-  // Adjust this value if the model appears rotated after changing the GLB file.
+  /// Degrees added to each model's bearing to compensate for GLB assets whose
+  /// front face does not point North. Set to 270 if the model faces East by
+  /// default; adjust whenever the GLB file changes.
   static const double _kModelBearingOffset = 0.0;
 
   MapboxMap? _map;
@@ -92,10 +90,6 @@ class MapboxAdapter {
         ..modelReceiveShadows = false,
     );
 
-    // Data-driven Z rotation: absolute bearing from each feature's
-    // 'modelBearing' property, plus a static offset that corrects for the
-    // GLB asset's default facing direction (_kModelBearingOffset).
-    // rotation[0] and rotation[1] are the static X/Y tilt from ModelConfig.
     await map.style.setStyleLayerProperty(
       layerId,
       'model-rotation',
@@ -107,10 +101,6 @@ class MapboxAdapter {
     );
   }
 
-  // ---------------------------------------------------------------------------
-  // Pitch
-  // ---------------------------------------------------------------------------
-
   void setPitch(double pitch) {
     final map = _map;
     if (map == null) return;
@@ -119,10 +109,6 @@ class MapboxAdapter {
       MapAnimationOptions(duration: 0),
     );
   }
-
-  // ---------------------------------------------------------------------------
-  // Waypoints
-  // ---------------------------------------------------------------------------
 
   Future<void> drawWaypoints(List<MapModel> waypoints) async {
     final map = _map;

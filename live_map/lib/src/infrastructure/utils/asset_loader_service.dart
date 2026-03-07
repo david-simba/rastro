@@ -4,7 +4,7 @@ import 'package:flutter/services.dart';
 import 'package:path_provider/path_provider.dart';
 
 /// Copies a bundled Flutter asset to a temporary file and returns its
-/// `file://` URI.  Skips the write if the file already exists on disk.
+/// `file://` URI. Skips the write if the file already exists on disk.
 class AssetLoaderService {
   const AssetLoaderService._();
 

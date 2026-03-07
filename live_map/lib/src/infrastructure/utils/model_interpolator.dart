@@ -1,7 +1,3 @@
-/// Per-model interpolation state.
-///
-/// Holds from/to snapshots and advances via elapsed time so that the
-/// renderer can push sub-frame GeoJSON updates at ~60 fps.
 class ModelInterpolator {
   final double fromLat;
   final double fromLng;

@@ -4,10 +4,6 @@ sealed class LiveMapEvent {
   const LiveMapEvent();
 }
 
-// ---------------------------------------------------------------------------
-// Lifecycle
-// ---------------------------------------------------------------------------
-
 final class MapCreated extends LiveMapEvent {
   const MapCreated();
 }
@@ -19,10 +15,6 @@ final class MapStyleLoaded extends LiveMapEvent {
 final class MapDisposed extends LiveMapEvent {
   const MapDisposed();
 }
-
-// ---------------------------------------------------------------------------
-// Camera
-// ---------------------------------------------------------------------------
 
 final class CameraFlyTo extends LiveMapEvent {
   final double latitude;
@@ -62,10 +54,6 @@ final class CameraMoved extends LiveMapEvent {
   });
 }
 
-// ---------------------------------------------------------------------------
-// Models
-// ---------------------------------------------------------------------------
-
 final class ModelsUpdated extends LiveMapEvent {
   final List<MapModel> models;
 
@@ -86,10 +74,6 @@ final class ModelLayerFailed extends LiveMapEvent {
   const ModelLayerFailed({required this.error});
 }
 
-// ---------------------------------------------------------------------------
-// Interaction
-// ---------------------------------------------------------------------------
-
 final class MapTapped extends LiveMapEvent {
   final double latitude;
   final double longitude;
@@ -106,10 +90,6 @@ final class ModelSelected extends LiveMapEvent {
 final class ModelDeselected extends LiveMapEvent {
   const ModelDeselected();
 }
-
-// ---------------------------------------------------------------------------
-// Tracking
-// ---------------------------------------------------------------------------
 
 final class TrackingStarted extends LiveMapEvent {
   const TrackingStarted();
@@ -132,10 +112,6 @@ final class TrackingPositionReceived extends LiveMapEvent {
     this.bearing = 0.0,
   });
 }
-
-// ---------------------------------------------------------------------------
-// Config
-// ---------------------------------------------------------------------------
 
 final class DimensionModeChanged extends LiveMapEvent {
   final MapDimensionMode dimensionMode;

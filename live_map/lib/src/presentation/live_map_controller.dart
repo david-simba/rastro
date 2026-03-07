@@ -14,10 +14,6 @@ class LiveMapController {
     _store = store;
   }
 
-  // ---------------------------------------------------------------------------
-  // Original public API (backward-compatible)
-  // ---------------------------------------------------------------------------
-
   Future<void> flyTo({
     required double latitude,
     required double longitude,
@@ -25,10 +21,6 @@ class LiveMapController {
   }) async {
     dispatch(CameraFlyTo(latitude: latitude, longitude: longitude, zoom: zoom));
   }
-
-  // ---------------------------------------------------------------------------
-  // New capabilities
-  // ---------------------------------------------------------------------------
 
   LiveMapState get state {
     assert(_store != null, 'Controller not bound to store');

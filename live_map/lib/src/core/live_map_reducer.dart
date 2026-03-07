@@ -4,12 +4,10 @@ import 'package:live_map/src/core/state/live_map_state.dart';
 
 LiveMapState liveMapReducer(LiveMapState state, LiveMapEvent event) {
   return switch (event) {
-    // Lifecycle
     MapCreated() => state.copyWith(lifecycle: MapLifecycle.created),
     MapStyleLoaded() => state.copyWith(lifecycle: MapLifecycle.styleLoaded),
     MapDisposed() => state.copyWith(lifecycle: MapLifecycle.disposed),
 
-    // Camera
     CameraFlyTo(:final latitude, :final longitude, :final zoom) =>
       state.copyWith(
         camera: state.camera.copyWith(
@@ -35,7 +33,6 @@ LiveMapState liveMapReducer(LiveMapState state, LiveMapEvent event) {
         ),
       ),
 
-    // Models
     ModelsUpdated(:final models) => state.copyWith(
         models: state.models.copyWith(models: models),
       ),
@@ -52,7 +49,6 @@ LiveMapState liveMapReducer(LiveMapState state, LiveMapEvent event) {
         ),
       ),
 
-    // Interaction — MapTapped is handled by middleware, reducer is a no-op
     MapTapped() => state,
     ModelSelected(:final model) => state.copyWith(
         models: state.models.copyWith(selectedModel: () => model),
@@ -61,7 +57,6 @@ LiveMapState liveMapReducer(LiveMapState state, LiveMapEvent event) {
         models: state.models.copyWith(selectedModel: () => null),
       ),
 
-    // Tracking
     TrackingStarted() => state.copyWith(
         tracking: state.tracking.copyWith(status: TrackingStatus.active),
       ),

@@ -50,21 +50,17 @@ class _LiveMapWidgetState extends State<LiveMapWidget> {
     final initialState = LiveMapState.fromConfig(widget.config);
     _store = LiveMapStore(initialState);
 
-    // Register modules
     InteractionHandler.register(_store);
     CameraHandler.register(_store);
     ModelHandler.register(_store);
     TrackingHandler.register(_store);
 
-    // Infrastructure
     _adapter = MapboxAdapter();
     _renderer = MapboxRenderer(_store, _adapter);
 
-    // Controller
     _controller = widget.controller ?? LiveMapController();
     _controller.bind(_store);
 
-    // Bridge ModelSelected events to the onModelTap callback
     if (widget.onModelTap != null) {
       _modelSelectedSub = _store.eventBus.on<ModelSelected>((event) {
         widget.onModelTap?.call(event.model);
