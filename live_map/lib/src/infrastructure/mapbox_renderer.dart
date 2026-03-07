@@ -50,6 +50,11 @@ class MapboxRenderer {
   }
 
   void _onCameraMoveTo(CameraMoveTo event) {
+    // TODO: Re-integrate this feature once frame-syncing is optimized.
+    // It is currently disabled because firing easeTo() at high frequencies
+    // (during ticker-driven model interpolation) causes MethodChannel
+    // congestion on Android, leading to UI freezes and "shadow lag."
+
     // _adapter.easeTo(
     //   event.latitude,
     //   event.longitude,
