@@ -1,11 +1,9 @@
-import 'dart:ui';
-
 import 'package:flutter/material.dart';
-import '../../theme/colors.dart';
+import '../../theme/ds_colors.dart';
+import '../../theme/ds_theme_ext.dart';
 import 'bottom_nav_item_data.dart';
 
 const double _kHeight = 56.0;
-
 const Duration _kAnimDuration = Duration(milliseconds: 200);
 const Curve _kAnimCurve = Curves.easeInOut;
 const double _kItemBorderRadius = 24.0;
@@ -14,7 +12,6 @@ const double _kItemHorizontalPadding = 24.0;
 const double _kIconSize = 20.0;
 const double _kIconLabelSpacing = 6.0;
 const double _kLabelFontSize = 12.0;
-const Color _kInactiveColor = Color(0xFF6B7280);
 
 class DsFloatingNavBar extends StatelessWidget {
   const DsFloatingNavBar({
@@ -58,9 +55,7 @@ class _NavBarBackground extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       padding: EdgeInsets.only(bottom: bottomPadding, top: 5),
-      decoration: BoxDecoration(
-        color: Colors.white,
-      ),
+      decoration: BoxDecoration(color: context.dsColors.surface),
       child: SizedBox(height: _kHeight, child: Center(child: child)),
     );
   }
@@ -79,6 +74,8 @@ class _NavItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final inactiveColor = context.dsColors.muted;
+
     return GestureDetector(
       onTap: onTap,
       behavior: HitTestBehavior.opaque,
@@ -98,7 +95,7 @@ class _NavItem extends StatelessWidget {
             Icon(
               isSelected ? item.activeIcon : item.icon,
               size: _kIconSize,
-              color: isSelected ? Colors.white : _kInactiveColor,
+              color: isSelected ? DsColors.white : inactiveColor,
             ),
             ClipRect(
               child: AnimatedSize(
@@ -114,7 +111,7 @@ class _NavItem extends StatelessWidget {
                           child: Text(
                             item.label,
                             style: const TextStyle(
-                              color: Colors.white,
+                              color: DsColors.white,
                               fontWeight: FontWeight.w600,
                               fontSize: _kLabelFontSize,
                             ),

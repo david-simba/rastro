@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import '../../theme/colors.dart';
+import '../../theme/ds_theme_ext.dart';
 
 class DsImageCard extends StatelessWidget {
   final Widget image;
@@ -23,7 +23,7 @@ class DsImageCard extends StatelessWidget {
             Container(
               width: double.infinity,
               padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
-              color: DsColors.white,
+              color: context.dsColors.surface,
               child: footer!,
             ),
         ],

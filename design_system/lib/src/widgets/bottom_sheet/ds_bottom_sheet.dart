@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../../theme/ds_theme_ext.dart';
 import 'ds_bottom_sheet_header.dart';
 
 class DsBottomSheet extends StatelessWidget {
@@ -39,9 +40,9 @@ class DsBottomSheet extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      decoration: const BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.vertical(top: Radius.circular(16)),
+      decoration: BoxDecoration(
+        color: context.dsColors.surface,
+        borderRadius: const BorderRadius.vertical(top: Radius.circular(16)),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,

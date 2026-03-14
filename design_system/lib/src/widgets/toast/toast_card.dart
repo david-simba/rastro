@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../../theme/ds_theme_ext.dart';
 import '../text/ds_text.dart';
 import '../text/text_variant.dart';
 import 'toast_variant.dart';
@@ -19,12 +20,13 @@ class ToastCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final dsColors = context.dsColors;
     final color = variant.color;
 
     return Container(
       margin: const EdgeInsets.symmetric(vertical: 6, horizontal: 12),
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: dsColors.surface,
         borderRadius: BorderRadius.circular(16),
         boxShadow: [
           BoxShadow(
@@ -61,9 +63,9 @@ class ToastCard extends StatelessWidget {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         mainAxisSize: MainAxisSize.min,
                         children: [
-                          DsText(title, bold: true, variant: TextVariant.body),
+                          DsText(title, bold: true, variant: TextVariant.body, color: dsColors.onSurface),
                           const SizedBox(height: 4),
-                          DsText(message, variant: TextVariant.caption, color: Colors.grey[700]),
+                          DsText(message, variant: TextVariant.caption, color: dsColors.muted),
                         ],
                       ),
                     ),
@@ -71,7 +73,7 @@ class ToastCard extends StatelessWidget {
                       const SizedBox(width: 8),
                       GestureDetector(
                         onTap: onClose,
-                        child: const Icon(Icons.close, size: 20, color: Colors.black54),
+                        child: Icon(Icons.close, size: 20, color: dsColors.muted),
                       ),
                     ],
                   ],

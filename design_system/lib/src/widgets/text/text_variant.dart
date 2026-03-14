@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import '../../theme/typography.dart';
+import '../../theme/ds_typography.dart';
 
 enum TextVariant {
   headline,

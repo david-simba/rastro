@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
-import '../../theme/typography.dart';
-import '../../theme/colors.dart';
+import '../../theme/ds_colors.dart';
+import '../../theme/ds_theme_ext.dart';
+import '../../theme/ds_typography.dart';
 import '../text/ds_text.dart';
 import '../text/text_variant.dart';
 
@@ -36,6 +37,7 @@ class DsTextField extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final dsColors = context.dsColors;
     final hasError = errorText != null;
 
     return Column(
@@ -57,12 +59,12 @@ class DsTextField extends StatelessWidget {
           cursorWidth: cursorWidth,
           decoration: InputDecoration(
             hintText: hint,
-            hintStyle: DsTypography.body.copyWith(color: Colors.grey),
+            hintStyle: DsTypography.body.copyWith(color: dsColors.muted),
             contentPadding: const EdgeInsets.symmetric(horizontal: 12, vertical: 14),
             enabledBorder: OutlineInputBorder(
               borderRadius: BorderRadius.circular(8),
               borderSide: BorderSide(
-                color: hasError ? DsColors.danger : DsColors.slate,
+                color: hasError ? DsColors.danger : dsColors.border,
                 width: 1,
               ),
             ),
@@ -78,11 +80,7 @@ class DsTextField extends StatelessWidget {
         ),
         if (hasError) ...[
           const SizedBox(height: 6),
-          DsText(
-            errorText!,
-            variant: TextVariant.label,
-            color: DsColors.danger,
-          ),
+          DsText(errorText!, variant: TextVariant.label, color: DsColors.danger),
         ],
       ],
     );

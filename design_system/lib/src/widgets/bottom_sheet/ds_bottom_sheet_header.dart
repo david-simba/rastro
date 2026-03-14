@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import '../../theme/colors.dart';
+import '../../theme/ds_theme_ext.dart';
 
 class DsBottomSheetHeader extends StatelessWidget {
   const DsBottomSheetHeader({
@@ -17,21 +17,21 @@ class DsBottomSheetHeader extends StatelessWidget {
       child: Stack(
         alignment: Alignment.center,
         children: [
-          _buildDragHandle(),
+          _buildDragHandle(context),
           if (showCloseButton) _buildCloseButton(context),
         ],
       ),
     );
   }
 
-  Widget _buildDragHandle() {
+  Widget _buildDragHandle(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.only(top: 20, bottom: 20),
       child: Container(
         width: 70,
         height: 4,
         decoration: BoxDecoration(
-          color: DsColors.slate,
+          color: context.dsColors.border,
           borderRadius: BorderRadius.circular(16),
         ),
       ),
@@ -44,11 +44,7 @@ class DsBottomSheetHeader extends StatelessWidget {
       top: 4,
       child: IconButton(
         onPressed: () => Navigator.of(context).pop(),
-        icon: const Icon(
-          Icons.close,
-          size: 20,
-          color: DsColors.gray,
-        ),
+        icon: Icon(Icons.close, size: 20, color: context.dsColors.muted),
         splashRadius: 20,
       ),
     );

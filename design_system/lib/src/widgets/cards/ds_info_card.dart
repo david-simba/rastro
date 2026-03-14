@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import '../../theme/colors.dart';
+import '../../theme/ds_theme_ext.dart';
 import '../text/ds_text.dart';
 import '../text/text_variant.dart';
 
@@ -25,40 +25,43 @@ class DsInfoCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final dsColors = context.dsColors;
+
     return GestureDetector(
       onTap: onPress,
       child: Container(
-      padding: const EdgeInsets.all(14),
-      decoration: BoxDecoration(
-        color: backgroundColor ?? DsColors.white,
-        borderRadius: BorderRadius.circular(16),
+        padding: const EdgeInsets.all(14),
+        decoration: BoxDecoration(
+          color: backgroundColor ?? dsColors.surface,
+          borderRadius: BorderRadius.circular(16),
+        ),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            if (icon != null) ...[
+              icon!,
+              const SizedBox(height: 10),
+            ],
+            if (label != null || trailing != null) ...[
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  if (label != null)
+                    DsText(label!, variant: TextVariant.caption, color: dsColors.muted),
+                  if (trailing != null) trailing!,
+                ],
+              ),
+              const SizedBox(height: 2),
+            ],
+            DsText(title, bold: true, color: dsColors.onSurface),
+            if (footer != null) ...[
+              const SizedBox(height: 8),
+              footer!,
+            ],
+          ],
+        ),
       ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          if (icon != null) ...[
-            icon!,
-            const SizedBox(height: 10),
-          ],
-          if (label != null || trailing != null) ...[
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                if (label != null)
-                  DsText(label!, variant: TextVariant.caption, color: DsColors.gray),
-                if (trailing != null) trailing!,
-              ],
-            ),
-            const SizedBox(height: 2),
-          ],
-          DsText(title, bold: true, color: DsColors.black),
-          if (footer != null) ...[
-            const SizedBox(height: 8),
-            footer!,
-          ],
-        ],
-      ),
-    ));
+    );
   }
 }

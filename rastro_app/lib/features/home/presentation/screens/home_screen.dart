@@ -18,7 +18,6 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
   late final TextEditingController _searchController;
 
   static const double _horizontalPadding = 20.0;
-  static const Color _backgroundColor = Color(0xFFF0F1F3);
 
   @override
   void initState() {
@@ -39,7 +38,6 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: _backgroundColor,
       body: SafeArea(
         child: SingleChildScrollView(
           padding: const EdgeInsets.symmetric(horizontal: _horizontalPadding),
@@ -140,7 +138,8 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                     ),
                   ),
                 ],
-              )
+              ),
+              const SizedBox(height: 16),
             ],
           ),
         ),

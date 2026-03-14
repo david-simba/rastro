@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import '../../theme/colors.dart';
+import '../../theme/ds_colors.dart';
 
 enum BadgeVariant {
   solid,

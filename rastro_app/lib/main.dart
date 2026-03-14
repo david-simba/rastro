@@ -1,3 +1,4 @@
+import 'package:design_system/design_system.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -36,7 +37,13 @@ class RastroApp extends ConsumerWidget {
 
     return MaterialApp.router(
       debugShowCheckedModeBanner: !config.isProduction,
-      theme: ThemeData(fontFamily: 'Poppins'),
+      theme: DsTheme.light.copyWith(
+        textTheme: DsTheme.light.textTheme.apply(fontFamily: 'Poppins'),
+      ),
+      darkTheme: DsTheme.dark.copyWith(
+        textTheme: DsTheme.dark.textTheme.apply(fontFamily: 'Poppins'),
+      ),
+      themeMode: ThemeMode.system,
       routerConfig: router,
     );
   }

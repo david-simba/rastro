@@ -1,6 +1,6 @@
 import 'package:design_system/design_system.dart';
 import 'package:flutter/material.dart';
-import '../../theme/colors.dart';
+import '../../theme/ds_colors.dart';
 import '../text/ds_text.dart';
 import 'badge_variant.dart';
 

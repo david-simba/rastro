@@ -1,5 +1,8 @@
-export 'src/theme/colors.dart';
-export 'src/theme/typography.dart';
+export 'src/theme/ds_colors.dart';
+export 'src/theme/ds_typography.dart';
+export 'src/theme/ds_color_tokens.dart';
+export 'src/theme/ds_theme.dart';
+export 'src/theme/ds_theme_ext.dart';
 export 'src/widgets/bottom_nav/ds_floating_nav_bar.dart';
 export 'src/widgets/bottom_nav/bottom_nav_item_data.dart';
 export 'src/widgets/bottom_sheet/ds_bottom_sheet.dart';
