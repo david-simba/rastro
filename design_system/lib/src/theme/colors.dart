@@ -2,7 +2,7 @@ import 'dart:ui';
 
 class DsColors {
   static const black = Color(0xFF1D1617);
-  static const white = Color(0xFFF7FEE7);
+  static const white = Color(0xFFFFFFFF);
   static const slate = Color(0xFFCAD5E2);
   static const gray = Color(0xFF9ca3af);
 

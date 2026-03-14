@@ -8,6 +8,7 @@ export 'src/widgets/button/ds_floating_button.dart';
 export 'src/widgets/button/button_variant.dart';
 export 'src/widgets/badge/ds_badge.dart';
 export 'src/widgets/badge/badge_variant.dart';
+export 'src/widgets/list_card/ds_list_card.dart';
 export 'src/widgets/card/ds_image_card.dart';
 export 'src/widgets/search/ds_search_bar.dart';
 export 'src/widgets/text/ds_text.dart';

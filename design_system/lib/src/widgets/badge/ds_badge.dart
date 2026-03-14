@@ -1,3 +1,4 @@
+import 'package:design_system/design_system.dart';
 import 'package:flutter/material.dart';
 import '../../theme/colors.dart';
 import '../text/ds_text.dart';
@@ -38,7 +39,7 @@ class DsBadge extends StatelessWidget {
             Icon(leadingIcon, size: 16, color: fgColor),
             const SizedBox(width: 4),
           ],
-          DsText(label, color: fgColor, bold: true),
+          DsText(label, color: fgColor, variant: TextVariant.label, bold: true),
           if (trailingIcon != null) ...[
             const SizedBox(width: 4),
             Icon(trailingIcon, size: 16, color: fgColor),
