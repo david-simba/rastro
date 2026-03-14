@@ -5,13 +5,6 @@ import '../../theme/colors.dart';
 import 'bottom_nav_item_data.dart';
 
 const double _kHeight = 56.0;
-const double _kBorderRadius = 32.0;
-
-const double _kBorderOpacity = 0.6;
-
-const double _kShadowBlur = 8.0;
-const double _kShadowOpacity = 0.06;
-const Offset _kShadowOffset = Offset(0, 2);
 
 const Duration _kAnimDuration = Duration(milliseconds: 200);
 const Curve _kAnimCurve = Curves.easeInOut;
@@ -39,53 +32,36 @@ class DsFloatingNavBar extends StatelessWidget {
   Widget build(BuildContext context) {
     final bottomPadding = MediaQuery.of(context).padding.bottom;
 
-    return Padding(
-      padding: EdgeInsets.only(bottom: bottomPadding),
+    return _NavBarBackground(
+      bottomPadding: bottomPadding,
       child: Row(
         mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          _NavBarBackground(
-            child: Row(
-              mainAxisSize: MainAxisSize.min,
-              children: List.generate(
-                items.length,
-                (i) => _NavItem(
-                  item: items[i],
-                  isSelected: i == currentIndex,
-                  onTap: () => onItemSelected(i),
-                ),
-              ),
-            ),
+        children: List.generate(
+          items.length,
+          (i) => _NavItem(
+            item: items[i],
+            isSelected: i == currentIndex,
+            onTap: () => onItemSelected(i),
           ),
-        ],
+        ),
       ),
     );
   }
 }
 
 class _NavBarBackground extends StatelessWidget {
-  const _NavBarBackground({required this.child});
+  const _NavBarBackground({required this.child, required this.bottomPadding});
   final Widget child;
+  final double bottomPadding;
 
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: _kHeight,
+      padding: EdgeInsets.only(bottom: bottomPadding, top: 5),
       decoration: BoxDecoration(
         color: Colors.white,
-        borderRadius: BorderRadius.circular(_kBorderRadius),
-        border: Border.all(
-          color: Colors.white.withValues(alpha: _kBorderOpacity),
-        ),
-        boxShadow: [
-          BoxShadow(
-            color: Color.fromRGBO(0, 0, 0, _kShadowOpacity),
-            blurRadius: _kShadowBlur,
-            offset: _kShadowOffset,
-          ),
-        ],
       ),
-      child: child,
+      child: SizedBox(height: _kHeight, child: Center(child: child)),
     );
   }
 }

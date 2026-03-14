@@ -10,6 +10,7 @@ class DsBadge extends StatelessWidget {
   final Color color;
   final IconData? leadingIcon;
   final IconData? trailingIcon;
+  final double iconSize;
 
   const DsBadge({
     required this.label,
@@ -17,6 +18,7 @@ class DsBadge extends StatelessWidget {
     this.color = DsColors.primary,
     this.leadingIcon,
     this.trailingIcon,
+    this.iconSize = 16,
     super.key,
   });
 
@@ -36,13 +38,13 @@ class DsBadge extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           if (leadingIcon != null) ...[
-            Icon(leadingIcon, size: 16, color: fgColor),
+            Icon(leadingIcon, size: iconSize, color: fgColor),
             const SizedBox(width: 4),
           ],
           DsText(label, color: fgColor, variant: TextVariant.label, bold: true),
           if (trailingIcon != null) ...[
             const SizedBox(width: 4),
-            Icon(trailingIcon, size: 16, color: fgColor),
+            Icon(trailingIcon, size: iconSize, color: fgColor),
           ],
         ],
       ),

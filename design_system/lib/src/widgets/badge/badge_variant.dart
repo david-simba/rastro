@@ -9,7 +9,7 @@ enum BadgeVariant {
 extension BadgeVariantExtension on BadgeVariant {
   static final _backgroundOpacityMap = <BadgeVariant, double>{
     BadgeVariant.solid: 1.0,
-    BadgeVariant.soft: 0.15,
+    BadgeVariant.soft: 0.05,
   };
 
   static final _textColorMap = <BadgeVariant, Color Function(Color)>{

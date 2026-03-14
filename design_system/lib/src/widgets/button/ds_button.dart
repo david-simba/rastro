@@ -8,9 +8,10 @@ class DsButton extends StatelessWidget {
   final ButtonVariant variant;
   final double? width;
   final double? height;
+  final bool fullWidth;
   final bool bold;
-  final IconData? leftIcon;
-  final IconData? rightIcon;
+  final IconData? leadingIcon;
+  final IconData? trailingIcon;
 
   const DsButton({
     required this.text,
@@ -18,9 +19,10 @@ class DsButton extends StatelessWidget {
     this.variant = ButtonVariant.primary,
     this.width,
     this.height,
+    this.fullWidth = false,
     this.bold = true,
-    this.leftIcon,
-    this.rightIcon,
+    this.leadingIcon,
+    this.trailingIcon,
     super.key,
   });
 
@@ -36,8 +38,8 @@ class DsButton extends StatelessWidget {
     );
 
     return SizedBox(
-      width: width ?? double.infinity,
-      height: height ?? 48,
+      width: width ?? (fullWidth ? double.infinity : null),
+      height: height ?? 32,
       child: ElevatedButton(
         onPressed: onPressed,
         style: style,
@@ -45,8 +47,8 @@ class DsButton extends StatelessWidget {
           mainAxisSize: MainAxisSize.min,
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            if (leftIcon != null) ...[
-              Icon(leftIcon, size: 16, color: variant.textColor),
+            if (leadingIcon != null) ...[
+              Icon(leadingIcon, size: 16, color: variant.textColor),
               const SizedBox(width: 6),
             ],
             DsText(
@@ -55,9 +57,9 @@ class DsButton extends StatelessWidget {
               color: variant.textColor,
               align: TextAlign.center,
             ),
-            if (rightIcon != null) ...[
+            if (trailingIcon != null) ...[
               const SizedBox(width: 6),
-              Icon(rightIcon, size: 16, color: variant.textColor),
+              Icon(trailingIcon, size: 16, color: variant.textColor),
             ],
           ],
         ),

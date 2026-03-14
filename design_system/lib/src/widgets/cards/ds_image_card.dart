@@ -1,86 +1,32 @@
 import 'package:flutter/material.dart';
+import '../../theme/colors.dart';
 
 class DsImageCard extends StatelessWidget {
-  final ImageProvider backgroundImage;
-  final Widget? child;
-  final double borderRadius;
-  final EdgeInsetsGeometry? padding;
-  final double? height;
-  final double? width;
-  final bool withOverlay;
+  final Widget image;
+  final Widget? footer;
 
   const DsImageCard({
-    required this.backgroundImage,
-    this.child,
-    this.borderRadius = 16,
-    this.padding,
-    this.height,
-    this.width,
-    this.withOverlay = false,
+    required this.image,
+    this.footer,
     super.key,
   });
-
-  factory DsImageCard.url({
-    required String imageUrl,
-    double borderRadius = 16,
-    EdgeInsetsGeometry? padding,
-    double? height,
-    double? width,
-    bool withOverlay = false,
-    Key? key,
-    Widget? child,
-  }) {
-    return DsImageCard(
-      backgroundImage: NetworkImage(imageUrl),
-      borderRadius: borderRadius,
-      padding: padding,
-      height: height,
-      width: width,
-      withOverlay: withOverlay,
-      key: key,
-      child: child,
-    );
-  }
 
   @override
   Widget build(BuildContext context) {
     return ClipRRect(
-      borderRadius: BorderRadius.circular(borderRadius),
-      child: Container(
-        height: height,
-        width: width,
-        decoration: BoxDecoration(
-          image: DecorationImage(
-            image: backgroundImage,
-            fit: BoxFit.cover,
-          ),
-        ),
-        child: Stack(
-          children: [
-            if (withOverlay)
-              Positioned.fill(
-                child: DecoratedBox(
-                  decoration: BoxDecoration(
-                    gradient: LinearGradient(
-                      begin: Alignment.topCenter,
-                      end: Alignment.bottomCenter,
-                      colors: [
-                        Colors.black.withValues(alpha: 0.15),
-                        Colors.black.withValues(alpha: 0.65),
-                      ],
-                    ),
-                  ),
-                ),
-              ),
-            if (child != null)
-              Positioned.fill(
-                child: Padding(
-                  padding: padding ?? EdgeInsets.zero,
-                  child: child,
-                ),
-              ),
-          ],
-        ),
+      borderRadius: BorderRadius.circular(16),
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          image,
+          if (footer != null)
+            Container(
+              width: double.infinity,
+              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
+              color: DsColors.white,
+              child: footer!,
+            ),
+        ],
       ),
     );
   }
