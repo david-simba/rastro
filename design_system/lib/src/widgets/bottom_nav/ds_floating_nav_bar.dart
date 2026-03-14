@@ -27,7 +27,7 @@ class DsFloatingNavBar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final bottomPadding = MediaQuery.of(context).padding.bottom;
+    final bottomPadding = MediaQuery.of(context).padding.bottom + 5;
 
     return _NavBarBackground(
       bottomPadding: bottomPadding,
@@ -54,7 +54,7 @@ class _NavBarBackground extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: EdgeInsets.only(bottom: bottomPadding, top: 5),
+      padding: EdgeInsets.only(bottom: bottomPadding, top: 5,),
       decoration: BoxDecoration(color: context.dsColors.surface),
       child: SizedBox(height: _kHeight, child: Center(child: child)),
     );
