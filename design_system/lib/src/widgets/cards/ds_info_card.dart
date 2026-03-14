@@ -10,6 +10,7 @@ class DsInfoCard extends StatelessWidget {
   final Widget? trailing;
   final Widget? footer;
   final Color? backgroundColor;
+  final VoidCallback? onPress;
 
   const DsInfoCard({
     required this.title,
@@ -18,12 +19,15 @@ class DsInfoCard extends StatelessWidget {
     this.trailing,
     this.footer,
     this.backgroundColor,
+    this.onPress,
     super.key,
   });
 
   @override
   Widget build(BuildContext context) {
-    return Container(
+    return GestureDetector(
+      onTap: onPress,
+      child: Container(
       padding: const EdgeInsets.all(14),
       decoration: BoxDecoration(
         color: backgroundColor ?? DsColors.white,
@@ -42,7 +46,8 @@ class DsInfoCard extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 if (label != null)
-                  DsText(label!, variant: TextVariant.caption, color: DsColors.gray), ?trailing,
+                  DsText(label!, variant: TextVariant.caption, color: DsColors.gray),
+                if (trailing != null) trailing!,
               ],
             ),
             const SizedBox(height: 2),
@@ -54,6 +59,6 @@ class DsInfoCard extends StatelessWidget {
           ],
         ],
       ),
-    );
+    ));
   }
 }

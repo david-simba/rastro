@@ -8,18 +8,22 @@ class DsListCard extends StatelessWidget {
   final String? subtitle;
   final Widget? leading;
   final Widget? trailing;
+  final VoidCallback? onPress;
 
   const DsListCard({
     required this.title,
     this.subtitle,
     this.leading,
     this.trailing,
+    this.onPress,
     super.key,
   });
 
   @override
   Widget build(BuildContext context) {
-    return Container(
+    return GestureDetector(
+      onTap: onPress,
+      child: Container(
       padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
       decoration: BoxDecoration(
         color: DsColors.white,
@@ -49,6 +53,6 @@ class DsListCard extends StatelessWidget {
           ],
         ],
       ),
-    );
+    ));
   }
 }
