@@ -18,19 +18,33 @@ class AppRouteItem {
 abstract final class AppRoutes {
   static const home = '/';
   static const map = '/map';
+  static const routes = '/routes';
+  static const profile = '/profile';
 
   static const List<AppRouteItem> tabs = [
     AppRouteItem(
       path: home,
-      label: 'Home',
+      label: 'Inicio',
       icon: LucideIcons.house,
       activeIcon: LucideIcons.house,
     ),
     AppRouteItem(
       path: map,
-      label: 'Map',
+      label: 'Mapa',
       icon: LucideIcons.map,
       activeIcon: LucideIcons.map,
+    ),
+    AppRouteItem(
+      path: routes,
+      label: 'Rutas',
+      icon: LucideIcons.route,
+      activeIcon: LucideIcons.route,
+    ),
+    AppRouteItem(
+      path: profile,
+      label: 'Perfil',
+      icon: LucideIcons.user,
+      activeIcon: LucideIcons.user,
     ),
   ];
 }
