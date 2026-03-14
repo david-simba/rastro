@@ -57,6 +57,9 @@ class MapboxRenderer {
       if (state.waypoints.isNotEmpty) {
         await _adapter.drawWaypoints(state.waypoints);
       }
+      if (state.modelConfig != null) {
+        _store.dispatch(const ModelLayerRequested());
+      }
     } catch (e) {
       debugPrint('MapboxRenderer: error applying initial style config: $e');
     }

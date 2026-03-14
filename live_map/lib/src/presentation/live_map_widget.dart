@@ -42,6 +42,7 @@ class _LiveMapWidgetState extends State<LiveMapWidget> {
   late final MapboxRenderer _renderer;
   late final LiveMapController _controller;
   StreamSubscription<ModelSelected>? _modelSelectedSub;
+  Brightness _brightness = Brightness.light;
 
   @override
   void initState() {
@@ -68,7 +69,19 @@ class _LiveMapWidgetState extends State<LiveMapWidget> {
     }
   }
 
-  String get _styleUri => MapboxStyles.STANDARD;
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    final brightness = MediaQuery.platformBrightnessOf(context);
+    if (brightness != _brightness) {
+      _brightness = brightness;
+      _adapter.loadStyle(_styleUri);
+    }
+  }
+
+  String get _styleUri => _brightness == Brightness.dark
+      ? MapboxStyles.DARK
+      : MapboxStyles.LIGHT;
 
   @override
   Widget build(BuildContext context) {

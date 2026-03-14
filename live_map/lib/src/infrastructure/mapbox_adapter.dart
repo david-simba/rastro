@@ -164,6 +164,10 @@ class MapboxAdapter {
     );
   }
 
+  Future<void> loadStyle(String styleUri) async {
+    await _map?.loadStyleURI(styleUri);
+  }
+
   void dispose() {
     _map = null;
   }
