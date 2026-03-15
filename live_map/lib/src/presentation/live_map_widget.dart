@@ -14,6 +14,7 @@ import 'package:live_map/src/application/camera/camera_handler.dart';
 import 'package:live_map/src/application/interaction/interaction_handler.dart';
 import 'package:live_map/src/application/model/model_handler.dart';
 import 'package:live_map/src/application/tracking/tracking_handler.dart';
+import 'package:live_map/src/infrastructure/services/route_manager.dart';
 import 'package:live_map/src/presentation/live_map_controller.dart';
 
 class LiveMapWidget extends StatefulWidget {
@@ -38,6 +39,7 @@ class LiveMapWidget extends StatefulWidget {
 
 class _LiveMapWidgetState extends State<LiveMapWidget> {
   late final LiveMapStore _store;
+  late final RouteManager _routeManager;
   late final MapboxAdapter _adapter;
   late final MapboxRenderer _renderer;
   late final LiveMapController _controller;
@@ -51,13 +53,15 @@ class _LiveMapWidgetState extends State<LiveMapWidget> {
     final initialState = LiveMapState.fromConfig(widget.config);
     _store = LiveMapStore(initialState);
 
+    _routeManager = RouteManager();
+
     InteractionHandler.register(_store);
     CameraHandler.register(_store);
     ModelHandler.register(_store);
-    TrackingHandler.register(_store);
+    TrackingHandler.register(_store, _routeManager);
 
     _adapter = MapboxAdapter();
-    _renderer = MapboxRenderer(_store, _adapter);
+    _renderer = MapboxRenderer(_store, _adapter, _routeManager);
 
     _controller = widget.controller ?? LiveMapController();
     _controller.bind(_store);

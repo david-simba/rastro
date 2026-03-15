@@ -118,3 +118,25 @@ final class DimensionModeChanged extends LiveMapEvent {
 
   const DimensionModeChanged({required this.dimensionMode});
 }
+
+/// Dispatched by the consumer when the backend provides route points for a
+/// model. [RouteManager] stores the polyline; the renderer verifies each
+/// incoming position against it.
+final class RouteAssigned extends LiveMapEvent {
+  final String modelId;
+  final List<LatLng> routePoints;
+
+  const RouteAssigned({required this.modelId, required this.routePoints});
+}
+
+/// Emitted by the renderer when a model drifts outside the deviation threshold.
+/// The consumer listens and dispatches a fresh [RouteAssigned] when ready.
+final class RouteUpdateNeeded extends LiveMapEvent {
+  final String modelId;
+  final LatLng currentPosition;
+
+  const RouteUpdateNeeded({
+    required this.modelId,
+    required this.currentPosition,
+  });
+}

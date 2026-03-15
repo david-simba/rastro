@@ -27,19 +27,6 @@ class MapboxAdapter {
     );
   }
 
-  void easeTo(double lat, double lng, double? zoom, {double? bearing}) {
-    final map = _map;
-    if (map == null) return;
-    map.easeTo(
-      CameraOptions(
-        center: Point(coordinates: Position(lng, lat)),
-        zoom: zoom,
-        bearing: bearing,
-      ),
-      null,
-    );
-  }
-
   Future<void> addStyleModel(String modelId, String modelUrl) async {
     final map = _map;
     if (map == null) return;

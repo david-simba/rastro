@@ -7,7 +7,9 @@ import 'package:flutter/scheduler.dart';
 
 import 'package:live_map/src/core/live_map_event.dart';
 import 'package:live_map/src/core/live_map_store.dart';
+import 'package:live_map/src/domain/types/map_types.dart';
 import 'package:live_map/src/infrastructure/mapbox_adapter.dart';
+import 'package:live_map/src/infrastructure/services/route_manager.dart';
 import 'package:live_map/src/infrastructure/utils/asset_loader_service.dart';
 import 'package:live_map/src/infrastructure/utils/geojson_builder.dart';
 import 'package:live_map/src/infrastructure/utils/model_interpolator.dart';
@@ -19,11 +21,15 @@ typedef _ModelSnapshot = ({String id, double lng, double lat, double bearing});
 class MapboxRenderer {
   final LiveMapStore _store;
   final MapboxAdapter _adapter;
+  final RouteManager _routeManager;
   final List<StreamSubscription<dynamic>> _subscriptions = [];
 
   static const String _sourceId = 'model-source';
   static const String _layerId = 'model-layer';
   static const Duration _animDuration = Duration(milliseconds: 200);
+
+  /// Euclidean-degree threshold (~50 m) used to detect route deviation.
+  static const double _deviationThreshold = 0.0005;
 
   late final Ticker _ticker;
   Duration _lastTickElapsed = Duration.zero;
@@ -31,12 +37,11 @@ class MapboxRenderer {
   bool _isComputingGeoJson = false;
   bool _disposed = false;
 
-  MapboxRenderer(this._store, this._adapter) {
+  MapboxRenderer(this._store, this._adapter, this._routeManager) {
     _ticker = Ticker(_onAnimationTick);
 
     _subscriptions.addAll([
       _store.eventBus.on<CameraFlyTo>(_onCameraFlyTo),
-      _store.eventBus.on<CameraMoveTo>(_onCameraMoveTo),
       _store.eventBus.on<ModelLayerRequested>(_onModelLayerRequested),
       _store.eventBus.on<TrackingPositionReceived>(_onTrackingPositionReceived),
       _store.eventBus.on<MapStyleLoaded>(_onMapStyleLoaded),
@@ -47,8 +52,6 @@ class MapboxRenderer {
   void _onCameraFlyTo(CameraFlyTo event) {
     _adapter.flyTo(event.latitude, event.longitude, event.zoom);
   }
-
-  void _onCameraMoveTo(CameraMoveTo event) {}
 
   Future<void> _onMapStyleLoaded(MapStyleLoaded event) async {
     final state = _store.state;
@@ -104,6 +107,31 @@ class MapboxRenderer {
   }
 
   void _onTrackingPositionReceived(TrackingPositionReceived event) {
+    final currentPosition = LatLng(
+      lat: event.latitude,
+      lng: event.longitude,
+    );
+
+    /// Routes are pushed by the backend via RouteAssigned; if one exists,
+    /// verify the model is still on it and notify on deviation.
+    final routePoints = _routeManager.getRoute(event.modelId);
+    if (routePoints != null) {
+      final onRoute = _routeManager.isOnRoute(
+        currentPosition,
+        routePoints,
+        tolerance: _deviationThreshold,
+      );
+
+      if (!onRoute) {
+        _store.dispatch(
+          RouteUpdateNeeded(
+            modelId: event.modelId,
+            currentPosition: currentPosition,
+          ),
+        );
+      }
+    }
+
     final existing = _lerps[event.modelId];
 
     _lerps[event.modelId] = ModelInterpolator(

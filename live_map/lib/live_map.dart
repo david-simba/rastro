@@ -5,3 +5,4 @@ export 'src/core/state/live_map_state.dart';
 export 'src/core/live_map_store.dart';
 export 'src/presentation/live_map_controller.dart';
 export 'src/presentation/live_map_widget.dart';
+export 'src/infrastructure/services/route_manager.dart';

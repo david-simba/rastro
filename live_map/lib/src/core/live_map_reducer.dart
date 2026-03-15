@@ -77,6 +77,11 @@ LiveMapState liveMapReducer(LiveMapState state, LiveMapEvent event) {
           pitch: dimensionMode == MapDimensionMode.threeD ? 65.0 : 0.0,
         ),
       ),
+
+    // Route events are handled as side-effects by RouteManager / TrackingHandler;
+    // they carry no reducer-level state change.
+    RouteAssigned() => state,
+    RouteUpdateNeeded() => state,
   };
 }
 
@@ -94,6 +99,9 @@ LiveMapState _updateModelPosition(
         latitude: latitude,
         longitude: longitude,
         bearing: bearing,
+        routeId: m.routeId,
+        isOnRoute: m.isOnRoute,
+        metadata: m.metadata,
       );
     }
     return m;
