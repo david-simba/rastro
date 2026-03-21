@@ -53,17 +53,23 @@ class MapNotifier extends Notifier<MapState> {
     final waypoints = _repository.waypoints;
 
     return LiveMapConfig(
+      initialZoom: 19,
+      initialLatitude: initial.latitude,
+      initialLongitude: initial.longitude,
       dimensionMode: state.dimensionMode,
+      initialModels: [PositionMapper.toMapModel(initial)],
+      waypoints: waypoints.map(PositionMapper.toMapModel).toList(),
       modelConfig: const ModelConfig(
         modelPath: 'assets/models/bus.glb',
         scale: [2.5, 2.5, 2.5],
         rotation: [0, 0, 0],
+        zoomScale: ZoomScaleConfig(
+          minZoom: 10.0,
+          maxZoom: 20.0,
+          minScaleMultiplier: 1,
+          maxScaleMultiplier: 16.0,
+        ),
       ),
-      initialLatitude: initial.latitude,
-      initialLongitude: initial.longitude,
-      initialZoom: 19,
-      initialModels: [PositionMapper.toMapModel(initial)],
-      waypoints: waypoints.map(PositionMapper.toMapModel).toList(),
     );
   }
 

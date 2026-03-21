@@ -20,6 +20,10 @@ class LiveMapState {
   final ModelConfig? modelConfig;
   final List<MapModel> waypoints;
 
+  /// Pitch applied when [dimensionMode] is [MapDimensionMode.threeD].
+  /// Set once from [LiveMapConfig.pitch3D] and never changes at runtime.
+  final double pitch3D;
+
   const LiveMapState({
     required this.lifecycle,
     required this.camera,
@@ -28,6 +32,7 @@ class LiveMapState {
     required this.dimensionMode,
     this.modelConfig,
     this.waypoints = const [],
+    this.pitch3D = 50.0,
   });
 
   factory LiveMapState.fromConfig(LiveMapConfig config) {
@@ -37,13 +42,14 @@ class LiveMapState {
         latitude: config.initialLatitude,
         longitude: config.initialLongitude,
         zoom: config.initialZoom,
-        pitch: config.dimensionMode == MapDimensionMode.threeD ? 65.0 : 0.0,
+        pitch: config.dimensionMode == MapDimensionMode.threeD ? config.pitch3D : 0.0,
       ),
       models: ModelsState(models: config.initialModels),
       tracking: const TrackingState(),
       dimensionMode: config.dimensionMode,
       modelConfig: config.modelConfig,
       waypoints: config.waypoints,
+      pitch3D: config.pitch3D,
     );
   }
 
@@ -64,6 +70,7 @@ class LiveMapState {
       dimensionMode: dimensionMode ?? this.dimensionMode,
       modelConfig: modelConfig != null ? modelConfig() : this.modelConfig,
       waypoints: waypoints ?? this.waypoints,
+      pitch3D: pitch3D,
     );
   }
 

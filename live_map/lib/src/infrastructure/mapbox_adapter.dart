@@ -73,6 +73,7 @@ class MapboxAdapter {
         ..modelId = modelId
         ..modelType = ModelType.COMMON_3D
         ..modelScale = scale
+        ..modelScaleMode = ModelScaleMode.MAP
         ..modelCastShadows = false
         ..modelReceiveShadows = false,
     );
@@ -153,6 +154,14 @@ class MapboxAdapter {
 
   Future<void> loadStyle(String styleUri) async {
     await _map?.loadStyleURI(styleUri);
+  }
+
+  /// Updates the model-layer scale property on the GPU without recreating
+  /// the layer. Safe to call on every camera-change tick.
+  Future<void> updateModelScale(String layerId, List<double> scale) async {
+    final map = _map;
+    if (map == null) return;
+    await map.style.setStyleLayerProperty(layerId, 'model-scale', scale);
   }
 
   void dispose() {

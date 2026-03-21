@@ -114,6 +114,7 @@ class _LiveMapWidgetState extends State<LiveMapWidget> {
             onMapCreated: _onMapCreated,
             onTapListener: _onMapTap,
             onStyleLoadedListener: _onStyleLoaded,
+            onCameraChangeListener: _onCameraChange,
           ),
         );
       },
@@ -130,6 +131,14 @@ class _LiveMapWidgetState extends State<LiveMapWidget> {
     _store.dispatch(MapTapped(
       latitude: coords.lat.toDouble(),
       longitude: coords.lng.toDouble(),
+    ));
+  }
+
+  void _onCameraChange(CameraChangedEventData data) {
+    _store.dispatch(CameraMoved(
+      latitude: _store.state.camera.latitude,
+      longitude: _store.state.camera.longitude,
+      zoom: data.cameraState.zoom,
     ));
   }
 

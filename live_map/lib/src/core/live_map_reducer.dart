@@ -74,7 +74,7 @@ LiveMapState liveMapReducer(LiveMapState state, LiveMapEvent event) {
     DimensionModeChanged(:final dimensionMode) => state.copyWith(
         dimensionMode: dimensionMode,
         camera: state.camera.copyWith(
-          pitch: dimensionMode == MapDimensionMode.threeD ? 65.0 : 0.0,
+          pitch: dimensionMode == MapDimensionMode.threeD ? state.pitch3D : 0.0,
         ),
       ),
 

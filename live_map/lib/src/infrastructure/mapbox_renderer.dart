@@ -11,6 +11,7 @@ import 'package:live_map/src/domain/types/map_types.dart';
 import 'package:live_map/src/infrastructure/mapbox_adapter.dart';
 import 'package:live_map/src/infrastructure/services/route_manager.dart';
 import 'package:live_map/src/infrastructure/utils/asset_loader_service.dart';
+import 'package:live_map/src/infrastructure/utils/camera_scale_controller.dart';
 import 'package:live_map/src/infrastructure/utils/geojson_builder.dart';
 import 'package:live_map/src/infrastructure/utils/model_interpolator.dart';
 
@@ -37,11 +38,14 @@ class MapboxRenderer {
   bool _isComputingGeoJson = false;
   bool _disposed = false;
 
+  CameraScaleController? _scaleController;
+
   MapboxRenderer(this._store, this._adapter, this._routeManager) {
     _ticker = Ticker(_onAnimationTick);
 
     _subscriptions.addAll([
       _store.eventBus.on<CameraFlyTo>(_onCameraFlyTo),
+      _store.eventBus.on<CameraMoved>(_onCameraMoved),
       _store.eventBus.on<ModelLayerRequested>(_onModelLayerRequested),
       _store.eventBus.on<TrackingPositionReceived>(_onTrackingPositionReceived),
       _store.eventBus.on<MapStyleLoaded>(_onMapStyleLoaded),
@@ -69,7 +73,11 @@ class MapboxRenderer {
   }
 
   void _onDimensionModeChanged(DimensionModeChanged event) {
-    _adapter.setPitch(_store.state.camera.pitch);
+    final pitch = event.dimensionMode == MapDimensionMode.threeD
+        ? _store.state.pitch3D
+        : 0.0;
+
+    _adapter.setPitch(pitch);
   }
 
   Future<void> _onModelLayerRequested(ModelLayerRequested event) async {
@@ -100,6 +108,27 @@ class MapboxRenderer {
       );
 
       _store.dispatch(const ModelLayerAdded());
+
+      final zoomScale = modelConfig.zoomScale;
+      if (zoomScale != null) {
+        _scaleController = CameraScaleController(
+          baseScale: modelConfig.scale,
+          minZoom: zoomScale.minZoom,
+          maxZoom: zoomScale.maxZoom,
+          minScaleMultiplier: zoomScale.minScaleMultiplier,
+          maxScaleMultiplier: zoomScale.maxScaleMultiplier,
+        );
+
+        // Apply the correct scale for the current zoom right away.
+        // Without this, the model keeps the static base scale until the
+        // user moves the camera for the first time.
+        final initialScale = _scaleController!.computeIfChanged(
+          _store.state.camera.zoom,
+        );
+        if (initialScale != null) {
+          await _adapter.updateModelScale(_layerId, initialScale);
+        }
+      }
     } catch (e) {
       debugPrint('MapboxRenderer: error loading model layer: $e');
       _store.dispatch(ModelLayerFailed(error: e.toString()));
@@ -211,8 +240,15 @@ class MapboxRenderer {
     });
   }
 
+  void _onCameraMoved(CameraMoved event) {
+    final scale = _scaleController?.computeIfChanged(event.zoom);
+    if (scale == null) return;
+    _adapter.updateModelScale(_layerId, scale);
+  }
+
   void dispose() {
     _disposed = true;
+    _scaleController = null;
     _ticker.dispose();
     _lerps.clear();
     for (final sub in _subscriptions) {
