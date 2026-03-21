@@ -1,7 +1,5 @@
+import 'package:design_system/design_system.dart';
 import 'package:flutter/material.dart';
-import '../../theme/ds_colors.dart';
-import '../../theme/ds_theme_ext.dart';
-import 'bottom_nav_item_data.dart';
 
 const double _kHeight = 56.0;
 const Duration _kAnimDuration = Duration(milliseconds: 200);
@@ -11,7 +9,6 @@ const double _kItemMargin = 4.0;
 const double _kItemHorizontalPadding = 24.0;
 const double _kIconSize = 20.0;
 const double _kIconLabelSpacing = 6.0;
-const double _kLabelFontSize = 12.0;
 
 class DsFloatingNavBar extends StatelessWidget {
   const DsFloatingNavBar({
@@ -108,14 +105,12 @@ class _NavItem extends StatelessWidget {
                           opacity: isSelected ? 1.0 : 0.0,
                           duration: _kAnimDuration,
                           curve: _kAnimCurve,
-                          child: Text(
+                          child: DsText(
                             item.label,
-                            style: const TextStyle(
-                              color: DsColors.white,
-                              fontWeight: FontWeight.w600,
-                              fontSize: _kLabelFontSize,
-                            ),
-                          ),
+                            color: DsColors.white,
+                            variant: TextVariant.label,
+                            bold: true
+                          )
                         ),
                       )
                     : const SizedBox.shrink(),
