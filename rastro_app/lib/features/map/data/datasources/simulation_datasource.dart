@@ -12,7 +12,8 @@ class SimulationDatasource {
     VehiclePosition(id: 'wp-4', latitude: -0.1996900, longitude: -78.5020900),
   ];
 
-  static const double _stepSize = 0.00003;
+  // ~0.0005° por tick ≈ 55 m cada 5 s ≈ 40 km/h
+  static const double _stepSize = 0.0005;
   static const String vehicleId = 'bus-1';
 
   final _controller = StreamController<VehiclePosition>.broadcast();
@@ -32,7 +33,7 @@ class SimulationDatasource {
     _lat = routeWaypoints[0].latitude;
     _lng = routeWaypoints[0].longitude;
 
-    _timer = Timer.periodic(const Duration(milliseconds: 200), (_) {
+    _timer = Timer.periodic(const Duration(seconds: 5), (_) {
       _tick();
     });
   }

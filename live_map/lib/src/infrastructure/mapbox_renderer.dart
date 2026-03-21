@@ -27,7 +27,7 @@ class MapboxRenderer {
 
   static const String _sourceId = 'model-source';
   static const String _layerId = 'model-layer';
-  static const Duration _animDuration = Duration(milliseconds: 200);
+  static const Duration _animDuration = Duration(seconds: 5);
 
   /// Euclidean-degree threshold (~50 m) used to detect route deviation.
   static const double _deviationThreshold = 0.0005;
@@ -45,7 +45,6 @@ class MapboxRenderer {
 
     _subscriptions.addAll([
       _store.eventBus.on<CameraFlyTo>(_onCameraFlyTo),
-      _store.eventBus.on<CameraMoved>(_onCameraMoved),
       _store.eventBus.on<ModelLayerRequested>(_onModelLayerRequested),
       _store.eventBus.on<TrackingPositionReceived>(_onTrackingPositionReceived),
       _store.eventBus.on<MapStyleLoaded>(_onMapStyleLoaded),
@@ -240,8 +239,11 @@ class MapboxRenderer {
     });
   }
 
-  void _onCameraMoved(CameraMoved event) {
-    final scale = _scaleController?.computeIfChanged(event.zoom);
+  /// Called directly by the widget on every camera-change frame (60 fps).
+  /// Bypasses the Redux store entirely — no [CameraMoved] dispatch, no
+  /// [copyWith] — so there is zero GC pressure from the zoom→scale path.
+  void onZoomChanged(double zoom) {
+    final scale = _scaleController?.computeIfChanged(zoom);
     if (scale == null) return;
     _adapter.updateModelScale(_layerId, scale);
   }

@@ -46,6 +46,14 @@ class _LiveMapWidgetState extends State<LiveMapWidget> {
   StreamSubscription<ModelSelected>? _modelSelectedSub;
   Brightness _brightness = Brightness.light;
 
+  // Camera-change throttle — keeps Redux free from 60-fps churn.
+  // Scale updates still reach the GPU every frame via _renderer.onZoomChanged.
+  static const double _zoomDispatchThreshold = 0.01;
+  static const int _minDispatchIntervalMs = 16;
+  final Stopwatch _cameraThrottle = Stopwatch()..start();
+  int _lastDispatchMs = -_minDispatchIntervalMs; // ensures first event fires
+  double _lastDispatchedZoom = double.infinity;
+
   @override
   void initState() {
     super.initState();
@@ -135,10 +143,27 @@ class _LiveMapWidgetState extends State<LiveMapWidget> {
   }
 
   void _onCameraChange(CameraChangedEventData data) {
+    final zoom = data.cameraState.zoom;
+
+    // Always forward zoom to the renderer — zero Redux overhead, zero GC.
+    _renderer.onZoomChanged(zoom);
+
+    // Throttle Redux dispatch: skip if zoom barely changed AND the minimum
+    // interval hasn't elapsed. This keeps CameraState eventually consistent
+    // without generating copyWith objects at 60 fps.
+    final nowMs = _cameraThrottle.elapsedMilliseconds;
+    final zoomDelta = (zoom - _lastDispatchedZoom).abs();
+    if (zoomDelta <= _zoomDispatchThreshold &&
+        nowMs - _lastDispatchMs < _minDispatchIntervalMs) {
+      return;
+    }
+
+    _lastDispatchedZoom = zoom;
+    _lastDispatchMs = nowMs;
     _store.dispatch(CameraMoved(
       latitude: _store.state.camera.latitude,
       longitude: _store.state.camera.longitude,
-      zoom: data.cameraState.zoom,
+      zoom: zoom,
     ));
   }
 
