@@ -14,6 +14,7 @@ export 'src/widgets/badge/badge_variant.dart';
 export 'src/widgets/cards/ds_image_card.dart';
 export 'src/widgets/cards/ds_list_card.dart';
 export 'src/widgets/cards/ds_info_card.dart';
+export 'src/widgets/cards/ds_gradient_card.dart';
 export 'src/widgets/search/ds_search_bar.dart';
 export 'src/widgets/text/ds_text.dart';
 export 'src/widgets/text/text_variant.dart';
