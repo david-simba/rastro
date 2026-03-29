@@ -3,40 +3,21 @@ import 'package:flutter/material.dart';
 import 'package:flutter_lucide/flutter_lucide.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
-
 import 'package:rastro/core/routing/app_routes.dart';
+
 import 'package:rastro/features/home/presentation/widgets/section_separator.dart';
+import 'package:rastro/features/search/presentation/search_controller_provider.dart';
+import 'package:rastro/features/search/presentation/search_notifier.dart';
 
-class HomeScreen extends ConsumerStatefulWidget {
+class HomeScreen extends ConsumerWidget {
   const HomeScreen({super.key});
-
-  @override
-  ConsumerState<HomeScreen> createState() => _HomeScreenState();
-}
-
-class _HomeScreenState extends ConsumerState<HomeScreen> {
-  late final TextEditingController _searchController;
 
   static const double _horizontalPadding = 20.0;
 
   @override
-  void initState() {
-    super.initState();
-    _searchController = TextEditingController();
-  }
+  Widget build(BuildContext context, WidgetRef ref) {
+    final controller = ref.watch(searchControllerProvider);
 
-  @override
-  void dispose() {
-    _searchController.dispose();
-    super.dispose();
-  }
-
-  void _onSearchChanged(String query) {
-    // TODO: ref.read(searchNotifierProvider.notifier).search(query);
-  }
-
-  @override
-  Widget build(BuildContext context) {
     return Scaffold(
       body: SafeArea(
         child: SingleChildScrollView(
@@ -45,9 +26,22 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               const SizedBox(height: 16),
+              DsText(
+                "Hola, Usuario",
+                variant: TextVariant.subtitle,
+              ),
+              DsText(
+                "Encuentra tu ruta",
+                variant: TextVariant.label,
+                color: DsColors.zinc500,
+              ),
+              const SizedBox(height: 16),
               DsSearchBar(
-                controller: _searchController,
-                onChanged: _onSearchChanged,
+                hintText: "Buscar bus, parada, ruta...",
+                controller: controller,
+                onChanged: (query) {
+                  ref.read(searchProvider.notifier).search(query);
+                },
               ),
               const SizedBox(height: 24),
               const SectionSeparator(

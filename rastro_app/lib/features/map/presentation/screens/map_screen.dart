@@ -7,6 +7,8 @@ import 'package:rastro/core/providers/core_providers.dart';
 import 'package:rastro/features/map/presentation/providers/map_notifier.dart';
 import 'package:rastro/features/map/presentation/widgets/map_controls.dart';
 import 'package:rastro/features/map/presentation/widgets/map_view.dart';
+import 'package:rastro/features/search/presentation/search_controller_provider.dart';
+import 'package:rastro/features/search/presentation/search_notifier.dart';
 
 class MapScreen extends ConsumerStatefulWidget {
   const MapScreen({super.key});
@@ -28,12 +30,25 @@ class _MapScreenState extends ConsumerState<MapScreen> {
   Widget build(BuildContext context) {
     final config = ref.watch(appConfigProvider);
     final mapState = ref.watch(mapNotifierProvider);
+    final controller = ref.watch(searchControllerProvider);
 
     return Stack(
       children: [
         MapView(onModelTap: _showVehicleInfo),
         Positioned(
-          top: 110,
+          top: 60,
+          left: 20,
+          right: 20,
+          child: DsSearchBar(
+            hintText: "Buscar bus, parada, ruta...",
+            controller: controller,
+            onChanged: (query) {
+              ref.read(searchProvider.notifier).search(query);
+            },
+          ),
+        ),
+        Positioned(
+          top: 140,
           right: 10,
           child: MapControls(
             showDebug: config.isDevelopment,

@@ -19,9 +19,8 @@ class SectionSeparator extends StatelessWidget {
         DsText(
           label,
           variant: TextVariant.subtitle,
-          bold: true,
         ),
-        if (trailing != null) trailing!,
+        ?trailing,
       ],
     );
   }
