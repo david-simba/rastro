@@ -49,7 +49,7 @@ class DsInfoCard extends StatelessWidget {
                 children: [
                   if (label != null)
                     DsText(label!, variant: TextVariant.caption, color: dsColors.muted),
-                  if (trailing != null) trailing!,
+                  ?trailing,
                 ],
               ),
               const SizedBox(height: 2),

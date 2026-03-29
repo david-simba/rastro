@@ -44,7 +44,7 @@ class DsListCard extends StatelessWidget {
                 children: [
                   DsText(title, variant: TextVariant.medium, color: dsColors.onSurface),
                   if (subtitle != null)
-                    DsText(subtitle!, variant: TextVariant.caption, color: dsColors.muted),
+                    DsText(subtitle!, variant: TextVariant.regular2, color: dsColors.muted),
                 ],
               ),
             ),

@@ -36,7 +36,7 @@ class _MapScreenState extends ConsumerState<MapScreen> {
       children: [
         MapView(onModelTap: _showVehicleInfo),
         Positioned(
-          top: 60,
+          top: 50,
           left: 20,
           right: 20,
           child: DsSearchBar(
@@ -48,8 +48,8 @@ class _MapScreenState extends ConsumerState<MapScreen> {
           ),
         ),
         Positioned(
-          top: 140,
-          right: 10,
+          top: 120,
+          right: 20,
           child: MapControls(
             showDebug: config.isDevelopment,
             dimensionMode: mapState.dimensionMode,

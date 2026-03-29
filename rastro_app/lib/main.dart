@@ -38,10 +38,10 @@ class RastroApp extends ConsumerWidget {
     return MaterialApp.router(
       debugShowCheckedModeBanner: !config.isProduction,
       theme: DsTheme.light.copyWith(
-        textTheme: DsTheme.light.textTheme.apply(fontFamily: 'Poppins'),
+        textTheme: DsTheme.light.textTheme.apply(fontFamily: 'Inter'),
       ),
       darkTheme: DsTheme.dark.copyWith(
-        textTheme: DsTheme.dark.textTheme.apply(fontFamily: 'Poppins'),
+        textTheme: DsTheme.dark.textTheme.apply(fontFamily: 'Inter'),
       ),
       themeMode: ThemeMode.system,
       routerConfig: router,

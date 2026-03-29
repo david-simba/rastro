@@ -27,8 +27,8 @@ class HomeScreen extends ConsumerWidget {
             children: [
               const SizedBox(height: 16),
               DsText(
-                "Hola, Usuario",
-                variant: TextVariant.subtitle,
+                "Hola, Team!",
+                variant: TextVariant.title,
               ),
               DsText(
                 "Encuentra tu ruta",
@@ -43,8 +43,7 @@ class HomeScreen extends ConsumerWidget {
                   ref.read(searchProvider.notifier).search(query);
                 },
               ),
-              const SizedBox(height: 24),
-
+              const SizedBox(height: 16),
               DsImageCard(
                 image: Image.asset('assets/images/map_preview_card.png', fit: BoxFit.cover, width: double.infinity, height: 150),
                 footer: Row(
