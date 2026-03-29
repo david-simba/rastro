@@ -5,8 +5,10 @@ enum TextVariant {
   headline,
   title,
   subtitle,
-  body,
-  label,
+  regular,
+  regular2,
+  medium,
+  medium2,
   caption,
 }
 
@@ -15,12 +17,14 @@ extension TextVariantExtension on TextVariant {
     TextVariant.headline: DsTypography.headline,
     TextVariant.title: DsTypography.title,
     TextVariant.subtitle: DsTypography.subtitle,
-    TextVariant.body: DsTypography.body,
-    TextVariant.label: DsTypography.label,
+    TextVariant.regular: DsTypography.regular,
+    TextVariant.regular2: DsTypography.regular2,
+    TextVariant.medium: DsTypography.medium,
+    TextVariant.medium2: DsTypography.medium2,
     TextVariant.caption: DsTypography.caption,
   };
 
   TextStyle get style {
-    return _styleMap[this] ?? DsTypography.body;
+    return _styleMap[this] ?? DsTypography.regular;
   }
 }

@@ -44,7 +44,7 @@ class DsTextField extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         if (label != null) ...[
-          DsText(label!, bold: true, variant: TextVariant.body),
+          DsText(label!, variant: TextVariant.medium),
           const SizedBox(height: 10),
         ],
         TextFormField(
@@ -59,7 +59,7 @@ class DsTextField extends StatelessWidget {
           cursorWidth: cursorWidth,
           decoration: InputDecoration(
             hintText: hint,
-            hintStyle: DsTypography.body.copyWith(color: dsColors.muted),
+            hintStyle: DsTypography.regular.copyWith(color: dsColors.muted),
             contentPadding: const EdgeInsets.symmetric(horizontal: 12, vertical: 14),
             enabledBorder: OutlineInputBorder(
               borderRadius: BorderRadius.circular(8),
@@ -80,7 +80,7 @@ class DsTextField extends StatelessWidget {
         ),
         if (hasError) ...[
           const SizedBox(height: 6),
-          DsText(errorText!, variant: TextVariant.label, color: DsColors.danger),
+          DsText(errorText!, variant: TextVariant.regular2, color: DsColors.danger),
         ],
       ],
     );

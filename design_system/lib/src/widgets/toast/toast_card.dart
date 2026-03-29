@@ -63,7 +63,7 @@ class ToastCard extends StatelessWidget {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         mainAxisSize: MainAxisSize.min,
                         children: [
-                          DsText(title, bold: true, variant: TextVariant.body, color: dsColors.onSurface),
+                          DsText(title, variant: TextVariant.medium, color: dsColors.onSurface),
                           const SizedBox(height: 4),
                           DsText(message, variant: TextVariant.caption, color: dsColors.muted),
                         ],

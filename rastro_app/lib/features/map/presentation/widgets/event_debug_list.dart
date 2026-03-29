@@ -23,7 +23,7 @@ class EventDebugList extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           mainAxisSize: MainAxisSize.min,
           children: [
-            DsText('Event Log (${events.length})', bold: true),
+            DsText('Event Log (${events.length})', variant: TextVariant.medium),
             const SizedBox(height: 12),
             for (final event in events)
               Padding(

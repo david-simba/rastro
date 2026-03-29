@@ -42,7 +42,7 @@ class DsListCard extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 mainAxisSize: MainAxisSize.min,
                 children: [
-                  DsText(title, bold: true, color: dsColors.onSurface),
+                  DsText(title, variant: TextVariant.medium, color: dsColors.onSurface),
                   if (subtitle != null)
                     DsText(subtitle!, variant: TextVariant.caption, color: dsColors.muted),
                 ],

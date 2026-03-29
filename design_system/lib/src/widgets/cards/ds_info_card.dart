@@ -54,7 +54,7 @@ class DsInfoCard extends StatelessWidget {
               ),
               const SizedBox(height: 2),
             ],
-            DsText(title, bold: true, color: dsColors.onSurface),
+            DsText(title, variant: TextVariant.medium, color: dsColors.onSurface),
             if (footer != null) ...[
               const SizedBox(height: 8),
               footer!,

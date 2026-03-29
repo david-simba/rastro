@@ -8,7 +8,7 @@ class RoutesScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       body: Center(
-        child: DsText('Rutas', variant: TextVariant.title, bold: true),
+        child: DsText('Rutas', variant: TextVariant.title),
       ),
     );
   }

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import '../text/ds_text.dart';
+import '../text/text_variant.dart';
 import 'button_variant.dart';
 
 class DsButton extends StatelessWidget {
@@ -9,7 +10,6 @@ class DsButton extends StatelessWidget {
   final double? width;
   final double? height;
   final bool fullWidth;
-  final bool bold;
   final IconData? leadingIcon;
   final IconData? trailingIcon;
 
@@ -20,7 +20,6 @@ class DsButton extends StatelessWidget {
     this.width,
     this.height,
     this.fullWidth = false,
-    this.bold = true,
     this.leadingIcon,
     this.trailingIcon,
     super.key,
@@ -53,7 +52,7 @@ class DsButton extends StatelessWidget {
             ],
             DsText(
               text,
-              bold: bold,
+              variant: TextVariant.medium,
               color: variant.textColor,
               align: TextAlign.center,
             ),

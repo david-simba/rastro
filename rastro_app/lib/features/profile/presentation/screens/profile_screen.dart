@@ -8,7 +8,7 @@ class ProfileScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       body: Center(
-        child: DsText('Perfil', variant: TextVariant.title, bold: true),
+        child: DsText('Perfil', variant: TextVariant.title),
       ),
     );
   }

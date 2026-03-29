@@ -50,8 +50,8 @@ class DsTheme {
       displayLarge: DsTypography.headline,
       titleLarge: DsTypography.title,
       titleMedium: DsTypography.subtitle,
-      bodyMedium: DsTypography.body,
-      labelMedium: DsTypography.label,
+      bodyMedium: DsTypography.regular,
+      labelMedium: DsTypography.regular2,
       bodySmall: DsTypography.caption,
     );
   }

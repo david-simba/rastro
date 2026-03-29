@@ -32,7 +32,7 @@ class HomeScreen extends ConsumerWidget {
               ),
               DsText(
                 "Encuentra tu ruta",
-                variant: TextVariant.label,
+                variant: TextVariant.regular2,
                 color: DsColors.zinc500,
               ),
               const SizedBox(height: 16),
@@ -44,17 +44,7 @@ class HomeScreen extends ConsumerWidget {
                 },
               ),
               const SizedBox(height: 24),
-              const SectionSeparator(
-                label: 'Mapa en vivo',
-                trailing: DsBadge(
-                  label: "3 buses cerca de ti",
-                  leadingIcon: Icons.circle,
-                  iconSize: 8,
-                  variant: BadgeVariant.soft,
-                  color: DsColors.primary,
-                ),
-              ),
-              const SizedBox(height: 16),
+
               DsImageCard(
                 image: Image.asset('assets/images/map_preview_card.png', fit: BoxFit.cover, width: double.infinity, height: 150),
                 footer: Row(
@@ -63,13 +53,12 @@ class HomeScreen extends ConsumerWidget {
                     Row(children: [
                       Icon(LucideIcons.map_pin, size: 16),
                       SizedBox(width: 4),
-                      DsText('Quito, Ecuador', bold: true,),
+                      DsText('Quito, Ecuador', variant: TextVariant.medium),
                     ]),
                     DsButton(
                       text: 'Ver mapa',
                       leadingIcon: LucideIcons.navigation,
                       onPressed: () => context.go(AppRoutes.map),
-                      bold: true,
                     ),
                   ],
                 ),

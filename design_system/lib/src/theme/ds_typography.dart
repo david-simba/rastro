@@ -18,14 +18,24 @@ class DsTypography {
     fontWeight: FontWeight.w500,
   );
 
-  static const TextStyle body = TextStyle(
+  static const TextStyle regular = TextStyle(
     fontSize: 14,
     fontWeight: FontWeight.w400,
   );
 
-  static const TextStyle label = TextStyle(
+  static const TextStyle regular2 = TextStyle(
     fontSize: 12,
     fontWeight: FontWeight.w400,
+  );
+
+  static const TextStyle medium = TextStyle(
+    fontSize: 14,
+    fontWeight: FontWeight.w500,
+  );
+
+  static const TextStyle medium2 = TextStyle(
+    fontSize: 12,
+    fontWeight: FontWeight.w600,
   );
 
   static const TextStyle caption = TextStyle(

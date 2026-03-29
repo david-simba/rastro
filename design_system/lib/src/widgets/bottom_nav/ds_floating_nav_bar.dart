@@ -108,8 +108,7 @@ class _NavItem extends StatelessWidget {
                           child: DsText(
                             item.label,
                             color: DsColors.white,
-                            variant: TextVariant.label,
-                            bold: true
+                            variant: TextVariant.medium2,
                           )
                         ),
                       )

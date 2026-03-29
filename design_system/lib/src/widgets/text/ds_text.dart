@@ -18,8 +18,7 @@ class DsText extends StatelessWidget {
 
   factory DsText(
     String text, {
-      TextVariant variant = TextVariant.body,
-      bool bold = false,
+      TextVariant variant = TextVariant.regular,
       Color? color,
       TextAlign? align,
       int? maxLines,
@@ -33,7 +32,6 @@ class DsText extends StatelessWidget {
       maxLines: maxLines,
       overflow: overflow,
       style: baseStyle.copyWith(
-        fontWeight: bold ? FontWeight.w500 : baseStyle.fontWeight,
         color: color ?? baseStyle.color,
       ),
     );

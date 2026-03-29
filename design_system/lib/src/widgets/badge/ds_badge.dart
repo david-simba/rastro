@@ -41,7 +41,7 @@ class DsBadge extends StatelessWidget {
             Icon(leadingIcon, size: iconSize, color: fgColor),
             const SizedBox(width: 4),
           ],
-          DsText(label, color: fgColor, variant: TextVariant.label, bold: true),
+          DsText(label, color: fgColor, variant: TextVariant.regular2),
           if (trailingIcon != null) ...[
             const SizedBox(width: 4),
             Icon(trailingIcon, size: iconSize, color: fgColor),

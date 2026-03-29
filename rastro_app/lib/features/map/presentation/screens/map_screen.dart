@@ -65,7 +65,7 @@ class _MapScreenState extends ConsumerState<MapScreen> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          DsText(model.id, bold: true),
+          DsText(model.id, variant: TextVariant.medium),
           const SizedBox(height: 8),
         ],
       ),
