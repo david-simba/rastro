@@ -132,26 +132,6 @@ class MapboxAdapter {
     );
   }
 
-  Future<void> hideDefaultLayers() async {
-    final map = _map;
-    if (map == null) return;
-    await map.style.setStyleImportConfigProperty(
-      'basemap',
-      'showPointOfInterestLabels',
-      false,
-    );
-    await map.style.setStyleImportConfigProperty(
-      'basemap',
-      'showRoadLabels',
-      true,
-    );
-    await map.style.setStyleImportConfigProperty(
-      'basemap',
-      'showPlaceLabels',
-      true,
-    );
-  }
-
   Future<void> loadStyle(String styleUri) async {
     await _map?.loadStyleURI(styleUri);
   }

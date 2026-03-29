@@ -10,10 +10,6 @@ import 'package:rastro/features/map/domain/entities/vehicle_position.dart';
 import 'package:rastro/features/map/domain/repositories/i_map_repository.dart';
 import 'package:rastro/features/map/presentation/providers/map_state.dart';
 
-// ---------------------------------------------------------------------------
-// Providers — composition root for the map feature
-// ---------------------------------------------------------------------------
-
 final mapRepositoryProvider = Provider<IMapRepository>((ref) {
   final datasource = SimulationDatasource();
   ref.onDispose(datasource.dispose);
@@ -23,10 +19,6 @@ final mapRepositoryProvider = Provider<IMapRepository>((ref) {
 final mapNotifierProvider = NotifierProvider<MapNotifier, MapState>(
   MapNotifier.new,
 );
-
-// ---------------------------------------------------------------------------
-// ViewModel
-// ---------------------------------------------------------------------------
 
 class MapNotifier extends Notifier<MapState> {
   late final LiveMapController _controller;
@@ -60,7 +52,7 @@ class MapNotifier extends Notifier<MapState> {
       initialModels: [PositionMapper.toMapModel(initial)],
       waypoints: waypoints.map(PositionMapper.toMapModel).toList(),
       modelConfig: const ModelConfig(
-        modelPath: 'assets/models/bus.glb',
+        modelPath: 'assets/models/optimized-bus.glb',
         scale: [2.5, 2.5, 2.5],
         rotation: [0, 0, 0],
         zoomScale: ZoomScaleConfig(

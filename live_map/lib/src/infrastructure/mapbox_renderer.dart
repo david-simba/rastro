@@ -59,7 +59,6 @@ class MapboxRenderer {
   Future<void> _onMapStyleLoaded(MapStyleLoaded event) async {
     final state = _store.state;
     try {
-      await _adapter.hideDefaultLayers();
       if (state.waypoints.isNotEmpty) {
         await _adapter.drawWaypoints(state.waypoints);
       }
