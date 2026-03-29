@@ -131,6 +131,14 @@ class _LiveMapWidgetState extends State<LiveMapWidget> {
 
   void _onMapCreated(MapboxMap map) {
     _adapter.bind(map);
+    map.scaleBar.updateSettings(
+      ScaleBarSettings(
+        enabled: false,
+      ),
+    );
+    map.compass.updateSettings(
+      CompassSettings(enabled: false),
+    );
     _store.dispatch(const MapCreated());
   }
 
