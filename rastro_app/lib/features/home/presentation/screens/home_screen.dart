@@ -35,7 +35,7 @@ class HomeScreen extends ConsumerWidget {
                 variant: TextVariant.regular2,
                 color: DsColors.zinc500,
               ),
-              const SizedBox(height: 16),
+              const SizedBox(height: 24),
               DsSearchBar(
                 hintText: "Buscar bus, parada, ruta...",
                 controller: controller,
@@ -43,7 +43,7 @@ class HomeScreen extends ConsumerWidget {
                   ref.read(searchProvider.notifier).search(query);
                 },
               ),
-              const SizedBox(height: 16),
+              const SizedBox(height: 24),
               DsImageCard(
                 image: Image.asset('assets/images/map_preview_card.png', fit: BoxFit.cover, width: double.infinity, height: 150),
                 footer: Row(
@@ -63,6 +63,36 @@ class HomeScreen extends ConsumerWidget {
                 ),
               ),
               const SizedBox(height: 24),
+              Row(
+                mainAxisSize: MainAxisSize.max,
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  DsCircleButton(
+                    onPressed: (){},
+                    icon: LucideIcons.map,
+                    label: "Mapa"
+                  ),
+                  DsCircleButton(
+                    onPressed: (){},
+                    icon: LucideIcons.route,
+                    label: "Rutas",
+                    backgroundColor: DsColors.green500,
+                  ),
+                  DsCircleButton(
+                    onPressed: (){},
+                    icon: LucideIcons.clock_4,
+                    label: "Horarios",
+                    backgroundColor: DsColors.orange400,
+                  ),
+                  DsCircleButton(
+                    onPressed: (){},
+                    icon: LucideIcons.star,
+                    label: "Favoritos",
+                    backgroundColor: DsColors.purple400,
+                  ),
+                ],
+              ),
+              const SizedBox(height: 24),
               const SectionSeparator(
                 label: 'Rutas Activas',
               ),
@@ -70,22 +100,22 @@ class HomeScreen extends ConsumerWidget {
               DsListCard(
                 title: 'Ecovia',
                 subtitle: 'Rio Coca → Quitumbe',
-                leading: Icon(LucideIcons.bus, color: DsColors.primary),
-                trailing: DsBadge(label: 'En vivo', color: DsColors.success, variant: BadgeVariant.soft,),
+                leading: Icon(LucideIcons.bus, color: DsColors.blue500),
+                trailing: DsBadge(label: 'En vivo', color: DsColors.green500, variant: BadgeVariant.soft,),
               ),
               const SizedBox(height: 10),
               DsListCard(
                 title: 'Ecovia',
                 subtitle: 'Rio Coca → Quitumbe',
-                leading: Icon(LucideIcons.bus, color: DsColors.primary),
-                trailing: DsBadge(label: 'En vivo', color: DsColors.success, variant: BadgeVariant.soft,),
+                leading: Icon(LucideIcons.bus, color: DsColors.blue500),
+                trailing: DsBadge(label: 'En vivo', color: DsColors.green500, variant: BadgeVariant.soft,),
               ),
               const SizedBox(height: 10),
               DsListCard(
                 title: 'Los Chillos',
                 subtitle: 'Quitumbe → Sangolqui',
-                leading: Icon(LucideIcons.bus, color: DsColors.danger),
-                trailing: DsBadge(label: 'Estan robando 🗣', color: DsColors.danger, variant: BadgeVariant.soft,),
+                leading: Icon(LucideIcons.bus, color: DsColors.orange500),
+                trailing: DsBadge(label: 'Estan robando 🗣', color: DsColors.orange500, variant: BadgeVariant.soft,),
               ),
               const SizedBox(height: 24),
               const SectionSeparator(
@@ -96,7 +126,7 @@ class HomeScreen extends ConsumerWidget {
                 children: [
                   Expanded(
                     child: DsInfoCard(
-                      icon: Icon(LucideIcons.bus_front, color: DsColors.primary),
+                      icon: Icon(LucideIcons.bus_front, color: DsColors.blue500),
                       title: 'La Marín',
                       footer: Row(
                         children: [
@@ -110,7 +140,7 @@ class HomeScreen extends ConsumerWidget {
                   SizedBox(width: 12),
                   Expanded(
                     child: DsInfoCard(
-                      icon: Icon(LucideIcons.bus_front, color: DsColors.primary),
+                      icon: Icon(LucideIcons.bus_front, color: DsColors.blue500),
                       title: 'La Cocha',
                       footer: Row(
                         children: [
