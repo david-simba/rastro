@@ -79,6 +79,11 @@ class MapNotifier extends Notifier<MapState> {
         accessToken: token,
       );
 
+      debugPrint('[directions] ${routePoints.length} route map');
+      for (final p in routePoints) {
+        debugPrint('[directions] lat: ${p.lat}, lng: ${p.lng}');
+      }
+
       _controller.assignRoute(SimulationDatasource.vehicleId, routePoints);
 
       // Make the bus follow the same road geometry drawn on the map.
@@ -97,6 +102,9 @@ class MapNotifier extends Notifier<MapState> {
 
     _repository.startTracking();
     _positionSub = _repository.watchPositions().listen((position) {
+      debugPrint(
+        '[position] ${position.id} → lat: ${position.latitude}, lng: ${position.longitude}, bearing: ${position.bearing.toStringAsFixed(1)}°',
+      );
       _controller.dispatch(TrackingPositionReceived(
         modelId: position.id,
         latitude: position.latitude,
