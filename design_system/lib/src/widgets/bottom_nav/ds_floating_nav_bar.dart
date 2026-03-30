@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 
 const Duration _kAnimDuration = Duration(milliseconds: 200);
 const Curve _kAnimCurve = Curves.easeInOut;
-const double _kItemMargin = 4.0;
 const double _kIconSize = 20.0;
 
 class DsFloatingNavBar extends StatelessWidget {
@@ -48,7 +47,13 @@ class _NavBarBackground extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       padding: EdgeInsets.only(bottom: bottomPadding, top: DsLayout.spacingXs),
-      decoration: BoxDecoration(color: context.dsColors.surface),
+      decoration: BoxDecoration(
+        color: context.dsColors.surface,
+        borderRadius: BorderRadius.only(
+          topLeft: Radius.circular(10),
+          topRight: Radius.circular(10)
+        )
+      ),
       child: SizedBox(height: DsLayout.navBarHeight, child: Center(child: child)),
     );
   }
@@ -77,7 +82,7 @@ class _NavItem extends StatelessWidget {
         curve: _kAnimCurve,
         alignment: Alignment.center,
         padding: const EdgeInsets.symmetric(horizontal: DsLayout.spacingXxl),
-        margin: const EdgeInsets.all(_kItemMargin),
+        margin: const EdgeInsets.all(DsLayout.radiusXs),
         decoration: BoxDecoration(
           color: isSelected ? DsColors.blue500 : Colors.transparent,
           borderRadius: DsLayout.borderRadiusLg,

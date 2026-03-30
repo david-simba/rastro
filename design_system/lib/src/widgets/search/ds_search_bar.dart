@@ -30,7 +30,7 @@ class DsSearchBar extends StatelessWidget {
       height: DsLayout.searchBarHeight,
       decoration: BoxDecoration(
         color: dsColors.surface,
-        borderRadius: DsLayout.borderRadiusFull,
+        borderRadius: DsLayout.borderRadiusMd,
         boxShadow: const [
           BoxShadow(
             color: Color.fromRGBO(0, 0, 0, _kShadowOpacity),
