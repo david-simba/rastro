@@ -70,7 +70,7 @@ class DsSearchBar extends StatelessWidget {
                 isDense: true,
                 contentPadding: EdgeInsets.zero,
               ),
-              cursorColor: DsColors.primary,
+              cursorColor: DsColors.blue500,
             ),
           ),
           if (onMicTap != null)

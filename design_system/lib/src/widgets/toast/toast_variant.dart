@@ -10,10 +10,10 @@ enum ToastVariant {
 
 extension ToastVariantExtension on ToastVariant {
   static final _colorMap = <ToastVariant, Color>{
-    ToastVariant.success: DsColors.success,
-    ToastVariant.warning: DsColors.warning,
-    ToastVariant.error: DsColors.danger,
-    ToastVariant.info: DsColors.primary,
+    ToastVariant.success: DsColors.green500,
+    ToastVariant.warning: DsColors.yellow400,
+    ToastVariant.error: DsColors.orange500,
+    ToastVariant.info: DsColors.blue500,
   };
 
   static final _iconMap = <ToastVariant, IconData>{
@@ -23,6 +23,6 @@ extension ToastVariantExtension on ToastVariant {
     ToastVariant.info: Icons.info,
   };
 
-  Color get color => _colorMap[this] ?? DsColors.primary;
+  Color get color => _colorMap[this] ?? DsColors.blue500;
   IconData get icon => _iconMap[this] ?? Icons.info;
 }

@@ -7,6 +7,7 @@ export 'src/widgets/bottom_nav/ds_floating_nav_bar.dart';
 export 'src/widgets/bottom_nav/bottom_nav_item_data.dart';
 export 'src/widgets/bottom_sheet/ds_bottom_sheet.dart';
 export 'src/widgets/button/ds_button.dart';
+export 'src/widgets/button/ds_circle_button.dart';
 export 'src/widgets/button/ds_floating_button.dart';
 export 'src/widgets/button/button_variant.dart';
 export 'src/widgets/badge/ds_badge.dart';

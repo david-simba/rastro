@@ -29,7 +29,7 @@ class DsTextField extends StatelessWidget {
     this.onChanged,
     this.onEditingComplete,
     this.maxLines = 1,
-    this.cursorColor = DsColors.primary,
+    this.cursorColor = DsColors.blue500,
     this.cursorHeight = 20,
     this.cursorWidth = 2,
     super.key,
@@ -64,14 +64,14 @@ class DsTextField extends StatelessWidget {
             enabledBorder: OutlineInputBorder(
               borderRadius: BorderRadius.circular(8),
               borderSide: BorderSide(
-                color: hasError ? DsColors.danger : dsColors.border,
+                color: hasError ? DsColors.orange500 : dsColors.border,
                 width: 1,
               ),
             ),
             focusedBorder: OutlineInputBorder(
               borderRadius: BorderRadius.circular(8),
               borderSide: BorderSide(
-                color: hasError ? DsColors.danger : DsColors.primary,
+                color: hasError ? DsColors.orange500 : DsColors.blue500,
                 width: 1.5,
               ),
             ),
@@ -80,7 +80,7 @@ class DsTextField extends StatelessWidget {
         ),
         if (hasError) ...[
           const SizedBox(height: 6),
-          DsText(errorText!, variant: TextVariant.regular2, color: DsColors.danger),
+          DsText(errorText!, variant: TextVariant.regular2, color: DsColors.orange500),
         ],
       ],
     );

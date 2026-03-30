@@ -19,7 +19,7 @@ class DsTheme {
   static ThemeData get light => _build(
         tokens: DsThemeColors.light,
         colorScheme: ColorScheme.fromSeed(
-          seedColor: DsColors.primary,
+          seedColor: DsColors.blue500,
           brightness: Brightness.light,
         ),
       );
@@ -27,7 +27,7 @@ class DsTheme {
   static ThemeData get dark => _build(
         tokens: DsThemeColors.dark,
         colorScheme: ColorScheme.fromSeed(
-          seedColor: DsColors.primary,
+          seedColor: DsColors.blue500,
           brightness: Brightness.dark,
         ),
       );
