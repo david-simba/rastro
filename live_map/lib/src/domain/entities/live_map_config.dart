@@ -11,7 +11,6 @@ class LiveMapConfig {
   final double initialLongitude;
   final double initialZoom;
   final List<MapModel> initialModels;
-  final List<MapModel> waypoints;
 
   /// Camera pitch (degrees) applied when [dimensionMode] is [MapDimensionMode.threeD].
   final double pitch3D;
@@ -23,7 +22,6 @@ class LiveMapConfig {
     required this.initialLongitude,
     this.initialZoom = 15.0,
     this.initialModels = const [],
-    this.waypoints = const [],
     this.pitch3D = 50.0,
   });
 }

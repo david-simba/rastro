@@ -18,7 +18,6 @@ class LiveMapState {
   final TrackingState tracking;
   final MapDimensionMode dimensionMode;
   final ModelConfig? modelConfig;
-  final List<MapModel> waypoints;
 
   /// Pitch applied when [dimensionMode] is [MapDimensionMode.threeD].
   /// Set once from [LiveMapConfig.pitch3D] and never changes at runtime.
@@ -31,7 +30,6 @@ class LiveMapState {
     required this.tracking,
     required this.dimensionMode,
     this.modelConfig,
-    this.waypoints = const [],
     this.pitch3D = 50.0,
   });
 
@@ -48,7 +46,6 @@ class LiveMapState {
       tracking: const TrackingState(),
       dimensionMode: config.dimensionMode,
       modelConfig: config.modelConfig,
-      waypoints: config.waypoints,
       pitch3D: config.pitch3D,
     );
   }
@@ -60,7 +57,6 @@ class LiveMapState {
     TrackingState? tracking,
     MapDimensionMode? dimensionMode,
     ModelConfig? Function()? modelConfig,
-    List<MapModel>? waypoints,
   }) {
     return LiveMapState(
       lifecycle: lifecycle ?? this.lifecycle,
@@ -69,7 +65,6 @@ class LiveMapState {
       tracking: tracking ?? this.tracking,
       dimensionMode: dimensionMode ?? this.dimensionMode,
       modelConfig: modelConfig != null ? modelConfig() : this.modelConfig,
-      waypoints: waypoints ?? this.waypoints,
       pitch3D: pitch3D,
     );
   }
@@ -83,8 +78,7 @@ class LiveMapState {
           models == other.models &&
           tracking == other.tracking &&
           dimensionMode == other.dimensionMode &&
-          modelConfig == other.modelConfig &&
-          waypoints == other.waypoints;
+          modelConfig == other.modelConfig;
 
   @override
   int get hashCode => Object.hash(
@@ -94,6 +88,5 @@ class LiveMapState {
         tracking,
         dimensionMode,
         modelConfig,
-        Object.hashAll(waypoints),
       );
 }

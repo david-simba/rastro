@@ -98,40 +98,6 @@ class MapboxAdapter {
     );
   }
 
-  Future<void> drawWaypoints(List<MapModel> waypoints) async {
-    final map = _map;
-    if (map == null || waypoints.isEmpty) return;
-
-    const sourceId = 'waypoints-source';
-    const layerId = 'waypoints-layer';
-
-    if (await sourceExists(sourceId)) return;
-
-    final geoJson = jsonEncode({
-      'type': 'FeatureCollection',
-      'features': waypoints.map((w) => {
-        'type': 'Feature',
-        'geometry': {
-          'type': 'Point',
-          'coordinates': [w.longitude, w.latitude],
-        },
-        'properties': {'id': w.id},
-      }).toList(),
-    });
-
-    await addGeoJsonSource(sourceId, geoJson);
-
-    if (await layerExists(layerId)) return;
-
-    await map.style.addLayer(
-      CircleLayer(id: layerId, sourceId: sourceId)
-        ..circleRadius = 6.0
-        ..circleColor = 0xFF6B7280
-        ..circleStrokeWidth = 2.0
-        ..circleStrokeColor = 0xFFFFFFFF,
-    );
-  }
-
   Future<void> loadStyle(String styleUri) async {
     await _map?.loadStyleURI(styleUri);
   }
@@ -142,6 +108,85 @@ class MapboxAdapter {
     final map = _map;
     if (map == null) return;
     await map.style.setStyleLayerProperty(layerId, 'model-scale', scale);
+  }
+
+  /// Renders a road route on the map as a [LineLayer].
+  ///
+  /// Safe to call multiple times for the same [routeId] — updates the GeoJSON
+  /// source in-place if the layer already exists. The layer is keyed by
+  /// [routeId] so multiple independent routes can coexist on the map.
+  Future<void> drawRoute(
+    String routeId,
+    List<LatLng> points, {
+    int color = 0xFF93C5FD,
+    double width = 5.0,
+  }) async {
+    final map = _map;
+    if (map == null || points.isEmpty) return;
+
+    final sourceId = 'route-source-$routeId';
+    final layerId = 'route-layer-$routeId';
+
+    final geoJson = jsonEncode({
+      'type': 'Feature',
+      'geometry': {
+        'type': 'LineString',
+        'coordinates': points.map((p) => [p.lng, p.lat]).toList(),
+      },
+      'properties': {},
+    });
+
+    if (await sourceExists(sourceId)) {
+      await updateSourceData(sourceId, geoJson);
+    } else {
+      await addGeoJsonSource(sourceId, geoJson);
+    }
+
+    if (!await layerExists(layerId)) {
+      await map.style.addLayer(
+        LineLayer(id: layerId, sourceId: sourceId)
+          ..lineColor = color
+          ..lineWidth = width,
+      );
+
+      // Place the route line below the first symbol layer (road labels, POI
+      // names, etc.) so text remains readable on top of the route.
+      final firstSymbol = await _firstSymbolLayerId();
+      if (firstSymbol != null) {
+        await map.style.moveStyleLayer(
+          layerId,
+          LayerPosition(below: firstSymbol),
+        );
+      }
+    }
+  }
+
+  /// Returns the id of the first [symbol] layer in the current map style, or
+  /// null if none is found. Used to position the route line below road labels.
+  Future<String?> _firstSymbolLayerId() async {
+    final map = _map;
+    if (map == null) return null;
+    final layers = await map.style.getStyleLayers();
+    for (final layer in layers) {
+      if (layer?.type == 'symbol') return layer?.id;
+    }
+    return null;
+  }
+
+  /// Removes the route line layer and its backing GeoJSON source from the map.
+  Future<void> clearRoute(String routeId) async {
+    final map = _map;
+    if (map == null) return;
+
+    final layerId = 'route-layer-$routeId';
+    final sourceId = 'route-source-$routeId';
+
+    if (await layerExists(layerId)) {
+      await map.style.removeStyleLayer(layerId);
+    }
+    if (await sourceExists(sourceId)) {
+      await map.style.removeStyleSource(sourceId);
+    }
   }
 
   void dispose() {
