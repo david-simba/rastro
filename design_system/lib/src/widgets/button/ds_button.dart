@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../../theme/ds_colors.dart';
 import '../text/ds_text.dart';
 import '../text/text_variant.dart';
 import 'button_variant.dart';
@@ -7,6 +8,7 @@ class DsButton extends StatelessWidget {
   final String text;
   final VoidCallback onPressed;
   final ButtonVariant variant;
+  final Color color;
   final double? width;
   final double? height;
   final bool fullWidth;
@@ -16,7 +18,8 @@ class DsButton extends StatelessWidget {
   const DsButton({
     required this.text,
     required this.onPressed,
-    this.variant = ButtonVariant.primary,
+    this.variant = ButtonVariant.filled,
+    this.color = DsColors.blue500,
     this.width,
     this.height,
     this.fullWidth = false,
@@ -27,13 +30,18 @@ class DsButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final isOutlined = variant == ButtonVariant.outlined;
+    final fgColor = isOutlined ? color : DsColors.white;
+
     final ButtonStyle style = ElevatedButton.styleFrom(
-      backgroundColor: variant.backgroundColor,
-      foregroundColor: variant.textColor,
+      backgroundColor: isOutlined ? Colors.transparent : color,
+      foregroundColor: fgColor,
+      shadowColor: Colors.transparent,
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(16),
+        side: isOutlined ? BorderSide(color: color) : BorderSide.none,
       ),
-      elevation: 2,
+      elevation: isOutlined ? 0 : 2,
     );
 
     return SizedBox(
@@ -47,18 +55,18 @@ class DsButton extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             if (leadingIcon != null) ...[
-              Icon(leadingIcon, size: 16, color: variant.textColor),
+              Icon(leadingIcon, size: 16, color: fgColor),
               const SizedBox(width: 6),
             ],
             DsText(
               text,
               variant: TextVariant.medium,
-              color: variant.textColor,
+              color: fgColor,
               align: TextAlign.center,
             ),
             if (trailingIcon != null) ...[
               const SizedBox(width: 6),
-              Icon(trailingIcon, size: 16, color: variant.textColor),
+              Icon(trailingIcon, size: 16, color: fgColor),
             ],
           ],
         ),

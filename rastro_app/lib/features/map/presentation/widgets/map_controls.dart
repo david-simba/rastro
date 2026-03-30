@@ -25,7 +25,6 @@ class MapControls extends ConsumerWidget {
       children: [
         DsFloatingButton(
           onPressed: notifier.toggleDimension,
-          variant: ButtonVariant.primary,
           icon: dimensionMode == MapDimensionMode.twoD
               ? Icons.threed_rotation_sharp
               : Icons.layers,
@@ -34,7 +33,7 @@ class MapControls extends ConsumerWidget {
         if (showDebug)
           DsFloatingButton(
             onPressed: () => _showEventDebugSheet(context, notifier),
-            variant: ButtonVariant.primary,
+            variant: ButtonVariant.filled,
             icon: Icons.bug_report,
           ),
       ],
