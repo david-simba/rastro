@@ -1,7 +1,5 @@
+import 'package:design_system/design_system.dart';
 import 'package:flutter/material.dart';
-import '../../theme/ds_theme_ext.dart';
-import '../text/ds_text.dart';
-import '../text/text_variant.dart';
 
 class DsListCard extends StatelessWidget {
   final String title;
@@ -26,16 +24,16 @@ class DsListCard extends StatelessWidget {
     return GestureDetector(
       onTap: onPress,
       child: Container(
-        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
+        padding: const EdgeInsets.symmetric(horizontal: DsLayout.spacingLg, vertical: 14),
         decoration: BoxDecoration(
           color: dsColors.surface,
-          borderRadius: BorderRadius.circular(16),
+          borderRadius: DsLayout.borderRadiusMd,
         ),
         child: Row(
           children: [
             if (leading != null) ...[
               leading!,
-              const SizedBox(width: 12),
+              const SizedBox(width: DsLayout.spacingMd),
             ],
             Expanded(
               child: Column(
@@ -49,7 +47,7 @@ class DsListCard extends StatelessWidget {
               ),
             ),
             if (trailing != null) ...[
-              const SizedBox(width: 12),
+              const SizedBox(width: DsLayout.spacingMd),
               trailing!,
             ],
           ],

@@ -1,12 +1,7 @@
+import 'package:design_system/design_system.dart';
 import 'package:flutter/material.dart';
-import '../../theme/ds_colors.dart';
-import '../../theme/ds_theme_ext.dart';
 
-const double _kHeight = 52.0;
-const double _kBorderRadius = 26.0;
-const double _kHorizontalPadding = 16.0;
 const double _kIconSize = 20.0;
-const double _kIconSpacing = 8.0;
 const double _kTextFontSize = 14.0;
 const double _kShadowBlur = 8.0;
 const double _kShadowOpacity = 0.06;
@@ -32,10 +27,10 @@ class DsSearchBar extends StatelessWidget {
     final dsColors = context.dsColors;
 
     return Container(
-      height: _kHeight,
+      height: DsLayout.searchBarHeight,
       decoration: BoxDecoration(
         color: dsColors.surface,
-        borderRadius: BorderRadius.circular(_kBorderRadius),
+        borderRadius: DsLayout.borderRadiusFull,
         boxShadow: const [
           BoxShadow(
             color: Color.fromRGBO(0, 0, 0, _kShadowOpacity),
@@ -47,9 +42,9 @@ class DsSearchBar extends StatelessWidget {
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
-          const SizedBox(width: _kHorizontalPadding),
+          const SizedBox(width: DsLayout.spacingLg),
           Icon(Icons.search_rounded, size: _kIconSize, color: dsColors.muted),
-          const SizedBox(width: _kIconSpacing),
+          const SizedBox(width: DsLayout.spacingSm),
           Expanded(
             child: TextField(
               controller: controller,
@@ -78,12 +73,12 @@ class DsSearchBar extends StatelessWidget {
               onTap: onMicTap,
               behavior: HitTestBehavior.opaque,
               child: Padding(
-                padding: const EdgeInsets.symmetric(horizontal: _kHorizontalPadding),
+                padding: const EdgeInsets.symmetric(horizontal: DsLayout.spacingLg),
                 child: Icon(Icons.mic_none_rounded, size: _kIconSize, color: dsColors.muted),
               ),
             )
           else
-            const SizedBox(width: _kHorizontalPadding),
+            const SizedBox(width: DsLayout.spacingLg),
         ],
       ),
     );

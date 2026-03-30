@@ -1,5 +1,5 @@
+import 'package:design_system/design_system.dart';
 import 'package:flutter/material.dart';
-import '../../theme/ds_theme_ext.dart';
 
 class DsImageCard extends StatelessWidget {
   final Widget image;
@@ -14,7 +14,7 @@ class DsImageCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ClipRRect(
-      borderRadius: BorderRadius.circular(16),
+      borderRadius: DsLayout.borderRadiusMd,
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
@@ -22,7 +22,7 @@ class DsImageCard extends StatelessWidget {
           if (footer != null)
             Container(
               width: double.infinity,
-              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
+              padding: const EdgeInsets.symmetric(horizontal: DsLayout.spacingLg, vertical: 10),
               color: context.dsColors.surface,
               child: footer!,
             ),

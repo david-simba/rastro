@@ -1,7 +1,5 @@
+import 'package:design_system/design_system.dart';
 import 'package:flutter/material.dart';
-import '../../theme/ds_colors.dart';
-import '../text/ds_text.dart';
-import '../text/text_variant.dart';
 
 class DsCircleButton extends StatelessWidget {
   final VoidCallback onPressed;
@@ -17,7 +15,7 @@ class DsCircleButton extends StatelessWidget {
     this.icon,
     this.backgroundColor = DsColors.blue500,
     this.foregroundColor = DsColors.white,
-    this.size = 56,
+    this.size = DsLayout.floatingButtonSize,
     super.key,
   });
 
@@ -42,7 +40,7 @@ class DsCircleButton extends StatelessWidget {
                 : null,
           ),
         ),
-        const SizedBox(height: 6),
+        const SizedBox(height: DsLayout.spacingSm),
         DsText(
           label,
           variant: TextVariant.caption,

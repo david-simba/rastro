@@ -1,8 +1,5 @@
 import 'package:design_system/design_system.dart';
 import 'package:flutter/material.dart';
-import '../../theme/ds_colors.dart';
-import '../text/ds_text.dart';
-import 'badge_variant.dart';
 
 class DsBadge extends StatelessWidget {
   final String label;
@@ -28,10 +25,10 @@ class DsBadge extends StatelessWidget {
     final fgColor = variant.textColor(color);
 
     return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+      padding: const EdgeInsets.symmetric(horizontal: DsLayout.spacingMd, vertical: DsLayout.spacingXs),
       decoration: BoxDecoration(
         color: bgColor,
-        borderRadius: BorderRadius.circular(100),
+        borderRadius: DsLayout.borderRadiusFull,
       ),
       child: Row(
         mainAxisSize: MainAxisSize.min,
@@ -39,11 +36,11 @@ class DsBadge extends StatelessWidget {
         children: [
           if (leadingIcon != null) ...[
             Icon(leadingIcon, size: iconSize, color: fgColor),
-            const SizedBox(width: 4),
+            const SizedBox(width: DsLayout.spacingXs),
           ],
           DsText(label, color: fgColor, variant: TextVariant.regular2),
           if (trailingIcon != null) ...[
-            const SizedBox(width: 4),
+            const SizedBox(width: DsLayout.spacingXs),
             Icon(trailingIcon, size: iconSize, color: fgColor),
           ],
         ],

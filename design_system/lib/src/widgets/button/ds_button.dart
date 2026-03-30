@@ -1,8 +1,5 @@
+import 'package:design_system/design_system.dart';
 import 'package:flutter/material.dart';
-import '../../theme/ds_colors.dart';
-import '../text/ds_text.dart';
-import '../text/text_variant.dart';
-import 'button_variant.dart';
 
 class DsButton extends StatelessWidget {
   final String text;
@@ -38,7 +35,7 @@ class DsButton extends StatelessWidget {
       foregroundColor: fgColor,
       shadowColor: Colors.transparent,
       shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(16),
+        borderRadius: DsLayout.borderRadiusMd,
         side: isOutlined ? BorderSide(color: color) : BorderSide.none,
       ),
       elevation: isOutlined ? 0 : 2,
@@ -46,7 +43,7 @@ class DsButton extends StatelessWidget {
 
     return SizedBox(
       width: width ?? (fullWidth ? double.infinity : null),
-      height: height ?? 32,
+      height: height ?? DsLayout.buttonHeight,
       child: ElevatedButton(
         onPressed: onPressed,
         style: style,

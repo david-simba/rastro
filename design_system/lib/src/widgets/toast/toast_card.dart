@@ -1,8 +1,5 @@
+import 'package:design_system/design_system.dart';
 import 'package:flutter/material.dart';
-import '../../theme/ds_theme_ext.dart';
-import '../text/ds_text.dart';
-import '../text/text_variant.dart';
-import 'toast_variant.dart';
 
 class ToastCard extends StatelessWidget {
   final String title;
@@ -24,10 +21,10 @@ class ToastCard extends StatelessWidget {
     final color = variant.color;
 
     return Container(
-      margin: const EdgeInsets.symmetric(vertical: 6, horizontal: 12),
+      margin: const EdgeInsets.symmetric(vertical: 6, horizontal: DsLayout.spacingMd),
       decoration: BoxDecoration(
         color: dsColors.surface,
-        borderRadius: BorderRadius.circular(16),
+        borderRadius: DsLayout.borderRadiusMd,
         boxShadow: [
           BoxShadow(
             color: Colors.black.withAlpha(25),
@@ -45,32 +42,35 @@ class ToastCard extends StatelessWidget {
               decoration: BoxDecoration(
                 color: color,
                 borderRadius: const BorderRadius.only(
-                  topLeft: Radius.circular(16),
-                  bottomLeft: Radius.circular(16),
+                  topLeft: Radius.circular(DsLayout.radiusMd),
+                  bottomLeft: Radius.circular(DsLayout.radiusMd),
                 ),
               ),
             ),
             Expanded(
               child: Padding(
-                padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 12),
+                padding: const EdgeInsets.symmetric(
+                  vertical: DsLayout.spacingLg,
+                  horizontal: DsLayout.spacingMd,
+                ),
                 child: Row(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Icon(variant.icon, color: color, size: 28),
-                    const SizedBox(width: 12),
+                    const SizedBox(width: DsLayout.spacingMd),
                     Expanded(
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         mainAxisSize: MainAxisSize.min,
                         children: [
                           DsText(title, variant: TextVariant.medium, color: dsColors.onSurface),
-                          const SizedBox(height: 4),
+                          const SizedBox(height: DsLayout.spacingXs),
                           DsText(message, variant: TextVariant.caption, color: dsColors.muted),
                         ],
                       ),
                     ),
                     if (onClose != null) ...[
-                      const SizedBox(width: 8),
+                      const SizedBox(width: DsLayout.spacingSm),
                       GestureDetector(
                         onTap: onClose,
                         child: Icon(Icons.close, size: 20, color: dsColors.muted),

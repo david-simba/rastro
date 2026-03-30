@@ -1,14 +1,10 @@
 import 'package:design_system/design_system.dart';
 import 'package:flutter/material.dart';
 
-const double _kHeight = 56.0;
 const Duration _kAnimDuration = Duration(milliseconds: 200);
 const Curve _kAnimCurve = Curves.easeInOut;
-const double _kItemBorderRadius = 24.0;
 const double _kItemMargin = 4.0;
-const double _kItemHorizontalPadding = 24.0;
 const double _kIconSize = 20.0;
-const double _kIconLabelSpacing = 6.0;
 
 class DsFloatingNavBar extends StatelessWidget {
   const DsFloatingNavBar({
@@ -51,9 +47,9 @@ class _NavBarBackground extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: EdgeInsets.only(bottom: bottomPadding, top: 5,),
+      padding: EdgeInsets.only(bottom: bottomPadding, top: DsLayout.spacingXs),
       decoration: BoxDecoration(color: context.dsColors.surface),
-      child: SizedBox(height: _kHeight, child: Center(child: child)),
+      child: SizedBox(height: DsLayout.navBarHeight, child: Center(child: child)),
     );
   }
 }
@@ -80,11 +76,11 @@ class _NavItem extends StatelessWidget {
         duration: _kAnimDuration,
         curve: _kAnimCurve,
         alignment: Alignment.center,
-        padding: const EdgeInsets.symmetric(horizontal: _kItemHorizontalPadding),
+        padding: const EdgeInsets.symmetric(horizontal: DsLayout.spacingXxl),
         margin: const EdgeInsets.all(_kItemMargin),
         decoration: BoxDecoration(
           color: isSelected ? DsColors.blue500 : Colors.transparent,
-          borderRadius: BorderRadius.circular(_kItemBorderRadius),
+          borderRadius: DsLayout.borderRadiusLg,
         ),
         child: Row(
           mainAxisSize: MainAxisSize.min,
@@ -100,7 +96,7 @@ class _NavItem extends StatelessWidget {
                 curve: _kAnimCurve,
                 child: isSelected
                     ? Padding(
-                        padding: const EdgeInsets.only(left: _kIconLabelSpacing),
+                        padding: const EdgeInsets.only(left: DsLayout.spacingSm),
                         child: AnimatedOpacity(
                           opacity: isSelected ? 1.0 : 0.0,
                           duration: _kAnimDuration,
@@ -109,7 +105,7 @@ class _NavItem extends StatelessWidget {
                             item.label,
                             color: DsColors.white,
                             variant: TextVariant.medium2,
-                          )
+                          ),
                         ),
                       )
                     : const SizedBox.shrink(),

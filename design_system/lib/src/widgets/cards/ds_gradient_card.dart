@@ -1,3 +1,4 @@
+import 'package:design_system/design_system.dart';
 import 'package:flutter/material.dart';
 
 class DsGradientCard extends StatelessWidget {
@@ -23,7 +24,7 @@ class DsGradientCard extends StatelessWidget {
           begin: begin,
           end: end,
         ),
-        borderRadius: BorderRadius.circular(16),
+        borderRadius: DsLayout.borderRadiusMd,
       ),
       child: child,
     );

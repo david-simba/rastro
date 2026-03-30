@@ -1,6 +1,5 @@
+import 'package:design_system/design_system.dart';
 import 'package:flutter/material.dart';
-import '../../theme/ds_colors.dart';
-import 'button_variant.dart';
 
 class DsFloatingButton extends StatelessWidget {
   final VoidCallback onPressed;
@@ -24,8 +23,8 @@ class DsFloatingButton extends StatelessWidget {
     final fgColor = isOutlined ? color : DsColors.white;
 
     return SizedBox(
-      width: size ?? 56,
-      height: size ?? 56,
+      width: size ?? DsLayout.floatingButtonSize,
+      height: size ?? DsLayout.floatingButtonSize,
       child: FloatingActionButton(
         onPressed: onPressed,
         backgroundColor: isOutlined ? Colors.transparent : color,

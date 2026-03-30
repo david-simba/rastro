@@ -1,9 +1,5 @@
+import 'package:design_system/design_system.dart';
 import 'package:flutter/material.dart';
-import '../../theme/ds_colors.dart';
-import '../../theme/ds_theme_ext.dart';
-import '../../theme/ds_typography.dart';
-import '../text/ds_text.dart';
-import '../text/text_variant.dart';
 
 class DsTextField extends StatelessWidget {
   final String? label;
@@ -60,16 +56,19 @@ class DsTextField extends StatelessWidget {
           decoration: InputDecoration(
             hintText: hint,
             hintStyle: DsTypography.regular.copyWith(color: dsColors.muted),
-            contentPadding: const EdgeInsets.symmetric(horizontal: 12, vertical: 14),
+            contentPadding: const EdgeInsets.symmetric(
+              horizontal: DsLayout.spacingMd,
+              vertical: 14,
+            ),
             enabledBorder: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(8),
+              borderRadius: DsLayout.borderRadiusSm,
               borderSide: BorderSide(
                 color: hasError ? DsColors.orange500 : dsColors.border,
                 width: 1,
               ),
             ),
             focusedBorder: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(8),
+              borderRadius: DsLayout.borderRadiusSm,
               borderSide: BorderSide(
                 color: hasError ? DsColors.orange500 : DsColors.blue500,
                 width: 1.5,

@@ -1,4 +1,5 @@
 export 'src/theme/ds_colors.dart';
+export 'src/theme/ds_layout.dart';
 export 'src/theme/ds_typography.dart';
 export 'src/theme/ds_color_tokens.dart';
 export 'src/theme/ds_theme.dart';

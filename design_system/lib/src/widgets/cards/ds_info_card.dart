@@ -1,7 +1,5 @@
+import 'package:design_system/design_system.dart';
 import 'package:flutter/material.dart';
-import '../../theme/ds_theme_ext.dart';
-import '../text/ds_text.dart';
-import '../text/text_variant.dart';
 
 class DsInfoCard extends StatelessWidget {
   final String title;
@@ -33,7 +31,7 @@ class DsInfoCard extends StatelessWidget {
         padding: const EdgeInsets.all(14),
         decoration: BoxDecoration(
           color: backgroundColor ?? dsColors.surface,
-          borderRadius: BorderRadius.circular(16),
+          borderRadius: DsLayout.borderRadiusMd,
         ),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -56,7 +54,7 @@ class DsInfoCard extends StatelessWidget {
             ],
             DsText(title, variant: TextVariant.medium, color: dsColors.onSurface),
             if (footer != null) ...[
-              const SizedBox(height: 8),
+              const SizedBox(height: DsLayout.spacingSm),
               footer!,
             ],
           ],

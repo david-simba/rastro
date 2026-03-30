@@ -1,6 +1,6 @@
+import 'package:design_system/design_system.dart';
+import 'package:design_system/src/widgets/bottom_sheet/ds_bottom_sheet_header.dart';
 import 'package:flutter/material.dart';
-import '../../theme/ds_theme_ext.dart';
-import 'ds_bottom_sheet_header.dart';
 
 class DsBottomSheet extends StatelessWidget {
   const DsBottomSheet({
@@ -42,7 +42,7 @@ class DsBottomSheet extends StatelessWidget {
     return Container(
       decoration: BoxDecoration(
         color: context.dsColors.surface,
-        borderRadius: const BorderRadius.vertical(top: Radius.circular(16)),
+        borderRadius: const BorderRadius.vertical(top: Radius.circular(DsLayout.radiusMd)),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -52,7 +52,9 @@ class DsBottomSheet extends StatelessWidget {
             child: SizedBox(
               width: double.infinity,
               child: SingleChildScrollView(
-                padding: const EdgeInsets.fromLTRB(16, 0, 16, 16),
+                padding: const EdgeInsets.fromLTRB(
+                  DsLayout.spacingLg, 0, DsLayout.spacingLg, DsLayout.spacingLg,
+                ),
                 child: Align(
                   alignment: Alignment.topLeft,
                   child: child,
