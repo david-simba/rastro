@@ -6,12 +6,14 @@ class DsGradientCard extends StatelessWidget {
   final Widget child;
   final AlignmentGeometry begin;
   final AlignmentGeometry end;
+  final bool rounded;
 
   const DsGradientCard({
     required this.colors,
     required this.child,
     this.begin = Alignment.topLeft,
     this.end = Alignment.bottomRight,
+    this.rounded = true,
     super.key,
   });
 
@@ -24,9 +26,15 @@ class DsGradientCard extends StatelessWidget {
           begin: begin,
           end: end,
         ),
-        borderRadius: DsLayout.borderRadiusMd,
+        borderRadius: rounded ? DsLayout.borderRadiusMd : BorderRadius.zero,
       ),
-      child: child,
+      child: DefaultTextStyle.merge(
+        style: const TextStyle(color: DsColors.white),
+        child: IconTheme.merge(
+          data: const IconThemeData(color: DsColors.white),
+          child: child,
+        ),
+      ),
     );
   }
 }

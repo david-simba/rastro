@@ -14,6 +14,7 @@ class DsTextField extends StatelessWidget {
   final Color cursorColor;
   final double cursorHeight;
   final double cursorWidth;
+  final IconData? leadingIcon;
 
   const DsTextField({
     this.label,
@@ -28,6 +29,7 @@ class DsTextField extends StatelessWidget {
     this.cursorColor = DsColors.blue500,
     this.cursorHeight = 20,
     this.cursorWidth = 2,
+    this.leadingIcon,
     super.key,
   });
 
@@ -56,21 +58,29 @@ class DsTextField extends StatelessWidget {
           decoration: InputDecoration(
             hintText: hint,
             hintStyle: DsTypography.regular.copyWith(color: dsColors.muted),
+            prefixIcon: leadingIcon != null
+                ? Padding(
+                    padding: const EdgeInsets.only(left: DsLayout.spacingLg, right: DsLayout.spacingSm, top: DsLayout.spacingXs),
+                    child: Icon(leadingIcon, size: 18, color: dsColors.muted),
+                  )
+                : null,
+            prefixIconConstraints: leadingIcon != null
+                ? const BoxConstraints()
+                : null,
             contentPadding: const EdgeInsets.symmetric(
               horizontal: DsLayout.spacingMd,
-              vertical: 14,
             ),
             enabledBorder: OutlineInputBorder(
-              borderRadius: DsLayout.borderRadiusSm,
+              borderRadius: DsLayout.borderRadiusMd,
               borderSide: BorderSide(
-                color: hasError ? DsColors.orange500 : dsColors.border,
+                color: hasError ? DsColors.red500 : dsColors.border,
                 width: 1,
               ),
             ),
             focusedBorder: OutlineInputBorder(
-              borderRadius: DsLayout.borderRadiusSm,
+              borderRadius: DsLayout.borderRadiusMd,
               borderSide: BorderSide(
-                color: hasError ? DsColors.orange500 : DsColors.blue500,
+                color: hasError ? DsColors.red500 : DsColors.blue500,
                 width: 1.5,
               ),
             ),
@@ -79,7 +89,7 @@ class DsTextField extends StatelessWidget {
         ),
         if (hasError) ...[
           const SizedBox(height: 6),
-          DsText(errorText!, variant: TextVariant.regular2, color: DsColors.orange500),
+          DsText(errorText!, variant: TextVariant.regular2, color: DsColors.red500),
         ],
       ],
     );

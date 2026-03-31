@@ -68,6 +68,18 @@ class DsColors {
   static const orange800 = Color(0xFF9A3412);
   static const orange900 = Color(0xFF7C2D12);
 
+  // Red
+  static const red50  = Color(0xFFFFF1F2);
+  static const red100 = Color(0xFFFFE4E6);
+  static const red200 = Color(0xFFFECDD3);
+  static const red300 = Color(0xFFFDA4AF);
+  static const red400 = Color(0xFFFB7185);
+  static const red500 = Color(0xFFF43F5E);
+  static const red600 = Color(0xFFE11D48);
+  static const red700 = Color(0xFFBE123C);
+  static const red800 = Color(0xFF9F1239);
+  static const red900 = Color(0xFF881337);
+
   // Purple
   static const purple50  = Color(0xFFF5F3FF);
   static const purple100 = Color(0xFFEDE9FE);

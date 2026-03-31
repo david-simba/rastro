@@ -56,7 +56,7 @@ class HomeScreen extends ConsumerWidget {
                     ]),
                     DsButton(
                       text: 'Ver mapa',
-                      leadingIcon: LucideIcons.navigation,
+                      leading: const Icon(LucideIcons.navigation, size: 16),
                       onPressed: () => context.go(AppRoutes.map),
                     ),
                   ],
