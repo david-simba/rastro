@@ -11,6 +11,8 @@ export 'src/widgets/button/ds_button.dart';
 export 'src/widgets/button/ds_circle_button.dart';
 export 'src/widgets/button/ds_floating_button.dart';
 export 'src/widgets/button/ds_gradient_button.dart';
+export 'src/widgets/button/ds_text_button.dart';
+export 'src/widgets/divider/ds_divider.dart';
 export 'src/widgets/button/button_variant.dart';
 export 'src/widgets/badge/ds_badge.dart';
 export 'src/widgets/badge/badge_variant.dart';
