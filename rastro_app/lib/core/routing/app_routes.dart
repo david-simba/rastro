@@ -16,7 +16,8 @@ class AppRouteItem {
 }
 
 abstract final class AppRoutes {
-  static const home = '/';
+  static const auth = '/auth';
+  static const home = '/home';
   static const map = '/map';
   static const routes = '/routes';
   static const profile = '/profile';
