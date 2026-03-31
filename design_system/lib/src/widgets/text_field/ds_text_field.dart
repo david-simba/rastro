@@ -59,17 +59,22 @@ class DsTextField extends StatelessWidget {
             hintText: hint,
             hintStyle: DsTypography.regular.copyWith(color: dsColors.muted),
             prefixIcon: leadingIcon != null
-                ? Icon(leadingIcon, size: 18, color: dsColors.muted)
+                ? Padding(
+                    padding: const EdgeInsets.only(left: DsLayout.spacingLg, right: DsLayout.spacingSm, top: DsLayout.spacingXs),
+                    child: Icon(leadingIcon, size: 18, color: dsColors.muted),
+                  )
+                : null,
+            prefixIconConstraints: leadingIcon != null
+                ? const BoxConstraints()
                 : null,
             contentPadding: const EdgeInsets.symmetric(
               horizontal: DsLayout.spacingMd,
-              vertical: 14,
             ),
             enabledBorder: OutlineInputBorder(
               borderRadius: DsLayout.borderRadiusMd,
               borderSide: BorderSide(
                 color: hasError ? DsColors.red500 : dsColors.border,
-                width: 0.5,
+                width: 1,
               ),
             ),
             focusedBorder: OutlineInputBorder(

@@ -19,7 +19,7 @@ class DsDivider extends StatelessWidget {
         Expanded(child: Divider(color: borderColor, thickness: 0.5, height: 1)),
         Padding(
           padding: const EdgeInsets.symmetric(horizontal: DsLayout.spacingMd),
-          child: DsText(label!, variant: TextVariant.regular, color: context.dsColors.muted),
+          child: DsText(label!, variant: TextVariant.regular2, color: context.dsColors.muted),
         ),
         Expanded(child: Divider(color: borderColor, thickness: 0.5, height: 1)),
       ],
