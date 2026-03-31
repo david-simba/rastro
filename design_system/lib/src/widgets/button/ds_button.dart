@@ -6,29 +6,34 @@ class DsButton extends StatelessWidget {
   final VoidCallback onPressed;
   final ButtonVariant variant;
   final Color color;
+  final Color? borderColor;
+  final Color? textColor;
   final double? width;
   final double? height;
   final bool fullWidth;
-  final IconData? leadingIcon;
-  final IconData? trailingIcon;
+  final Widget? leading;
+  final Widget? trailing;
 
   const DsButton({
     required this.text,
     required this.onPressed,
     this.variant = ButtonVariant.filled,
     this.color = DsColors.blue500,
+    this.borderColor,
+    this.textColor,
     this.width,
     this.height,
     this.fullWidth = false,
-    this.leadingIcon,
-    this.trailingIcon,
+    this.leading,
+    this.trailing,
     super.key,
   });
 
   @override
   Widget build(BuildContext context) {
     final isOutlined = variant == ButtonVariant.outlined;
-    final fgColor = isOutlined ? color : DsColors.white;
+    final fgColor = textColor ?? (isOutlined ? color : DsColors.white);
+    final strokeColor = borderColor ?? color;
 
     final ButtonStyle style = ElevatedButton.styleFrom(
       backgroundColor: isOutlined ? Colors.transparent : color,
@@ -36,7 +41,7 @@ class DsButton extends StatelessWidget {
       shadowColor: Colors.transparent,
       shape: RoundedRectangleBorder(
         borderRadius: DsLayout.borderRadiusMd,
-        side: isOutlined ? BorderSide(color: color) : BorderSide.none,
+        side: isOutlined ? BorderSide(color: strokeColor) : BorderSide.none,
       ),
       elevation: isOutlined ? 0 : 2,
     );
@@ -51,9 +56,9 @@ class DsButton extends StatelessWidget {
           mainAxisSize: MainAxisSize.min,
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            if (leadingIcon != null) ...[
-              Icon(leadingIcon, size: 16, color: fgColor),
-              const SizedBox(width: 6),
+            if (leading != null) ...[
+              leading!,
+              const SizedBox(width: 10),
             ],
             DsText(
               text,
@@ -61,9 +66,9 @@ class DsButton extends StatelessWidget {
               color: fgColor,
               align: TextAlign.center,
             ),
-            if (trailingIcon != null) ...[
+            if (trailing != null) ...[
               const SizedBox(width: 6),
-              Icon(trailingIcon, size: 16, color: fgColor),
+              trailing!,
             ],
           ],
         ),
