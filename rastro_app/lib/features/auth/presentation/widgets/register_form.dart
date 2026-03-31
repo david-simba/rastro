@@ -1,14 +1,12 @@
 import 'package:design_system/design_system.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_lucide/flutter_lucide.dart';
-import 'package:go_router/go_router.dart';
-import 'package:rastro/core/routing/app_routes.dart';
 import 'package:rastro/features/auth/presentation/widgets/oauth_buttons.dart';
 
-class LoginForm extends StatelessWidget {
-  final VoidCallback onRegisterTap;
+class RegisterForm extends StatelessWidget {
+  final VoidCallback onLoginTap;
 
-  const LoginForm({required this.onRegisterTap, super.key});
+  const RegisterForm({required this.onLoginTap, super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -16,14 +14,19 @@ class LoginForm extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         DsText(
-          "Iniciar Sesión",
+          "Crear Cuenta",
           variant: TextVariant.title,
         ),
         DsText(
-          "Bienvenido de vuelta",
+          "Completa tus datos para registrarte",
           color: DsColors.zinc500,
         ),
         SizedBox(height: DsLayout.spacingXl),
+        DsTextField(
+          hint: "Nombre completo",
+          leadingIcon: LucideIcons.user,
+        ),
+        SizedBox(height: DsLayout.spacingLg),
         DsTextField(
           hint: "Correo electrónico",
           leadingIcon: LucideIcons.mail,
@@ -33,27 +36,24 @@ class LoginForm extends StatelessWidget {
           hint: "Contraseña",
           leadingIcon: LucideIcons.lock,
         ),
-        SizedBox(height: DsLayout.spacingXl),
-        Align(
-          alignment: Alignment.centerRight,
-          child: DsTextButton(
-            text: '¿Olvidaste tu contraseña?',
-            onPressed: () {},
-          ),
+        SizedBox(height: DsLayout.spacingLg),
+        DsTextField(
+          hint: "Confirmar contraseña",
+          leadingIcon: LucideIcons.lock,
         ),
         SizedBox(height: DsLayout.spacingXxl),
         DsGradientButton(
-          text: 'Iniciar sesión',
+          text: 'Crear Cuenta',
           height: 46,
           fullWidth: true,
           colors: [
             DsColors.blue500,
             DsColors.purple500,
           ],
-          onPressed: () => context.go(AppRoutes.home),
+          onPressed: () {},
         ),
         SizedBox(height: DsLayout.spacingXl),
-        const DsDivider(label: 'o continuar con'),
+        const DsDivider(label: 'o regístrate con'),
         SizedBox(height: DsLayout.spacingXxl),
         const OAuthButtons(),
         SizedBox(height: DsLayout.spacingXl),
@@ -61,10 +61,10 @@ class LoginForm extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             DsText(
-              "¿No tienes cuenta? ",
+              "¿Ya tienes cuenta? ",
               color: DsColors.zinc500,
             ),
-            DsTextButton(text: "Registrate", onPressed: onRegisterTap),
+            DsTextButton(text: "Inicia Sesión", onPressed: onLoginTap),
           ],
         ),
       ],
