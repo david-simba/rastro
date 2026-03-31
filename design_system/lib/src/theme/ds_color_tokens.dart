@@ -37,7 +37,7 @@ class DsThemeColors extends ThemeExtension<DsThemeColors> {
     background: DsColors.surface,
     onBackground: DsColors.black,
     border: DsColors.zinc300,
-    muted: DsColors.zinc500,
+    muted: DsColors.zinc400,
   );
 
   static const dark = DsThemeColors(
