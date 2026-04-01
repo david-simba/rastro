@@ -105,7 +105,7 @@ class _RegisterFormState extends ConsumerState<RegisterForm> {
           height: 46,
           fullWidth: true,
           isLoading: loadingAction == AuthAction.email,
-          colors: [DsColors.blue500, DsColors.purple500],
+          colors: [DsColors.secondary, DsColors.primary],
           onPressed: () => _submit(notifier),
         ),
         SizedBox(height: DsLayout.spacingXl),

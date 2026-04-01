@@ -68,7 +68,10 @@ class _LoginFormState extends ConsumerState<LoginForm> {
         SizedBox(height: DsLayout.spacingXl),
         Align(
           alignment: Alignment.centerRight,
-          child: DsTextButton(text: '¿Olvidaste tu contraseña?', onPressed: () {}),
+          child: DsTextButton(
+            text: '¿Olvidaste tu contraseña?',
+            onPressed: () {}
+          ),
         ),
         SizedBox(height: DsLayout.spacingXxl),
         DsGradientButton(
@@ -76,7 +79,7 @@ class _LoginFormState extends ConsumerState<LoginForm> {
           height: 46,
           fullWidth: true,
           isLoading: loadingAction == AuthAction.email,
-          colors: [DsColors.blue500, DsColors.purple500],
+          colors: [DsColors.secondary, DsColors.primary],
           onPressed: () => notifier.loginWithEmail(
             email: _emailController.text.trim(),
             password: _passwordController.text,
