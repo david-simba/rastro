@@ -22,6 +22,8 @@ dependencies:
     path: ../design_system
   live_map:
     path: ../live_map
+  network:
+    path: ../network
 
 dev_dependencies:
   flutter_test:
