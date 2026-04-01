@@ -17,12 +17,18 @@ class DsGradientCard extends StatelessWidget {
     super.key,
   });
 
+  List<Color> _normalizeColors(List<Color> colors) {
+    return colors.map((c) {
+      return Color.lerp(c, Colors.black, 0.08)!;
+    }).toList();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Container(
       decoration: BoxDecoration(
         gradient: LinearGradient(
-          colors: colors,
+          colors: _normalizeColors(colors),
           begin: begin,
           end: end,
         ),

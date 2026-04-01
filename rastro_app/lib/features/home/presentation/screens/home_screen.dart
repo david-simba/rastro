@@ -46,7 +46,7 @@ class HomeScreen extends ConsumerWidget {
               SizedBox(height: DsLayout.spacingLg),
               DsGradientCard(
                 colors: [DsColors.primary, DsColors.secondary],
-                begin: Alignment.topRight,
+                end: Alignment.bottomRight,
                 child: SizedBox(
                   width: double.infinity,
                   child: Padding(
