@@ -12,7 +12,7 @@ class DsBadge extends StatelessWidget {
   const DsBadge({
     required this.label,
     this.variant = BadgeVariant.solid,
-    this.color = DsColors.blue500,
+    this.color = DsColors.primary,
     this.leadingIcon,
     this.trailingIcon,
     this.iconSize = 16,

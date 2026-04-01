@@ -6,9 +6,9 @@ class DsColors {
   // Core
   static const black = Color(0xFF1D1617);
   static const white = Color(0xFFFFFFFF);
-  static const surface = Color(0xFFF5F7FA);
-  static const primary = Color(0xFF1a374d);
-  static const secondary = Color(0xFF2d6187);
+  static const surface = Color(0xFFF0F4F6);
+  static const primary = Color(0xFF244E6B);
+  static const secondary = Color(0xFF1A374D);
 
   // Zinc
   static const zinc50  = Color(0xFFFAFAFA);

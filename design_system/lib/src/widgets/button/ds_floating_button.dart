@@ -12,7 +12,7 @@ class DsFloatingButton extends StatelessWidget {
     required this.onPressed,
     required this.icon,
     this.variant = ButtonVariant.filled,
-    this.color = DsColors.blue500,
+    this.color = DsColors.primary,
     this.size,
     super.key,
   });

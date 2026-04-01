@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 
 class DsCircleButton extends StatelessWidget {
   final VoidCallback onPressed;
-  final String label;
+  final String? label;
   final IconData? icon;
   final Color backgroundColor;
   final Color foregroundColor;
@@ -11,9 +11,9 @@ class DsCircleButton extends StatelessWidget {
 
   const DsCircleButton({
     required this.onPressed,
-    required this.label,
+    this.label,
     this.icon,
-    this.backgroundColor = DsColors.blue500,
+    this.backgroundColor = DsColors.primary,
     this.foregroundColor = DsColors.white,
     this.size = DsLayout.floatingButtonSize,
     super.key,
@@ -41,11 +41,12 @@ class DsCircleButton extends StatelessWidget {
           ),
         ),
         const SizedBox(height: DsLayout.spacingSm),
-        DsText(
-          label,
-          variant: TextVariant.caption,
-          align: TextAlign.center,
-        ),
+        if (label != null)
+          DsText(
+            label!,
+            variant: TextVariant.caption,
+            align: TextAlign.center,
+          ),
       ],
     );
   }
