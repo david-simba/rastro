@@ -72,8 +72,6 @@ class ApiClient {
     }
   }
 
-  // ── internal ───────────────────────────────────────────────────────────────
-
   Future<Result<T, NetworkError>> _safeRequest<T>(
     Future<Response<dynamic>> Function() request,
     T Function(Map<String, dynamic>) fromJson,

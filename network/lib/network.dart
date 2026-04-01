@@ -6,15 +6,10 @@
 /// ```
 library network;
 
-// Models
 export 'src/models/result.dart';
 export 'src/models/network_response.dart';
-
-// Errors
 export 'src/errors/network_error.dart';
 export 'src/errors/network_exception_mapper.dart';
-
-// Client
 export 'src/client/api_client.dart';
 export 'src/client/api_client_config.dart';
 export 'src/client/interceptors/auth_interceptor.dart';

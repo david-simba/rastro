@@ -43,8 +43,6 @@ class RetryInterceptor extends Interceptor {
     }
   }
 
-  // ── helpers ───────────────────────────────────────────────────────────────
-
   static const _kAttemptKey = '_retry_attempt';
 
   int _attemptCount(RequestOptions options) =>
