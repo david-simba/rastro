@@ -12,7 +12,7 @@ import 'package:rastro/features/search/presentation/search_notifier.dart';
 class HomeScreen extends ConsumerWidget {
   const HomeScreen({super.key});
 
-  static const double _horizontalPadding = 20.0;
+  static const double _horizontalPadding = 24.0;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -25,7 +25,7 @@ class HomeScreen extends ConsumerWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              const SizedBox(height: 16),
+              SizedBox(height: DsLayout.spacingLg),
               DsText(
                 "Hola, Team!",
                 variant: TextVariant.title,
@@ -35,7 +35,7 @@ class HomeScreen extends ConsumerWidget {
                 variant: TextVariant.regular2,
                 color: DsColors.zinc500,
               ),
-              const SizedBox(height: 24),
+              SizedBox(height: DsLayout.spacingLg),
               DsSearchBar(
                 hintText: "Buscar bus, parada, ruta...",
                 controller: controller,
@@ -43,104 +43,128 @@ class HomeScreen extends ConsumerWidget {
                   ref.read(searchProvider.notifier).search(query);
                 },
               ),
-              const SizedBox(height: 24),
-              DsImageCard(
-                image: Image.asset('assets/images/map_preview_card.png', fit: BoxFit.cover, width: double.infinity, height: 150),
-                footer: Row(
+              SizedBox(height: DsLayout.spacingLg),
+              DsGradientCard(
+                colors: [DsColors.primary, DsColors.secondary],
+                begin: Alignment.topRight,
+                child: SizedBox(
+                  width: double.infinity,
+                  child: Padding(
+                    padding: EdgeInsetsGeometry.symmetric(vertical: DsLayout.spacingXl, horizontal: DsLayout.spacingXxl),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        DsBadge(label: 'En vivo', color: DsColors.green500, variant: BadgeVariant.soft, leadingIcon: Icons.circle, iconSize: 8,),
+                        SizedBox(height: DsLayout.spacingMd),
+                        DsText("Próximo bus", variant: TextVariant.medium2),
+                        SizedBox(height: DsLayout.spacingXs),
+                        DsText("Transplaneta", variant: TextVariant.title),
+                        SizedBox(height: DsLayout.spacingMd),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            DsText(
+                              "Llega en 3 min",
+                              variant: TextVariant.medium2,
+                            ),
+                            DsButton(
+                              text: "Ver en mapa",
+                              height: 36,
+                              color: Colors.white,
+                              textColor: Colors.black,
+                              onPressed: () => context.go(AppRoutes.map),
+                            )
+                          ],
+                        )
+                      ],
+                    ),
+                  ),
+                )
+              ),
+              SizedBox(height: DsLayout.spacingLg),
+              Padding(
+                padding: EdgeInsetsGeometry.symmetric(
+                  horizontal: DsLayout.spacingSm
+                ),
+                child: Row(
+                  mainAxisSize: MainAxisSize.max,
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    Row(children: [
-                      Icon(LucideIcons.map_pin, size: 16),
-                      SizedBox(width: 4),
-                      DsText('Quito, Ecuador', variant: TextVariant.medium),
-                    ]),
-                    DsButton(
-                      text: 'Ver mapa',
-                      leading: const Icon(LucideIcons.navigation, size: 16),
-                      onPressed: () => context.go(AppRoutes.map),
+                    DsCircleButton(
+                        onPressed: (){},
+                        icon: LucideIcons.map,
+                        label: "Mapa"
+                    ),
+                    DsCircleButton(
+                      onPressed: (){},
+                      icon: LucideIcons.route,
+                      label: "Rutas",
+                      backgroundColor: DsColors.green500,
+                    ),
+                    DsCircleButton(
+                      onPressed: (){},
+                      icon: LucideIcons.clock_4,
+                      label: "Horarios",
+                      backgroundColor: DsColors.orange400,
+                    ),
+                    DsCircleButton(
+                      onPressed: (){},
+                      icon: LucideIcons.star,
+                      label: "Favoritos",
+                      backgroundColor: DsColors.blue400,
                     ),
                   ],
                 ),
               ),
-              const SizedBox(height: 24),
-              Row(
-                mainAxisSize: MainAxisSize.max,
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  DsCircleButton(
-                    onPressed: (){},
-                    icon: LucideIcons.map,
-                    label: "Mapa"
-                  ),
-                  DsCircleButton(
-                    onPressed: (){},
-                    icon: LucideIcons.route,
-                    label: "Rutas",
-                    backgroundColor: DsColors.green500,
-                  ),
-                  DsCircleButton(
-                    onPressed: (){},
-                    icon: LucideIcons.clock_4,
-                    label: "Horarios",
-                    backgroundColor: DsColors.orange400,
-                  ),
-                  DsCircleButton(
-                    onPressed: (){},
-                    icon: LucideIcons.star,
-                    label: "Favoritos",
-                    backgroundColor: DsColors.purple400,
-                  ),
-                ],
-              ),
-              const SizedBox(height: 24),
+              SizedBox(height: DsLayout.spacingXl),
               const SectionSeparator(
                 label: 'Rutas Activas',
               ),
-              const SizedBox(height: 16),
+              SizedBox(height: DsLayout.spacingLg),
               DsListCard(
                 title: 'Ecovia',
                 subtitle: 'Rio Coca → Quitumbe',
-                leading: Icon(LucideIcons.bus, color: DsColors.blue500),
+                leading: Icon(LucideIcons.bus, color: DsColors.primary),
                 trailing: DsBadge(label: 'En vivo', color: DsColors.green500, variant: BadgeVariant.soft,),
               ),
-              const SizedBox(height: 10),
+              SizedBox(height: DsLayout.spacingSm),
               DsListCard(
                 title: 'Ecovia',
                 subtitle: 'Rio Coca → Quitumbe',
-                leading: Icon(LucideIcons.bus, color: DsColors.blue500),
+                leading: Icon(LucideIcons.bus, color: DsColors.primary),
                 trailing: DsBadge(label: 'En vivo', color: DsColors.green500, variant: BadgeVariant.soft,),
               ),
-              const SizedBox(height: 10),
+              SizedBox(height: DsLayout.spacingSm),
               DsListCard(
                 title: 'Los Chillos',
                 subtitle: 'Quitumbe → Sangolqui',
-                leading: Icon(LucideIcons.bus, color: DsColors.orange500),
-                trailing: DsBadge(label: 'Estan robando 🗣', color: DsColors.orange500, variant: BadgeVariant.soft,),
+                leading: Icon(LucideIcons.bus, color: DsColors.red500),
+                trailing: DsBadge(label: 'Estan robando 🗣', color: DsColors.red500, variant: BadgeVariant.soft,),
               ),
-              const SizedBox(height: 24),
+              SizedBox(height: DsLayout.spacingXl),
               const SectionSeparator(
                 label: 'Paradas Cercanas',
               ),
-              const SizedBox(height: 16),
+              SizedBox(height: DsLayout.spacingLg),
               Row(
                 children: [
                   Expanded(
                     child: DsInfoCard(
-                      icon: Icon(LucideIcons.bus_front, color: DsColors.blue500),
+                      icon: Icon(LucideIcons.bus_front, color: DsColors.primary),
                       title: 'La Marín',
                       footer: Row(
                         children: [
                           DsBadge(label: 'E35', variant: BadgeVariant.soft),
-                          SizedBox(width: 6),
+                          SizedBox(width: DsLayout.spacingSm),
                           DsBadge(label: 'C1', variant: BadgeVariant.solid),
                         ],
                       ),
                     ),
                   ),
-                  SizedBox(width: 12),
+                  SizedBox(width: DsLayout.spacingMd),
                   Expanded(
                     child: DsInfoCard(
-                      icon: Icon(LucideIcons.bus_front, color: DsColors.blue500),
+                      icon: Icon(LucideIcons.bus_front, color: DsColors.primary),
                       title: 'La Cocha',
                       footer: Row(
                         children: [
@@ -151,7 +175,7 @@ class HomeScreen extends ConsumerWidget {
                   ),
                 ],
               ),
-              const SizedBox(height: 16),
+              SizedBox(height: DsLayout.spacingXxl),
             ],
           ),
         ),
