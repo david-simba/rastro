@@ -1,7 +1,9 @@
 import 'package:design_system/design_system.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 import 'package:live_map/live_map.dart';
 
 import 'package:rastro/core/config/app_config.dart';
@@ -10,11 +12,14 @@ import 'package:rastro/core/routing/app_router.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp();
+  await GoogleSignIn.instance.initialize();
   await dotenv.load(fileName: 'assets/config/.env.dev');
 
   final config = AppConfig(
     appEnv: dotenv.env['APP_ENV'] ?? 'development',
     mapboxToken: dotenv.env['MAPBOX_ACCESS_TOKEN'] ?? '',
+    baseUrl: dotenv.env['BASE_URL'] ?? '',
   );
 
   LiveMapWidget.setAccessToken(config.mapboxToken);

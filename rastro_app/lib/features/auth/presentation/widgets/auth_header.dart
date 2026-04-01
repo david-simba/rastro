@@ -10,7 +10,9 @@ class AuthHeader extends StatelessWidget {
     final paddingTop = MediaQuery.of(context).padding.top;
 
     return DsGradientCard(
-      colors: [DsColors.blue500, DsColors.purple500],
+      colors: [DsColors.secondary, DsColors.primary],
+      begin: Alignment.topLeft,
+      end: Alignment.bottomCenter,
       rounded: false,
       child: Padding(
         padding: EdgeInsets.only(top: paddingTop),

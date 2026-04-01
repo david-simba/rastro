@@ -13,6 +13,7 @@ class DsButton extends StatelessWidget {
   final bool fullWidth;
   final Widget? leading;
   final Widget? trailing;
+  final bool isLoading;
 
   const DsButton({
     required this.text,
@@ -26,6 +27,7 @@ class DsButton extends StatelessWidget {
     this.fullWidth = false,
     this.leading,
     this.trailing,
+    this.isLoading = false,
     super.key,
   });
 
@@ -50,28 +52,37 @@ class DsButton extends StatelessWidget {
       width: width ?? (fullWidth ? double.infinity : null),
       height: height ?? DsLayout.buttonHeight,
       child: ElevatedButton(
-        onPressed: onPressed,
+        onPressed: isLoading ? null : onPressed,
         style: style,
-        child: Row(
-          mainAxisSize: MainAxisSize.min,
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            if (leading != null) ...[
-              leading!,
-              const SizedBox(width: 10),
-            ],
-            DsText(
-              text,
-              variant: TextVariant.medium,
-              color: fgColor,
-              align: TextAlign.center,
-            ),
-            if (trailing != null) ...[
-              const SizedBox(width: 6),
-              trailing!,
-            ],
-          ],
-        ),
+        child: isLoading
+            ? SizedBox(
+                width: 18,
+                height: 18,
+                child: CircularProgressIndicator(
+                  strokeWidth: 2,
+                  color: fgColor,
+                ),
+              )
+            : Row(
+                mainAxisSize: MainAxisSize.min,
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  if (leading != null) ...[
+                    leading!,
+                    const SizedBox(width: 10),
+                  ],
+                  DsText(
+                    text,
+                    variant: TextVariant.medium,
+                    color: fgColor,
+                    align: TextAlign.center,
+                  ),
+                  if (trailing != null) ...[
+                    const SizedBox(width: 6),
+                    trailing!,
+                  ],
+                ],
+              ),
       ),
     );
   }
