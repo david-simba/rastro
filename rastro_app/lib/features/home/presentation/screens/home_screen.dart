@@ -91,12 +91,12 @@ class HomeScreen extends ConsumerWidget {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     DsCircleButton(
-                        onPressed: (){},
+                        onPressed: () => context.go(AppRoutes.map),
                         icon: LucideIcons.map,
                         label: "Mapa"
                     ),
                     DsCircleButton(
-                      onPressed: (){},
+                      onPressed: () => context.go(AppRoutes.routes),
                       icon: LucideIcons.route,
                       label: "Rutas",
                       backgroundColor: DsColors.green500,
