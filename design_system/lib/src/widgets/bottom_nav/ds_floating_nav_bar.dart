@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:design_system/design_system.dart';
 import 'package:flutter/material.dart';
 
@@ -19,7 +21,7 @@ class DsFloatingNavBar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final bottomPadding = MediaQuery.of(context).padding.bottom + 5;
+    final bottomPadding = Platform.isAndroid ? MediaQuery.of(context).padding.bottom + 5 : DsLayout.spacingMd;
 
     return _NavBarBackground(
       bottomPadding: bottomPadding,

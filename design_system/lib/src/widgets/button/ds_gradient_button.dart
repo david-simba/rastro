@@ -12,6 +12,7 @@ class DsGradientButton extends StatelessWidget {
   final bool fullWidth;
   final IconData? leadingIcon;
   final IconData? trailingIcon;
+  final bool isLoading;
 
   const DsGradientButton({
     required this.text,
@@ -24,6 +25,7 @@ class DsGradientButton extends StatelessWidget {
     this.fullWidth = false,
     this.leadingIcon,
     this.trailingIcon,
+    this.isLoading = false,
     super.key,
   }) : assert(colors.length >= 2, 'colors must have at least 2 entries');
 
@@ -41,7 +43,7 @@ class DsGradientButton extends StatelessWidget {
           borderRadius: DsLayout.borderRadiusMd,
         ),
         child: ElevatedButton(
-          onPressed: onPressed,
+          onPressed: isLoading ? null : onPressed,
           style: ElevatedButton.styleFrom(
             backgroundColor: Colors.transparent,
             foregroundColor: DsColors.white,
@@ -51,26 +53,35 @@ class DsGradientButton extends StatelessWidget {
               borderRadius: DsLayout.borderRadiusMd,
             ),
           ),
-          child: Row(
-            mainAxisSize: MainAxisSize.min,
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              if (leadingIcon != null) ...[
-                Icon(leadingIcon, size: 16, color: DsColors.white),
-                const SizedBox(width: 6),
-              ],
-              DsText(
-                text,
-                variant: TextVariant.medium,
-                color: DsColors.white,
-                align: TextAlign.center,
-              ),
-              if (trailingIcon != null) ...[
-                const SizedBox(width: 6),
-                Icon(trailingIcon, size: 16, color: DsColors.white),
-              ],
-            ],
-          ),
+          child: isLoading
+              ? const SizedBox(
+                  width: 18,
+                  height: 18,
+                  child: CircularProgressIndicator(
+                    strokeWidth: 2,
+                    color: DsColors.white,
+                  ),
+                )
+              : Row(
+                  mainAxisSize: MainAxisSize.min,
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    if (leadingIcon != null) ...[
+                      Icon(leadingIcon, size: 16, color: DsColors.white),
+                      const SizedBox(width: 6),
+                    ],
+                    DsText(
+                      text,
+                      variant: TextVariant.medium,
+                      color: DsColors.white,
+                      align: TextAlign.center,
+                    ),
+                    if (trailingIcon != null) ...[
+                      const SizedBox(width: 6),
+                      Icon(trailingIcon, size: 16, color: DsColors.white),
+                    ],
+                  ],
+                ),
         ),
       ),
     );

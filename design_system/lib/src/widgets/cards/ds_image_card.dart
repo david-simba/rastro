@@ -22,6 +22,7 @@ class DsImageCard extends StatelessWidget {
           if (footer != null)
             Container(
               width: double.infinity,
+              height: 52,
               padding: const EdgeInsets.symmetric(horizontal: DsLayout.spacingLg, vertical: 10),
               color: context.dsColors.surface,
               child: footer!,

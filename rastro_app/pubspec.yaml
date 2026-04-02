@@ -17,11 +17,16 @@ dependencies:
   flutter_lucide: ^1.8.2
   flutter_svg: ^2.2.4
   go_router: ^17.1.0
+  firebase_core: ^4.6.0
+  firebase_auth: ^6.3.0
+  google_sign_in: ^7.2.0
 
   design_system:
     path: ../design_system
   live_map:
     path: ../live_map
+  network:
+    path: ../network
 
 dev_dependencies:
   flutter_test:
