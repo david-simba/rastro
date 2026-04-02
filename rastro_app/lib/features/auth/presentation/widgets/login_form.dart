@@ -79,7 +79,7 @@ class _LoginFormState extends ConsumerState<LoginForm> {
           height: 46,
           fullWidth: true,
           isLoading: loadingAction == AuthAction.email,
-          colors: [DsColors.secondary, DsColors.primary],
+          colors: [DsColors.blue600, DsColors.blue500],
           onPressed: () => notifier.loginWithEmail(
             email: _emailController.text.trim(),
             password: _passwordController.text,

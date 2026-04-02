@@ -84,7 +84,7 @@ class _NavItem extends StatelessWidget {
         padding: const EdgeInsets.symmetric(horizontal: DsLayout.spacingXxl),
         margin: const EdgeInsets.all(DsLayout.radiusXs),
         decoration: BoxDecoration(
-          color: isSelected ? DsColors.primary : Colors.transparent,
+          color: isSelected ? DsColors.blue500 : Colors.transparent,
           borderRadius: DsLayout.borderRadiusLg,
         ),
         child: Row(

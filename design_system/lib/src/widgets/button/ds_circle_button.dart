@@ -13,7 +13,7 @@ class DsCircleButton extends StatelessWidget {
     required this.onPressed,
     this.label,
     this.icon,
-    this.backgroundColor = DsColors.primary,
+    this.backgroundColor = DsColors.blue500,
     this.foregroundColor = DsColors.white,
     this.size = DsLayout.floatingButtonSize,
     super.key,

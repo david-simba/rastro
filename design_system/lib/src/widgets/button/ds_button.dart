@@ -19,7 +19,7 @@ class DsButton extends StatelessWidget {
     required this.text,
     required this.onPressed,
     this.variant = ButtonVariant.filled,
-    this.color = DsColors.primary,
+    this.color = DsColors.blue500,
     this.borderColor,
     this.textColor,
     this.width,

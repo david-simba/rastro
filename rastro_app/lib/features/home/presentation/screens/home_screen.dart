@@ -45,7 +45,7 @@ class HomeScreen extends ConsumerWidget {
               ),
               SizedBox(height: DsLayout.spacingLg),
               DsGradientCard(
-                colors: [DsColors.primary, DsColors.secondary],
+                colors: [DsColors.blue500, DsColors.blue700],
                 end: Alignment.bottomRight,
                 child: SizedBox(
                   width: double.infinity,
@@ -111,7 +111,7 @@ class HomeScreen extends ConsumerWidget {
                       onPressed: (){},
                       icon: LucideIcons.star,
                       label: "Favoritos",
-                      backgroundColor: DsColors.blue400,
+                      backgroundColor: DsColors.blue600,
                     ),
                   ],
                 ),
@@ -124,14 +124,14 @@ class HomeScreen extends ConsumerWidget {
               DsListCard(
                 title: 'Ecovia',
                 subtitle: 'Rio Coca → Quitumbe',
-                leading: Icon(LucideIcons.bus, color: DsColors.primary),
+                leading: Icon(LucideIcons.bus, color: DsColors.blue500),
                 trailing: DsBadge(label: 'En vivo', color: DsColors.green500, variant: BadgeVariant.soft,),
               ),
               SizedBox(height: DsLayout.spacingSm),
               DsListCard(
                 title: 'Ecovia',
                 subtitle: 'Rio Coca → Quitumbe',
-                leading: Icon(LucideIcons.bus, color: DsColors.primary),
+                leading: Icon(LucideIcons.bus, color: DsColors.blue500),
                 trailing: DsBadge(label: 'En vivo', color: DsColors.green500, variant: BadgeVariant.soft,),
               ),
               SizedBox(height: DsLayout.spacingSm),
@@ -150,7 +150,7 @@ class HomeScreen extends ConsumerWidget {
                 children: [
                   Expanded(
                     child: DsInfoCard(
-                      icon: Icon(LucideIcons.bus_front, color: DsColors.primary),
+                      icon: Icon(LucideIcons.bus_front, color: DsColors.blue500),
                       title: 'La Marín',
                       footer: Row(
                         children: [
@@ -164,7 +164,7 @@ class HomeScreen extends ConsumerWidget {
                   SizedBox(width: DsLayout.spacingMd),
                   Expanded(
                     child: DsInfoCard(
-                      icon: Icon(LucideIcons.bus_front, color: DsColors.primary),
+                      icon: Icon(LucideIcons.bus_front, color: DsColors.blue500),
                       title: 'La Cocha',
                       footer: Row(
                         children: [
