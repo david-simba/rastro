@@ -122,24 +122,31 @@ class HomeScreen extends ConsumerWidget {
               ),
               SizedBox(height: DsLayout.spacingLg),
               DsListCard(
-                title: 'Ecovia',
+                title: 'Translatinos',
                 subtitle: 'Rio Coca → Quitumbe',
-                leading: Icon(LucideIcons.bus, color: DsColors.blue500),
+                accentColor: DsColors.yellow400,
                 trailing: DsBadge(label: 'En vivo', color: DsColors.green500, variant: BadgeVariant.soft,),
               ),
-              SizedBox(height: DsLayout.spacingSm),
-              DsListCard(
-                title: 'Ecovia',
+              SizedBox(height: DsLayout.spacingSm),DsListCard(
+                title: 'Transplaneta',
                 subtitle: 'Rio Coca → Quitumbe',
-                leading: Icon(LucideIcons.bus, color: DsColors.blue500),
+                accentColor: DsColors.orange400,
                 trailing: DsBadge(label: 'En vivo', color: DsColors.green500, variant: BadgeVariant.soft,),
               ),
               SizedBox(height: DsLayout.spacingSm),
               DsListCard(
                 title: 'Los Chillos',
                 subtitle: 'Quitumbe → Sangolqui',
-                leading: Icon(LucideIcons.bus, color: DsColors.red500),
+                accentColor: DsColors.green700,
                 trailing: DsBadge(label: 'Estan robando 🗣', color: DsColors.red500, variant: BadgeVariant.soft,),
+              ),
+              SizedBox(height: DsLayout.spacingSm),
+              DsListCard(
+                title: 'Ecovia',
+                badge: 'E2',
+                subtitle: 'Rio Coca → Quitumbe',
+                accentColor: DsColors.blue500,
+                trailing: DsBadge(label: 'En vivo', color: DsColors.green500, variant: BadgeVariant.soft,),
               ),
               SizedBox(height: DsLayout.spacingXl),
               const SectionSeparator(

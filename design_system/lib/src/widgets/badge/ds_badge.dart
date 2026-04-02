@@ -8,6 +8,7 @@ class DsBadge extends StatelessWidget {
   final IconData? leadingIcon;
   final IconData? trailingIcon;
   final double iconSize;
+  final bool rounded;
 
   const DsBadge({
     required this.label,
@@ -16,6 +17,7 @@ class DsBadge extends StatelessWidget {
     this.leadingIcon,
     this.trailingIcon,
     this.iconSize = 16,
+    this.rounded = true,
     super.key,
   });
 
@@ -25,10 +27,10 @@ class DsBadge extends StatelessWidget {
     final fgColor = variant.textColor(color);
 
     return Container(
-      padding: const EdgeInsets.symmetric(horizontal: DsLayout.spacingMd, vertical: DsLayout.spacingXs),
+      padding: const EdgeInsets.symmetric(horizontal: DsLayout.spacingSm, vertical: DsLayout.spacingXs),
       decoration: BoxDecoration(
         color: bgColor,
-        borderRadius: DsLayout.borderRadiusFull,
+        borderRadius: rounded ? DsLayout.borderRadiusFull : DsLayout.borderRadiusSm,
       ),
       child: Row(
         mainAxisSize: MainAxisSize.min,
@@ -38,7 +40,7 @@ class DsBadge extends StatelessWidget {
             Icon(leadingIcon, size: iconSize, color: fgColor),
             const SizedBox(width: DsLayout.spacingXs),
           ],
-          DsText(label, color: fgColor, variant: TextVariant.regular2),
+          DsText(label, color: fgColor, variant: TextVariant.medium2),
           if (trailingIcon != null) ...[
             const SizedBox(width: DsLayout.spacingXs),
             Icon(trailingIcon, size: iconSize, color: fgColor),
