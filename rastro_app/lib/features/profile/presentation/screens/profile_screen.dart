@@ -1,6 +1,5 @@
 import 'package:design_system/design_system.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_lucide/flutter_lucide.dart';
 
 import 'package:go_router/go_router.dart';
 import 'package:rastro/core/routing/app_routes.dart';
@@ -30,8 +29,6 @@ class ProfileScreen extends StatelessWidget {
                     text: 'Cerrar sesión',
                     fullWidth: true,
                     color: DsColors.red500,
-                    variant: ButtonVariant.outlined,
-                    leading: Icon(LucideIcons.log_out, size: 18, color: DsColors.red500),
                     onPressed: () => context.go(AppRoutes.auth),
                   ),
                 ],
