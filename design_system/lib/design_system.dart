@@ -24,5 +24,6 @@ export 'src/widgets/search/ds_search_bar.dart';
 export 'src/widgets/text/ds_text.dart';
 export 'src/widgets/text/text_variant.dart';
 export 'src/widgets/text_field/ds_text_field.dart';
+export 'src/widgets/tab_selector/ds_tab_selector.dart';
 export 'src/widgets/toast/ds_toast.dart';
 export 'src/widgets/toast/toast_variant.dart';
