@@ -51,6 +51,7 @@ class MapboxRenderer {
       _store.eventBus.on<DimensionModeChanged>(_onDimensionModeChanged),
       _store.eventBus.on<RouteAssigned>(_onRouteAssigned),
       _store.eventBus.on<RouteClearRequested>(_onRouteClearRequested),
+      _store.eventBus.on<FitBoundsRequested>(_onFitBoundsRequested),
     ]);
   }
 
@@ -150,6 +151,10 @@ class MapboxRenderer {
   Future<void> _onRouteClearRequested(RouteClearRequested event) async {
     _routeManager.clearRoute(event.modelId);
     await _adapter.clearRoute(event.modelId);
+  }
+
+  Future<void> _onFitBoundsRequested(FitBoundsRequested event) async {
+    await _adapter.fitBounds(event.points, padding: event.padding);
   }
 
   void _onTrackingPositionReceived(TrackingPositionReceived event) {

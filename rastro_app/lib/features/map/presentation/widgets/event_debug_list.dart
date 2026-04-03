@@ -70,6 +70,7 @@ class EventDebugList extends StatelessWidget {
         'RouteAssigned: $modelId (${routePoints.length} pts)',
       RouteUpdateNeeded(:final modelId) => 'RouteUpdateNeeded: $modelId',
       RouteClearRequested(:final modelId) => 'RouteClearRequested: $modelId',
+      FitBoundsRequested(:final points) => 'FitBoundsRequested: ${points.length} pts',
     };
   }
 }

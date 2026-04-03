@@ -148,3 +148,11 @@ final class RouteClearRequested extends LiveMapEvent {
 
   const RouteClearRequested({required this.modelId});
 }
+
+/// Dispatched to animate the camera to fit all [points] within the viewport.
+final class FitBoundsRequested extends LiveMapEvent {
+  final List<LatLng> points;
+  final double padding;
+
+  const FitBoundsRequested({required this.points, this.padding = 60.0});
+}

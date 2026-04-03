@@ -6,6 +6,9 @@ import 'package:rastro/features/map/data/services/user_location_service.dart';
 import 'package:rastro/features/map/presentation/providers/map_state.dart';
 import 'package:rastro/features/routes/domain/entities/route_entity.dart';
 
+const _kFallbackLat = -0.2295;
+const _kFallbackLng = -78.5243;
+
 final mapNotifierProvider = NotifierProvider<MapNotifier, MapState>(
   MapNotifier.new,
 );
@@ -23,17 +26,20 @@ class MapNotifier extends Notifier<MapState> {
 
   LiveMapController get controller => _controller;
 
-  LiveMapConfig get mapConfig => const LiveMapConfig(
-    initialLatitude: -0.2295,
-    initialLongitude: -78.5243,
+  LiveMapConfig get mapConfig => LiveMapConfig(
+    initialLatitude: state.userPosition?.lat ?? _kFallbackLat,
+    initialLongitude: state.userPosition?.lng ?? _kFallbackLng,
     dimensionMode: MapDimensionMode.twoD,
     showUserLocation: true,
   );
 
   Future<void> _initUserLocation() async {
     final position = await _locationService.getCurrentPosition();
-    if (position == null) return;
-    await _flyToWhenReady(position.latitude, position.longitude);
+    state = state.copyWith(
+      userPosition: () => position != null
+          ? LatLng(lat: position.latitude, lng: position.longitude)
+          : const LatLng(lat: _kFallbackLat, lng: _kFallbackLng),
+    );
   }
 
   Future<void> centerOnUser() async {
@@ -41,16 +47,6 @@ class MapNotifier extends Notifier<MapState> {
     if (position == null) return;
     if (_controller.isReady) {
       _controller.flyTo(latitude: position.latitude, longitude: position.longitude, zoom: 15);
-    }
-  }
-
-  Future<void> _flyToWhenReady(double lat, double lng) async {
-    for (int i = 0; i < 100; i++) {
-      if (_controller.isReady) break;
-      await Future.delayed(const Duration(milliseconds: 100));
-    }
-    if (_controller.isReady) {
-      _controller.flyTo(latitude: lat, longitude: lng, zoom: 15);
     }
   }
 
@@ -63,7 +59,7 @@ class MapNotifier extends Notifier<MapState> {
 
     if (_controller.isReady) {
       _controller.assignRoute(route.id, points);
-      _controller.flyTo(latitude: points.first.lat, longitude: points.first.lng, zoom: 15);
+      _controller.fitRoute(points);
     }
   }
 

@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:math' as math;
 
 import 'package:mapbox_maps_flutter/mapbox_maps_flutter.dart';
 import 'package:live_map/src/domain/types/map_types.dart';
@@ -187,6 +188,30 @@ class MapboxAdapter {
     if (await sourceExists(sourceId)) {
       await map.style.removeStyleSource(sourceId);
     }
+  }
+
+  Future<void> fitBounds(List<LatLng> points, {double padding = 60.0}) async {
+    final map = _map;
+    if (map == null || points.isEmpty) return;
+
+    final minLat = points.map((p) => p.lat).reduce(math.min);
+    final maxLat = points.map((p) => p.lat).reduce(math.max);
+    final minLng = points.map((p) => p.lng).reduce(math.min);
+    final maxLng = points.map((p) => p.lng).reduce(math.max);
+
+    final bounds = CoordinateBounds(
+      southwest: Point(coordinates: Position(minLng, minLat)),
+      northeast: Point(coordinates: Position(maxLng, maxLat)),
+      infiniteBounds: false,
+    );
+
+    final camera = await map.cameraForCoordinateBounds(
+      bounds,
+      MbxEdgeInsets(top: padding, left: padding, bottom: padding, right: padding),
+      null, null, null, null,
+    );
+
+    map.flyTo(camera, null);
   }
 
   Future<void> enableLocationPuck() async {

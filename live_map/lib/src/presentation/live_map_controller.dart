@@ -57,4 +57,9 @@ class LiveMapController {
   void clearRoute(String modelId) {
     dispatch(RouteClearRequested(modelId: modelId));
   }
+
+  /// Animates the camera to fit all [points] within the viewport.
+  void fitRoute(List<LatLng> points, {double padding = 60.0}) {
+    dispatch(FitBoundsRequested(points: points, padding: padding));
+  }
 }
