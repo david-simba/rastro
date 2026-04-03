@@ -28,3 +28,5 @@ export 'src/widgets/avatar/ds_avatar.dart';
 export 'src/widgets/tab_selector/ds_tab_selector.dart';
 export 'src/widgets/toast/ds_toast.dart';
 export 'src/widgets/toast/toast_variant.dart';
+export 'src/widgets/loader/ds_loader.dart';
+export 'src/widgets/empty_state/ds_empty_state.dart';
