@@ -189,6 +189,14 @@ class MapboxAdapter {
     }
   }
 
+  Future<void> enableLocationPuck() async {
+    final map = _map;
+    if (map == null) return;
+    await map.location.updateSettings(
+      LocationComponentSettings(enabled: true, pulsingEnabled: true),
+    );
+  }
+
   void dispose() {
     _map = null;
   }

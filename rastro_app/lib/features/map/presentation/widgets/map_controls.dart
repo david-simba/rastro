@@ -30,6 +30,11 @@ class MapControls extends ConsumerWidget {
               : Icons.layers,
         ),
         const SizedBox(height: 10),
+        DsFloatingButton(
+          onPressed: notifier.centerOnUser,
+          icon: Icons.my_location,
+        ),
+        const SizedBox(height: 10),
         if (showDebug)
           DsFloatingButton(
             onPressed: () => _showEventDebugSheet(context, notifier),

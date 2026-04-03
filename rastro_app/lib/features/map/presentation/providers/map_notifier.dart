@@ -2,6 +2,7 @@ import 'package:polyline_codec/polyline_codec.dart';
 
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:live_map/live_map.dart';
+import 'package:rastro/features/map/data/services/user_location_service.dart';
 import 'package:rastro/features/map/presentation/providers/map_state.dart';
 import 'package:rastro/features/routes/domain/entities/route_entity.dart';
 
@@ -11,10 +12,12 @@ final mapNotifierProvider = NotifierProvider<MapNotifier, MapState>(
 
 class MapNotifier extends Notifier<MapState> {
   late final LiveMapController _controller;
+  final _locationService = UserLocationService();
 
   @override
   MapState build() {
     _controller = LiveMapController();
+    _initUserLocation();
     return MapState.initial();
   }
 
@@ -24,7 +27,32 @@ class MapNotifier extends Notifier<MapState> {
     initialLatitude: -0.2295,
     initialLongitude: -78.5243,
     dimensionMode: MapDimensionMode.twoD,
+    showUserLocation: true,
   );
+
+  Future<void> _initUserLocation() async {
+    final position = await _locationService.getCurrentPosition();
+    if (position == null) return;
+    await _flyToWhenReady(position.latitude, position.longitude);
+  }
+
+  Future<void> centerOnUser() async {
+    final position = await _locationService.getCurrentPosition();
+    if (position == null) return;
+    if (_controller.isReady) {
+      _controller.flyTo(latitude: position.latitude, longitude: position.longitude, zoom: 15);
+    }
+  }
+
+  Future<void> _flyToWhenReady(double lat, double lng) async {
+    for (int i = 0; i < 100; i++) {
+      if (_controller.isReady) break;
+      await Future.delayed(const Duration(milliseconds: 100));
+    }
+    if (_controller.isReady) {
+      _controller.flyTo(latitude: lat, longitude: lng, zoom: 15);
+    }
+  }
 
   Future<void> loadRoute(RouteEntity route) async {
     final coords = PolylineCodec.decode(route.geometry, precision: 6);

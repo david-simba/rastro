@@ -15,6 +15,9 @@ class LiveMapConfig {
   /// Camera pitch (degrees) applied when [dimensionMode] is [MapDimensionMode.threeD].
   final double pitch3D;
 
+  /// Whether to show the native platform location puck (blue dot).
+  final bool showUserLocation;
+
   const LiveMapConfig({
     required this.dimensionMode,
     this.modelConfig,
@@ -23,5 +26,6 @@ class LiveMapConfig {
     this.initialZoom = 15.0,
     this.initialModels = const [],
     this.pitch3D = 50.0,
+    this.showUserLocation = false,
   });
 }
