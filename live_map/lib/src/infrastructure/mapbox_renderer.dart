@@ -51,7 +51,7 @@ class MapboxRenderer {
       _store.eventBus.on<DimensionModeChanged>(_onDimensionModeChanged),
       _store.eventBus.on<RouteAssigned>(_onRouteAssigned),
       _store.eventBus.on<RouteClearRequested>(_onRouteClearRequested),
-      _store.eventBus.on<FitBoundsRequested>(_onFitBoundsRequested),
+      _store.eventBus.on<CameraFitRoute>(_onCameraFitRoute),
     ]);
   }
 
@@ -153,7 +153,7 @@ class MapboxRenderer {
     await _adapter.clearRoute(event.modelId);
   }
 
-  Future<void> _onFitBoundsRequested(FitBoundsRequested event) async {
+  Future<void> _onCameraFitRoute(CameraFitRoute event) async {
     await _adapter.fitBounds(event.points, padding: event.padding);
   }
 

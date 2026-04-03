@@ -83,7 +83,7 @@ LiveMapState liveMapReducer(LiveMapState state, LiveMapEvent event) {
     RouteAssigned() => state,
     RouteUpdateNeeded() => state,
     RouteClearRequested() => state,
-    FitBoundsRequested() => state,
+    CameraFitRoute() => state,
   };
 }
 
