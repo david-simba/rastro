@@ -62,6 +62,9 @@ class MapboxRenderer {
     final state = _store.state;
     try {
       // Redraw any routes that were assigned before the style finished loading.
+      for (final entry in _routeManager.allRoutes.entries) {
+        await _adapter.drawRoute(entry.key, entry.value);
+      }
       for (final model in state.models.models) {
         final route = _routeManager.getRoute(model.id);
         if (route != null) {
@@ -140,6 +143,7 @@ class MapboxRenderer {
   }
 
   Future<void> _onRouteAssigned(RouteAssigned event) async {
+    _routeManager.saveRoute(event.modelId, event.routePoints);
     await _adapter.drawRoute(event.modelId, event.routePoints);
   }
 

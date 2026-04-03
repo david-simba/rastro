@@ -4,6 +4,7 @@ class RouteEntity {
   final String coopId;
   final String origin;
   final String destination;
+  final String geometry;
 
   const RouteEntity({
     required this.id,
@@ -11,5 +12,6 @@ class RouteEntity {
     required this.coopId,
     required this.origin,
     required this.destination,
+    required this.geometry,
   });
 }

@@ -10,31 +10,18 @@ import 'package:rastro/features/map/presentation/widgets/map_view.dart';
 import 'package:rastro/features/search/presentation/search_controller_provider.dart';
 import 'package:rastro/features/search/presentation/search_notifier.dart';
 
-class MapScreen extends ConsumerStatefulWidget {
+class MapScreen extends ConsumerWidget {
   const MapScreen({super.key});
 
   @override
-  ConsumerState<MapScreen> createState() => _MapScreenState();
-}
-
-class _MapScreenState extends ConsumerState<MapScreen> {
-  @override
-  void initState() {
-    super.initState();
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      ref.read(mapNotifierProvider.notifier).startTracking();
-    });
-  }
-
-  @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     final config = ref.watch(appConfigProvider);
     final mapState = ref.watch(mapNotifierProvider);
     final controller = ref.watch(searchControllerProvider);
 
     return Stack(
       children: [
-        MapView(onModelTap: _showVehicleInfo),
+        MapView(onModelTap: (model) => _showVehicleInfo(context, model)),
         Positioned(
           top: 50,
           left: 20,
@@ -59,7 +46,7 @@ class _MapScreenState extends ConsumerState<MapScreen> {
     );
   }
 
-  void _showVehicleInfo(MapModel model) {
+  void _showVehicleInfo(BuildContext context, MapModel model) {
     DsBottomSheet.show(
       context: context,
       child: Column(

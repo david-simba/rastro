@@ -15,6 +15,7 @@ class RoutesFirebaseDatasource {
         coopId: data['coopId'] as String,
         origin: data['origin'] as String,
         destination: data['destination'] as String,
+        geometry: (data['geometry'] as String).replaceAll('\\\\', '\\'),
       );
     }).toList();
   }
