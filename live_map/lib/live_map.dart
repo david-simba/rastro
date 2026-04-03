@@ -7,3 +7,4 @@ export 'src/presentation/live_map_controller.dart';
 export 'src/presentation/live_map_widget.dart';
 export 'src/infrastructure/services/route_manager.dart';
 export 'src/infrastructure/services/directions_service.dart';
+export 'src/infrastructure/utils/polyline_decoder.dart';
