@@ -44,4 +44,17 @@ class LiveMapController {
   void toggleDimensionMode(MapDimensionMode mode) {
     dispatch(DimensionModeChanged(dimensionMode: mode));
   }
+
+  /// Assigns a pre-fetched route to [modelId] and draws it on the map.
+  ///
+  /// Use [DirectionsService.fetchRoute] to obtain [routePoints] from the
+  /// Mapbox Directions API before calling this method.
+  void assignRoute(String modelId, List<LatLng> routePoints) {
+    dispatch(RouteAssigned(modelId: modelId, routePoints: routePoints));
+  }
+
+  /// Removes the route line for [modelId] from the map.
+  void clearRoute(String modelId) {
+    dispatch(RouteClearRequested(modelId: modelId));
+  }
 }

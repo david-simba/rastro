@@ -15,10 +15,10 @@ class MapRepositoryImpl implements IMapRepository {
       );
 
   @override
-  List<VehiclePosition> get waypoints => SimulationDatasource.routeWaypoints;
+  Stream<VehiclePosition> watchPositions() => _datasource.positionStream;
 
   @override
-  Stream<VehiclePosition> watchPositions() => _datasource.positionStream;
+  void setRoute(List<VehiclePosition> points) => _datasource.setRoute(points);
 
   @override
   void startTracking() => _datasource.start();

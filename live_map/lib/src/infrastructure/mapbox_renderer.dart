@@ -27,7 +27,7 @@ class MapboxRenderer {
 
   static const String _sourceId = 'model-source';
   static const String _layerId = 'model-layer';
-  static const Duration _animDuration = Duration(seconds: 5);
+  static const Duration _animDuration = Duration(seconds: 1);
 
   /// Euclidean-degree threshold (~50 m) used to detect route deviation.
   static const double _deviationThreshold = 0.0005;
@@ -49,6 +49,8 @@ class MapboxRenderer {
       _store.eventBus.on<TrackingPositionReceived>(_onTrackingPositionReceived),
       _store.eventBus.on<MapStyleLoaded>(_onMapStyleLoaded),
       _store.eventBus.on<DimensionModeChanged>(_onDimensionModeChanged),
+      _store.eventBus.on<RouteAssigned>(_onRouteAssigned),
+      _store.eventBus.on<RouteClearRequested>(_onRouteClearRequested),
     ]);
   }
 
@@ -59,8 +61,12 @@ class MapboxRenderer {
   Future<void> _onMapStyleLoaded(MapStyleLoaded event) async {
     final state = _store.state;
     try {
-      if (state.waypoints.isNotEmpty) {
-        await _adapter.drawWaypoints(state.waypoints);
+      // Redraw any routes that were assigned before the style finished loading.
+      for (final model in state.models.models) {
+        final route = _routeManager.getRoute(model.id);
+        if (route != null) {
+          await _adapter.drawRoute(model.id, route);
+        }
       }
       if (state.modelConfig != null) {
         _store.dispatch(const ModelLayerRequested());
@@ -131,6 +137,15 @@ class MapboxRenderer {
       debugPrint('MapboxRenderer: error loading model layer: $e');
       _store.dispatch(ModelLayerFailed(error: e.toString()));
     }
+  }
+
+  Future<void> _onRouteAssigned(RouteAssigned event) async {
+    await _adapter.drawRoute(event.modelId, event.routePoints);
+  }
+
+  Future<void> _onRouteClearRequested(RouteClearRequested event) async {
+    _routeManager.clearRoute(event.modelId);
+    await _adapter.clearRoute(event.modelId);
   }
 
   void _onTrackingPositionReceived(TrackingPositionReceived event) {

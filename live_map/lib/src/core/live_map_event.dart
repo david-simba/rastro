@@ -140,3 +140,11 @@ final class RouteUpdateNeeded extends LiveMapEvent {
     required this.currentPosition,
   });
 }
+
+/// Dispatched by the consumer to remove a previously drawn route line from
+/// the map and clear it from [RouteManager].
+final class RouteClearRequested extends LiveMapEvent {
+  final String modelId;
+
+  const RouteClearRequested({required this.modelId});
+}

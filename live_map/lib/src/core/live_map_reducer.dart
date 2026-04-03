@@ -82,6 +82,7 @@ LiveMapState liveMapReducer(LiveMapState state, LiveMapEvent event) {
     // they carry no reducer-level state change.
     RouteAssigned() => state,
     RouteUpdateNeeded() => state,
+    RouteClearRequested() => state,
   };
 }
 
