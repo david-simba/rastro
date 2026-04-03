@@ -19,7 +19,6 @@ Future<void> main() async {
   final config = AppConfig(
     appEnv: dotenv.env['APP_ENV'] ?? 'development',
     mapboxToken: dotenv.env['MAPBOX_ACCESS_TOKEN'] ?? '',
-    baseUrl: dotenv.env['BASE_URL'] ?? '',
   );
 
   LiveMapWidget.setAccessToken(config.mapboxToken);
