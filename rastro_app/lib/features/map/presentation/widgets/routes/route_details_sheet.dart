@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_lucide/flutter_lucide.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import 'package:rastro/features/map/presentation/providers/map_notifier.dart';
+import 'package:rastro/features/map/presentation/widgets/routes/stops_timeline.dart';
 import 'package:rastro/features/routes/domain/entities/route_entity.dart';
 import 'package:rastro/features/stops/presentation/providers/stops_provider.dart';
 
@@ -50,15 +52,15 @@ class RouteDetailsSheet extends ConsumerWidget {
               variant: TextVariant.regular2,
               color: colors.muted,
             ),
-            data: (stops) => Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: stops
-                  .map((stop) => Padding(
-                        padding: const EdgeInsets.only(bottom: DsLayout.spacingXs),
-                        child: DsText(stop.name, variant: TextVariant.regular2),
-                      ))
-                  .toList(),
-            ),
+            data: (stops) {
+              final notifier = ref.read(mapNotifierProvider.notifier);
+              return StopsTimeline(
+                stops: stops,
+                onFitRoute: notifier.fitSelectedRoute,
+                onStopTap: (stop) =>
+                    notifier.flyToStop(stop.latitude, stop.longitude),
+              );
+            },
           ),
       ],
     );

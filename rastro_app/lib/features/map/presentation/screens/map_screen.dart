@@ -7,7 +7,7 @@ import 'package:rastro/core/providers/core_providers.dart';
 import 'package:rastro/features/map/presentation/providers/map_notifier.dart';
 import 'package:rastro/features/map/presentation/widgets/map_controls.dart';
 import 'package:rastro/features/map/presentation/widgets/map_view.dart';
-import 'package:rastro/features/map/presentation/widgets/route_details_sheet.dart';
+import 'package:rastro/features/map/presentation/widgets/routes/route_details_sheet.dart';
 import 'package:rastro/features/search/presentation/search_controller_provider.dart';
 import 'package:rastro/features/search/presentation/search_notifier.dart';
 
