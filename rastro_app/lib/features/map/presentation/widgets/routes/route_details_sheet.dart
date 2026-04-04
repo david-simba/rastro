@@ -5,6 +5,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import 'package:rastro/features/map/presentation/providers/map_notifier.dart';
 import 'package:rastro/features/map/presentation/widgets/routes/stops_timeline.dart';
+import 'package:rastro/features/map/presentation/widgets/routes/stops_timeline_skeleton.dart';
 import 'package:rastro/features/routes/domain/entities/route_entity.dart';
 import 'package:rastro/features/stops/presentation/providers/stops_provider.dart';
 
@@ -46,8 +47,8 @@ class RouteDetailsSheet extends ConsumerWidget {
           )
         else
           ref.watch(stopsForIdsProvider(route.stops)).when(
-            loading: () => const DsLoader(),
-            error: (_, __) => DsText(
+            loading: () => StopsTimelineSkeleton(itemCount: route.stops.length),
+            error: (_, _) => DsText(
               'Error al cargar paradas',
               variant: TextVariant.regular2,
               color: colors.muted,

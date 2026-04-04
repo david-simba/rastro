@@ -30,7 +30,7 @@ mixin MapRouteMixin on Notifier<MapState> {
     await Future.delayed(const Duration(milliseconds: 300));
     if (controller.isReady) {
       controller.assignRoute(route.id, points);
-      controller.fitRoute(points, bottomPadding: 410);
+      controller.fitRoute(points, bottomPadding: 430);
     }
 
     if (route.stops.isNotEmpty && controller.isReady) {
@@ -72,7 +72,7 @@ mixin MapRouteMixin on Notifier<MapState> {
         .map((c) => LatLng(lat: c[0].toDouble(), lng: c[1].toDouble()))
         .toList();
     if (controller.isReady) {
-      controller.fitRoute(points, bottomPadding: 410);
+      controller.fitRoute(points, bottomPadding: 430);
     }
   }
 }

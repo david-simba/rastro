@@ -278,7 +278,15 @@ class MapboxAdapter {
       null, null, null, null,
     );
 
-    map.flyTo(camera, null);
+    map.flyTo(
+      CameraOptions(
+        center: camera.center,
+        zoom: (camera.zoom ?? 14) - 0.5,
+        bearing: camera.bearing,
+        pitch: camera.pitch,
+      ),
+      null,
+    );
   }
 
   Future<void> enableLocationPuck() async {

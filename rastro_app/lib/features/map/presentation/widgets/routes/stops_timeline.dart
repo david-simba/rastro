@@ -91,7 +91,7 @@ class _TimelineItem extends StatelessWidget {
                       ),
                     )
                   else
-                    const SizedBox(height: 10),
+                    const SizedBox(height: 8),
                   dot,
                   if (!isLast)
                     Expanded(
@@ -129,11 +129,11 @@ class _FitRouteDot extends StatelessWidget {
       width: 26,
       height: 26,
       decoration: BoxDecoration(
-        color: DsColors.blue500.withOpacity(0.1),
+        color: DsColors.blue500.withAlpha(2),
         shape: BoxShape.circle,
         border: Border.all(color: DsColors.blue500, width: 1.5),
       ),
-      child: const Icon(LucideIcons.route, size: 13, color: DsColors.blue500),
+      child: const Icon(LucideIcons.route, size: 14, color: DsColors.blue500),
     );
   }
 }
