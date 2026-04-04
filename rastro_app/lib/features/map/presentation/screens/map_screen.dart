@@ -7,6 +7,7 @@ import 'package:rastro/core/providers/core_providers.dart';
 import 'package:rastro/features/map/presentation/providers/map_notifier.dart';
 import 'package:rastro/features/map/presentation/widgets/map_controls.dart';
 import 'package:rastro/features/map/presentation/widgets/map_view.dart';
+import 'package:rastro/features/map/presentation/widgets/route_details_sheet.dart';
 import 'package:rastro/features/search/presentation/search_controller_provider.dart';
 import 'package:rastro/features/search/presentation/search_notifier.dart';
 
@@ -18,6 +19,7 @@ class MapScreen extends ConsumerWidget {
     final config = ref.watch(appConfigProvider);
     final mapState = ref.watch(mapNotifierProvider);
     final controller = ref.watch(searchControllerProvider);
+    final notifier = ref.read(mapNotifierProvider.notifier);
 
     return Stack(
       children: [
@@ -29,9 +31,7 @@ class MapScreen extends ConsumerWidget {
           child: DsSearchBar(
             hintText: "Buscar bus, parada, ruta...",
             controller: controller,
-            onChanged: (query) {
-              ref.read(searchProvider.notifier).search(query);
-            },
+            onChanged: (query) => ref.read(searchProvider.notifier).search(query),
           ),
         ),
         Positioned(
@@ -42,6 +42,11 @@ class MapScreen extends ConsumerWidget {
             dimensionMode: mapState.dimensionMode,
           ),
         ),
+        if (mapState.selectedRoute != null)
+          DsBottomSheetPanel(
+            onClose: notifier.clearSelection,
+            child: RouteDetailsSheet(route: mapState.selectedRoute!),
+          ),
       ],
     );
   }

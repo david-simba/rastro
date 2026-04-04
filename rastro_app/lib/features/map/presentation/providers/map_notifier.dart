@@ -46,21 +46,64 @@ class MapNotifier extends Notifier<MapState> {
     final position = await _locationService.getCurrentPosition();
     if (position == null) return;
     if (_controller.isReady) {
-      _controller.flyTo(latitude: position.latitude, longitude: position.longitude, zoom: 15);
+      _controller.flyTo(
+        latitude: position.latitude,
+        longitude: position.longitude,
+        zoom: 15,
+      );
     }
   }
 
-  Future<void> loadRoute(RouteEntity route) async {
+  Future<void> selectRoute(RouteEntity route) async {
+    if (state.selectedRoute != null && _controller.isReady) {
+      _controller.clearRoute(state.selectedRoute!.id);
+    }
+
     final coords = PolylineCodec.decode(route.geometry, precision: 6);
     if (coords.isEmpty) return;
 
-    final points = coords.map((c) => LatLng(lat: c[0].toDouble(), lng: c[1].toDouble())).toList();
-    await Future.delayed(const Duration(milliseconds: 300));
+    final points = coords
+      .map((c) => LatLng(lat: c[0].toDouble(), lng: c[1].toDouble()))
+      .toList();
 
+    state = state.copyWith(
+      mode: MapMode.routeSelected,
+      selectedRoute: () => route,
+    );
+
+    await Future.delayed(const Duration(milliseconds: 300));
     if (_controller.isReady) {
       _controller.assignRoute(route.id, points);
-      _controller.fitRoute(points);
+      _controller.fitRoute(points, bottomPadding: 410);
     }
+  }
+
+  void clearSelection() {
+    if (state.selectedRoute != null && _controller.isReady) {
+      _controller.clearRoute(state.selectedRoute!.id);
+    }
+    state = state.copyWith(
+      mode: MapMode.idle,
+      selectedRoute: () => null,
+    );
+    final pos = state.userPosition;
+    if (pos != null && _controller.isReady) {
+      _controller.flyTo(latitude: pos.lat, longitude: pos.lng, zoom: 15);
+    }
+  }
+
+  void startTracking(MapModel model) {
+    state = state.copyWith(
+      mode: MapMode.trackingBus,
+      trackedModel: () => model,
+    );
+  }
+
+  void stopTracking() {
+    state = state.copyWith(
+      mode: MapMode.idle,
+      trackedModel: () => null,
+    );
   }
 
   void toggleDimension() {

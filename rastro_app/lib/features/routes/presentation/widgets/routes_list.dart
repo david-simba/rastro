@@ -36,8 +36,7 @@ class RoutesList extends ConsumerWidget {
             accentColor: DsColors.blue500,
             trailing: Icon(LucideIcons.chevron_right, color: DsColors.zinc300),
             onPress: () {
-              ref.read(selectedRouteProvider.notifier).select(routes[i]);
-              ref.read(mapNotifierProvider.notifier).loadRoute(routes[i]);
+              ref.read(mapNotifierProvider.notifier).selectRoute(routes[i]);
               context.go(AppRoutes.map);
             },
           ),
