@@ -18,11 +18,12 @@ class DsBottomSheetPanel extends StatefulWidget {
   State<DsBottomSheetPanel> createState() => _DsBottomSheetPanelState();
 }
 
-class _DsBottomSheetPanelState extends State<DsBottomSheetPanel>
-    with SingleTickerProviderStateMixin {
+class _DsBottomSheetPanelState extends State<DsBottomSheetPanel> with TickerProviderStateMixin {
   late final AnimationController _entryController;
+  late final AnimationController _snapController;
+  OverlayEntry? _overlayEntry;
 
-  double _dragOffset = 0;
+  final ValueNotifier<double> _dragOffset = ValueNotifier<double>(0);
   double _snapStartOffset = 0;
 
   static const double _closeThreshold = 80;
@@ -37,116 +38,131 @@ class _DsBottomSheetPanelState extends State<DsBottomSheetPanel>
       duration: const Duration(milliseconds: 400),
     );
 
+    _snapController = AnimationController(
+      vsync: this,
+      duration: const Duration(milliseconds: 300),
+    );
+
+    _snapController.addListener(() {
+      _dragOffset.value = _snapStartOffset *
+          (1 - Curves.easeOut.transform(_snapController.value));
+    });
+
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      if (mounted) _entryController.forward();
+      if (!mounted) return;
+      _overlayEntry = OverlayEntry(builder: _buildPanel);
+      Overlay.of(context, rootOverlay: true).insert(_overlayEntry!);
+      _entryController.forward();
     });
   }
 
   @override
   void dispose() {
+    _overlayEntry?.remove();
+    _overlayEntry = null;
     _entryController.dispose();
+    _snapController.dispose();
+    _dragOffset.dispose();
     super.dispose();
   }
 
   void _onDragUpdate(DragUpdateDetails details) {
-    setState(() {
-      _dragOffset =
-          (_dragOffset + details.delta.dy).clamp(0.0, double.infinity);
-    });
+    if (_snapController.isAnimating) {
+      _snapController.stop();
+    }
+    _dragOffset.value =
+        (_dragOffset.value + details.delta.dy).clamp(0.0, double.infinity);
   }
 
   void _onDragEnd(DragEndDetails details) {
     final velocity = details.primaryVelocity ?? 0;
 
-    if (_dragOffset > _closeThreshold ||
+    if (_dragOffset.value > _closeThreshold ||
         velocity > _closeVelocityThreshold) {
       widget.onClose();
     } else {
-      _snapStartOffset = _dragOffset;
-
-      final controller = AnimationController(
-        vsync: this,
-        duration: const Duration(milliseconds: 300),
-      );
-
-      final animation =
-      CurvedAnimation(parent: controller, curve: Curves.easeOut);
-
-      controller.addListener(() {
-        setState(() {
-          _dragOffset =
-              _snapStartOffset * (1 - animation.value);
-        });
-      });
-
-      controller.forward().whenComplete(controller.dispose);
+      _snapStartOffset = _dragOffset.value;
+      _snapController.forward(from: 0);
     }
   }
 
-  @override
-  @override
-  Widget build(BuildContext context) {
-    final screenHeight = MediaQuery.of(context).size.height;
+  Widget _buildPanel(BuildContext overlayContext) {
+    final screenHeight = MediaQuery.of(overlayContext).size.height;
+    final textDirection = Directionality.of(context);
 
     return Positioned(
       left: 0,
       right: 0,
       bottom: 0,
-      child: AnimatedBuilder(
-        animation: _entryController,
-        builder: (_, child) {
-          final entryOffset =
-              (1 - Curves.easeOut.transform(_entryController.value)) *
-                  screenHeight;
+      child: Directionality(
+        textDirection: textDirection,
+        child: Material(
+          type: MaterialType.transparency,
+          child: AnimatedBuilder(
+            animation: _entryController,
+            builder: (_, child) {
+              final entryOffset =
+                  (1 - Curves.easeOut.transform(_entryController.value)) *
+                      screenHeight;
 
-          return Transform.translate(
-            offset: Offset(0, entryOffset + _dragOffset),
-            child: child,
-          );
-        },
-        child: Container(
-          height: widget.height,
-          width: double.infinity,
-          decoration: BoxDecoration(
-            color: context.dsColors.surface,
-            borderRadius: const BorderRadius.vertical(
-              top: Radius.circular(DsLayout.radiusMd),
-            ),
-            boxShadow: [
-              BoxShadow(
-                color: Colors.black.withValues(alpha: 0.12),
-                blurRadius: 16,
-                offset: const Offset(0, -4),
-              ),
-            ],
-          ),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              GestureDetector(
-                behavior: HitTestBehavior.opaque,
-                onVerticalDragUpdate: _onDragUpdate,
-                onVerticalDragEnd: _onDragEnd,
-                child: DsBottomSheetHeader(
-                  showCloseButton: true,
-                  onClose: widget.onClose,
+              return ValueListenableBuilder<double>(
+                valueListenable: _dragOffset,
+                builder: (_, dragValue, __) {
+                  return Transform.translate(
+                    offset: Offset(0, entryOffset + dragValue),
+                    child: child,
+                  );
+                },
+              );
+            },
+            child: Container(
+              height: widget.height,
+              width: double.infinity,
+              decoration: BoxDecoration(
+                color: overlayContext.dsColors.surface,
+                borderRadius: const BorderRadius.vertical(
+                  top: Radius.circular(DsLayout.radiusMd),
                 ),
-              ),
-              Expanded(
-                child: SingleChildScrollView(
-                  padding: const EdgeInsets.fromLTRB(
-                    DsLayout.spacingLg,
-                    0,
-                    DsLayout.spacingLg,
-                    DsLayout.spacingLg,
+                boxShadow: [
+                  BoxShadow(
+                    color: Colors.black.withValues(alpha: 0.12),
+                    blurRadius: 16,
+                    offset: const Offset(0, -4),
                   ),
-                  child: widget.child,
-                ),
+                ],
               ),
-            ],
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  GestureDetector(
+                    behavior: HitTestBehavior.opaque,
+                    onVerticalDragUpdate: _onDragUpdate,
+                    onVerticalDragEnd: _onDragEnd,
+                    child: DsBottomSheetHeader(
+                      showCloseButton: true,
+                      onClose: widget.onClose,
+                    ),
+                  ),
+                  Expanded(
+                    child: SingleChildScrollView(
+                      padding: const EdgeInsets.fromLTRB(
+                        DsLayout.spacingLg,
+                        0,
+                        DsLayout.spacingLg,
+                        DsLayout.spacingLg,
+                      ),
+                      child: widget.child,
+                    ),
+                  ),
+                ],
+              ),
+            ),
           ),
         ),
       ),
     );
   }
+
+  @override
+  Widget build(BuildContext context) => const SizedBox.shrink();
 }
