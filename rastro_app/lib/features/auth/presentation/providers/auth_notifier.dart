@@ -1,5 +1,6 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:network/network.dart';
+import 'package:firebase_auth/firebase_auth.dart' as fb;
 
 import 'package:rastro/core/providers/core_providers.dart';
 import 'package:rastro/features/auth/domain/repositories/i_auth_repository.dart';
@@ -49,6 +50,11 @@ class AuthNotifier extends Notifier<AuthState> {
       success: AuthSuccess.new,
       failure: (e) => AuthError(_errorMessage(e)),
     );
+  }
+
+  Future<void> signOut() async {
+    await fb.FirebaseAuth.instance.signOut();
+    state = const AuthInitial();
   }
 
   void reset() => state = const AuthInitial();
