@@ -1,10 +1,9 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
-import 'package:flutter/foundation.dart';
 
 import 'package:rastro/core/layout/app_shell.dart';
 import 'package:rastro/core/routing/app_routes.dart';
-import 'package:rastro/features/auth/presentation/providers/auth_session_provider.dart';
+import 'package:rastro/core/routing/auth_redirect.dart';
 import 'package:rastro/features/auth/presentation/screens/auth_screen.dart';
 import 'package:rastro/features/home/presentation/screens/home_screen.dart';
 import 'package:rastro/features/map/presentation/screens/map_screen.dart';
@@ -12,25 +11,12 @@ import 'package:rastro/features/routes/presentation/screens/routes_screen.dart';
 import 'package:rastro/features/profile/presentation/screens/profile_screen.dart';
 
 final routerProvider = Provider<GoRouter>((ref) {
-  final notifier = _AuthRouterNotifier(ref);
+  final notifier = AuthRouterNotifier(ref);
 
   return GoRouter(
     initialLocation: AppRoutes.auth,
     refreshListenable: notifier,
-    redirect: (context, state) {
-      final authState = ref.read(authSessionProvider);
-      final isLoading = authState.isLoading;
-      final isLoggedIn = authState.asData?.value != null;
-      final isAuthRoute = state.matchedLocation == AppRoutes.auth;
-
-      if (isLoading) return null;
-
-      if (!isLoggedIn && !isAuthRoute) return AppRoutes.auth;
-
-      if (isLoggedIn && isAuthRoute) return AppRoutes.home;
-
-      return null;
-    },
+    redirect: (context, state) => authRedirect(ref, context, state),
     routes: [
       GoRoute(
         path: AppRoutes.auth,
@@ -68,9 +54,3 @@ final routerProvider = Provider<GoRouter>((ref) {
     ],
   );
 });
-
-class _AuthRouterNotifier extends ChangeNotifier {
-  _AuthRouterNotifier(Ref ref) {
-    ref.listen(authSessionProvider, (_, __) => notifyListeners());
-  }
-}
