@@ -41,7 +41,10 @@ class DsListCard extends StatelessWidget {
                 ),
               Expanded(
                 child: Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: DsLayout.spacingLg, vertical: DsLayout.spacingMd),
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: DsLayout.spacingLg,
+                    vertical: DsLayout.spacingMd
+                  ),
                   child: Row(
                     children: [
                       Expanded(
