@@ -16,6 +16,7 @@ class RoutesFirebaseDatasource {
         origin: data['origin'] as String,
         destination: data['destination'] as String,
         geometry: (data['geometry'] as String).replaceAll('\\\\', '\\'),
+        stops: (data['stops'] as List?)?.whereType<String>().toList() ?? [],
       );
     }).toList();
   }

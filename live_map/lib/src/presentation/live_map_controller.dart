@@ -62,4 +62,14 @@ class LiveMapController {
   void fitRoute(List<LatLng> points, {double padding = 60.0, double? bottomPadding}) {
     dispatch(CameraFitRoute(points: points, padding: padding, bottomPadding: bottomPadding));
   }
+
+  /// Draws a circle pin on the map for each stop point belonging to [routeId].
+  void drawStopPins(String routeId, List<LatLng> points) {
+    dispatch(StopPinsDrawRequested(routeId: routeId, points: points));
+  }
+
+  /// Removes all stop pins associated with [routeId] from the map.
+  void clearStopPins(String routeId) {
+    dispatch(StopPinsClearRequested(routeId: routeId));
+  }
 }

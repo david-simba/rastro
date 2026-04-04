@@ -84,6 +84,10 @@ LiveMapState liveMapReducer(LiveMapState state, LiveMapEvent event) {
     RouteUpdateNeeded() => state,
     RouteClearRequested() => state,
     CameraFitRoute() => state,
+
+    // Stop pin events are handled as side-effects by the renderer.
+    StopPinsDrawRequested() => state,
+    StopPinsClearRequested() => state,
   };
 }
 

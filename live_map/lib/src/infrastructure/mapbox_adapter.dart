@@ -174,6 +174,64 @@ class MapboxAdapter {
     return null;
   }
 
+  /// Draws a circle pin on the map for each stop in [points].
+  ///
+  /// Safe to call multiple times for the same [routeId] — updates the GeoJSON
+  /// source in-place if the layer already exists.
+  Future<void> drawStopPins(String routeId, List<LatLng> points) async {
+    final map = _map;
+    if (map == null || points.isEmpty) return;
+
+    final sourceId = 'stops-source-$routeId';
+    final layerId = 'stops-layer-$routeId';
+
+    final geoJson = jsonEncode({
+      'type': 'FeatureCollection',
+      'features': points
+          .map((p) => {
+                'type': 'Feature',
+                'geometry': {
+                  'type': 'Point',
+                  'coordinates': [p.lng, p.lat],
+                },
+                'properties': {},
+              })
+          .toList(),
+    });
+
+    if (await sourceExists(sourceId)) {
+      await updateSourceData(sourceId, geoJson);
+    } else {
+      await addGeoJsonSource(sourceId, geoJson);
+    }
+
+    if (!await layerExists(layerId)) {
+      await map.style.addLayer(
+        CircleLayer(id: layerId, sourceId: sourceId)
+          ..circleColor = 0xFF3B82F6
+          ..circleRadius = 6.0
+          ..circleStrokeWidth = 2.0
+          ..circleStrokeColor = 0xFFFFFFFF,
+      );
+    }
+  }
+
+  /// Removes the stop pins layer and its backing GeoJSON source from the map.
+  Future<void> clearStopPins(String routeId) async {
+    final map = _map;
+    if (map == null) return;
+
+    final layerId = 'stops-layer-$routeId';
+    final sourceId = 'stops-source-$routeId';
+
+    if (await layerExists(layerId)) {
+      await map.style.removeStyleLayer(layerId);
+    }
+    if (await sourceExists(sourceId)) {
+      await map.style.removeStyleSource(sourceId);
+    }
+  }
+
   /// Removes the route line layer and its backing GeoJSON source from the map.
   Future<void> clearRoute(String routeId) async {
     final map = _map;

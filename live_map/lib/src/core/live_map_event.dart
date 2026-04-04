@@ -161,3 +161,18 @@ final class CameraFitRoute extends LiveMapEvent {
     this.bottomPadding,
   });
 }
+
+/// Dispatched to draw a circle pin for each stop point on the map.
+final class StopPinsDrawRequested extends LiveMapEvent {
+  final String routeId;
+  final List<LatLng> points;
+
+  const StopPinsDrawRequested({required this.routeId, required this.points});
+}
+
+/// Dispatched to remove all stop pins for a given route.
+final class StopPinsClearRequested extends LiveMapEvent {
+  final String routeId;
+
+  const StopPinsClearRequested({required this.routeId});
+}

@@ -5,6 +5,7 @@ import 'package:live_map/live_map.dart';
 import 'package:rastro/features/map/data/services/user_location_service.dart';
 import 'package:rastro/features/map/presentation/providers/map_state.dart';
 import 'package:rastro/features/routes/domain/entities/route_entity.dart';
+import 'package:rastro/features/stops/data/datasources/stops_firebase_datasource.dart';
 
 const _kFallbackLat = -0.2295;
 const _kFallbackLng = -78.5243;
@@ -16,6 +17,7 @@ final mapNotifierProvider = NotifierProvider<MapNotifier, MapState>(
 class MapNotifier extends Notifier<MapState> {
   late final LiveMapController _controller;
   final _locationService = UserLocationService();
+  final _stopsDatasource = const StopsFirebaseDatasource();
 
   @override
   MapState build() {
@@ -76,11 +78,20 @@ class MapNotifier extends Notifier<MapState> {
       _controller.assignRoute(route.id, points);
       _controller.fitRoute(points, bottomPadding: 410);
     }
+
+    if (route.stops.isNotEmpty && _controller.isReady) {
+      final stops = await _stopsDatasource.getStopsByIds(route.stops);
+      final stopPoints = stops
+          .map((s) => LatLng(lat: s.latitude, lng: s.longitude))
+          .toList();
+      _controller.drawStopPins(route.id, stopPoints);
+    }
   }
 
   void clearSelection() {
     if (state.selectedRoute != null && _controller.isReady) {
       _controller.clearRoute(state.selectedRoute!.id);
+      _controller.clearStopPins(state.selectedRoute!.id);
     }
     state = state.copyWith(
       mode: MapMode.idle,

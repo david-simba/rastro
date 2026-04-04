@@ -35,6 +35,7 @@ class MapboxRenderer {
   late final Ticker _ticker;
   Duration _lastTickElapsed = Duration.zero;
   final Map<String, ModelInterpolator> _lerps = {};
+  final Map<String, List<LatLng>> _stopPins = {};
   bool _isComputingGeoJson = false;
   bool _disposed = false;
 
@@ -52,6 +53,8 @@ class MapboxRenderer {
       _store.eventBus.on<RouteAssigned>(_onRouteAssigned),
       _store.eventBus.on<RouteClearRequested>(_onRouteClearRequested),
       _store.eventBus.on<CameraFitRoute>(_onCameraFitRoute),
+      _store.eventBus.on<StopPinsDrawRequested>(_onStopPinsDrawRequested),
+      _store.eventBus.on<StopPinsClearRequested>(_onStopPinsClearRequested),
     ]);
   }
 
@@ -71,6 +74,10 @@ class MapboxRenderer {
         if (route != null) {
           await _adapter.drawRoute(model.id, route);
         }
+      }
+      // Redraw stop pins that were drawn before the style finished loading.
+      for (final entry in _stopPins.entries) {
+        await _adapter.drawStopPins(entry.key, entry.value);
       }
       if (state.modelConfig != null) {
         _store.dispatch(const ModelLayerRequested());
@@ -159,6 +166,16 @@ class MapboxRenderer {
       padding: event.padding,
       bottomPadding: event.bottomPadding,
     );
+  }
+
+  Future<void> _onStopPinsDrawRequested(StopPinsDrawRequested event) async {
+    _stopPins[event.routeId] = event.points;
+    await _adapter.drawStopPins(event.routeId, event.points);
+  }
+
+  Future<void> _onStopPinsClearRequested(StopPinsClearRequested event) async {
+    _stopPins.remove(event.routeId);
+    await _adapter.clearStopPins(event.routeId);
   }
 
   void _onTrackingPositionReceived(TrackingPositionReceived event) {
