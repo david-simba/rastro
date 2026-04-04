@@ -16,7 +16,12 @@ class RoutesList extends ConsumerWidget {
     final routesAsync = ref.watch(routesNotifierProvider);
 
     return routesAsync.when(
-      loading: () => const DsLoader(),
+      loading: () => ListView.separated(
+        padding: const EdgeInsets.symmetric(horizontal: 24),
+        itemCount: 5,
+        separatorBuilder: (_, _) => SizedBox(height: DsLayout.spacingSm),
+        itemBuilder: (_, _) => const DsListCardSkeleton(),
+      ),
       error: (e, _) => Center(child: DsText('Error: $e')),
       data: (routes) {
         if (routes.isEmpty) {
