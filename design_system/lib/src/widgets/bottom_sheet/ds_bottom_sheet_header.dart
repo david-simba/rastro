@@ -5,9 +5,11 @@ class DsBottomSheetHeader extends StatelessWidget {
   const DsBottomSheetHeader({
     super.key,
     required this.showCloseButton,
+    this.onClose,
   });
 
   final bool showCloseButton;
+  final VoidCallback? onClose;
 
   @override
   Widget build(BuildContext context) {
@@ -43,7 +45,7 @@ class DsBottomSheetHeader extends StatelessWidget {
       right: DsLayout.spacingSm,
       top: DsLayout.spacingXs,
       child: IconButton(
-        onPressed: () => Navigator.of(context).pop(),
+        onPressed: onClose ?? () => Navigator.of(context).pop(),
         icon: Icon(Icons.close, size: 20, color: context.dsColors.muted),
         splashRadius: 20,
       ),

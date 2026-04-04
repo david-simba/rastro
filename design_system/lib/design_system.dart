@@ -30,3 +30,4 @@ export 'src/widgets/toast/ds_toast.dart';
 export 'src/widgets/toast/toast_variant.dart';
 export 'src/widgets/loader/ds_loader.dart';
 export 'src/widgets/empty_state/ds_empty_state.dart';
+export 'src/widgets/bottom_sheet/ds_bottom_sheet_panel.dart';
