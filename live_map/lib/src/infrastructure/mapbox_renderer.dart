@@ -154,7 +154,11 @@ class MapboxRenderer {
   }
 
   Future<void> _onCameraFitRoute(CameraFitRoute event) async {
-    await _adapter.fitBounds(event.points, padding: event.padding);
+    await _adapter.fitBounds(
+      event.points,
+      padding: event.padding,
+      bottomPadding: event.bottomPadding,
+    );
   }
 
   void _onTrackingPositionReceived(TrackingPositionReceived event) {

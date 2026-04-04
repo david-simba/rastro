@@ -59,7 +59,7 @@ class LiveMapController {
   }
 
   /// Animates the camera to fit all [points] within the viewport.
-  void fitRoute(List<LatLng> points, {double padding = 60.0}) {
-    dispatch(CameraFitRoute(points: points, padding: padding));
+  void fitRoute(List<LatLng> points, {double padding = 60.0, double? bottomPadding}) {
+    dispatch(CameraFitRoute(points: points, padding: padding, bottomPadding: bottomPadding));
   }
 }

@@ -190,7 +190,11 @@ class MapboxAdapter {
     }
   }
 
-  Future<void> fitBounds(List<LatLng> points, {double padding = 60.0}) async {
+  Future<void> fitBounds(
+    List<LatLng> points, {
+    double padding = 60.0,
+    double? bottomPadding,
+  }) async {
     final map = _map;
     if (map == null || points.isEmpty) return;
 
@@ -207,7 +211,12 @@ class MapboxAdapter {
 
     final camera = await map.cameraForCoordinateBounds(
       bounds,
-      MbxEdgeInsets(top: padding, left: padding, bottom: padding, right: padding),
+      MbxEdgeInsets(
+        top: padding,
+        left: padding,
+        bottom: bottomPadding ?? padding,
+        right: padding,
+      ),
       null, null, null, null,
     );
 

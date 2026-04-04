@@ -153,6 +153,11 @@ final class RouteClearRequested extends LiveMapEvent {
 final class CameraFitRoute extends LiveMapEvent {
   final List<LatLng> points;
   final double padding;
+  final double? bottomPadding;
 
-  const CameraFitRoute({required this.points, this.padding = 60.0});
+  const CameraFitRoute({
+    required this.points,
+    this.padding = 60.0,
+    this.bottomPadding,
+  });
 }

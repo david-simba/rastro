@@ -15,18 +15,6 @@ class RoutesTabNotifier extends Notifier<int> {
   void select(int index) => state = index;
 }
 
-final selectedRouteProvider =
-    NotifierProvider<SelectedRouteNotifier, RouteEntity?>(
-  SelectedRouteNotifier.new,
-);
-
-class SelectedRouteNotifier extends Notifier<RouteEntity?> {
-  @override
-  RouteEntity? build() => null;
-
-  void select(RouteEntity route) => state = route;
-}
-
 final routesRepositoryProvider = Provider<IRoutesRepository>((ref) {
   return RoutesRepositoryImpl(const RoutesFirebaseDatasource());
 });
