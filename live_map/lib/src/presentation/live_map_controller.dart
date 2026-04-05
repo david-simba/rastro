@@ -1,3 +1,5 @@
+import 'dart:typed_data';
+
 import 'package:live_map/src/domain/types/map_types.dart';
 import 'package:live_map/src/core/live_map_event.dart';
 import 'package:live_map/src/core/state/live_map_state.dart';
@@ -63,9 +65,13 @@ class LiveMapController {
     dispatch(CameraFitRoute(points: points, padding: padding, bottomPadding: bottomPadding));
   }
 
-  /// Draws a circle pin on the map for each stop point belonging to [routeId].
-  void drawStopPins(String routeId, List<LatLng> points) {
-    dispatch(StopPinsDrawRequested(routeId: routeId, points: points));
+  /// Draws a pin on the map for each stop point belonging to [routeId].
+  ///
+  /// Pass [pinIcon] as raw PNG bytes to render a custom image instead of the
+  /// default circle. The image is decoded and registered with the map style
+  /// automatically.
+  void drawStopPins(String routeId, List<LatLng> points, {Uint8List? pinIcon}) {
+    dispatch(StopPinsDrawRequested(routeId: routeId, points: points, pinIcon: pinIcon));
   }
 
   /// Removes all stop pins associated with [routeId] from the map.

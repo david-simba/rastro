@@ -1,3 +1,5 @@
+import 'dart:typed_data';
+
 import 'package:live_map/src/domain/types/map_types.dart';
 
 sealed class LiveMapEvent {
@@ -162,12 +164,20 @@ final class CameraFitRoute extends LiveMapEvent {
   });
 }
 
-/// Dispatched to draw a circle pin for each stop point on the map.
+/// Dispatched to draw a pin for each stop point on the map.
+///
+/// If [pinIcon] is provided (raw PNG bytes), a symbol layer is used with
+/// that image. Otherwise falls back to a circle layer.
 final class StopPinsDrawRequested extends LiveMapEvent {
   final String routeId;
   final List<LatLng> points;
+  final Uint8List? pinIcon;
 
-  const StopPinsDrawRequested({required this.routeId, required this.points});
+  const StopPinsDrawRequested({
+    required this.routeId,
+    required this.points,
+    this.pinIcon,
+  });
 }
 
 /// Dispatched to remove all stop pins for a given route.

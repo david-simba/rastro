@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'dart:convert';
+import 'dart:typed_data';
 
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -35,7 +36,7 @@ class MapboxRenderer {
   late final Ticker _ticker;
   Duration _lastTickElapsed = Duration.zero;
   final Map<String, ModelInterpolator> _lerps = {};
-  final Map<String, List<LatLng>> _stopPins = {};
+  final Map<String, ({List<LatLng> points, Uint8List? icon})> _stopPins = {};
   bool _isComputingGeoJson = false;
   bool _disposed = false;
 
@@ -77,7 +78,7 @@ class MapboxRenderer {
       }
       // Redraw stop pins that were drawn before the style finished loading.
       for (final entry in _stopPins.entries) {
-        await _adapter.drawStopPins(entry.key, entry.value);
+        await _adapter.drawStopPins(entry.key, entry.value.points, pinIcon: entry.value.icon);
       }
       if (state.modelConfig != null) {
         _store.dispatch(const ModelLayerRequested());
@@ -169,8 +170,8 @@ class MapboxRenderer {
   }
 
   Future<void> _onStopPinsDrawRequested(StopPinsDrawRequested event) async {
-    _stopPins[event.routeId] = event.points;
-    await _adapter.drawStopPins(event.routeId, event.points);
+    _stopPins[event.routeId] = (points: event.points, icon: event.pinIcon);
+    await _adapter.drawStopPins(event.routeId, event.points, pinIcon: event.pinIcon);
   }
 
   Future<void> _onStopPinsClearRequested(StopPinsClearRequested event) async {

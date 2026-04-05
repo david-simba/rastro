@@ -1,5 +1,7 @@
 import 'dart:convert';
 import 'dart:math' as math;
+import 'dart:typed_data';
+import 'dart:ui' as ui;
 
 import 'package:mapbox_maps_flutter/mapbox_maps_flutter.dart';
 import 'package:live_map/src/domain/types/map_types.dart';
@@ -174,16 +176,24 @@ class MapboxAdapter {
     return null;
   }
 
-  /// Draws a circle pin on the map for each stop in [points].
+  /// Draws a pin on the map for each stop in [points].
+  ///
+  /// If [pinIcon] is provided (raw PNG bytes), a symbol layer is used with
+  /// that image. Otherwise falls back to a circle layer.
   ///
   /// Safe to call multiple times for the same [routeId] — updates the GeoJSON
   /// source in-place if the layer already exists.
-  Future<void> drawStopPins(String routeId, List<LatLng> points) async {
+  Future<void> drawStopPins(
+    String routeId,
+    List<LatLng> points, {
+    Uint8List? pinIcon,
+  }) async {
     final map = _map;
     if (map == null || points.isEmpty) return;
 
     final sourceId = 'stops-source-$routeId';
     final layerId = 'stops-layer-$routeId';
+    final imageId = 'stops-icon-$routeId';
 
     final geoJson = jsonEncode({
       'type': 'FeatureCollection',
@@ -206,29 +216,67 @@ class MapboxAdapter {
     }
 
     if (!await layerExists(layerId)) {
-      await map.style.addLayer(
-        CircleLayer(id: layerId, sourceId: sourceId)
-          ..circleColor = 0xFF3B82F6
-          ..circleRadius = 6.0
-          ..circleStrokeWidth = 2.0
-          ..circleStrokeColor = 0xFFFFFFFF,
-      );
+      if (pinIcon != null) {
+        final mbxImage = await _decodePngToMbxImage(pinIcon);
+        await map.style.addStyleImage(imageId, 1.0, mbxImage, false, [], [], null);
+        await map.style.addLayer(
+          SymbolLayer(id: layerId, sourceId: sourceId)
+            ..iconImage = imageId
+            ..iconAllowOverlap = true
+            ..iconIgnorePlacement = true
+            ..iconAnchor = IconAnchor.BOTTOM
+            ..iconSizeExpression = [
+              'interpolate', ['linear'], ['zoom'],
+              10, 0.2,
+              14, 0.2,
+              17, 0.3,
+            ],
+        );
+      } else {
+        await map.style.addLayer(
+          CircleLayer(id: layerId, sourceId: sourceId)
+            ..circleColor = 0xFF3B82F6
+            ..circleRadius = 6.0
+            ..circleStrokeWidth = 2.0
+            ..circleStrokeColor = 0xFFFFFFFF,
+        );
+      }
     }
   }
 
-  /// Removes the stop pins layer and its backing GeoJSON source from the map.
+  /// Wraps [bytes] (PNG/JPEG) into an [MbxImage].
+  ///
+  /// Mapbox's native SDK accepts compressed image data directly; we only need
+  /// the pixel dimensions from the Flutter codec.
+  Future<MbxImage> _decodePngToMbxImage(Uint8List bytes) async {
+    final codec = await ui.instantiateImageCodec(bytes);
+    final frame = await codec.getNextFrame();
+    final image = frame.image;
+    return MbxImage(
+      width: image.width,
+      height: image.height,
+      data: bytes,
+    );
+  }
+
+  /// Removes the stop pins layer, its backing GeoJSON source, and any
+  /// registered icon image from the map style.
   Future<void> clearStopPins(String routeId) async {
     final map = _map;
     if (map == null) return;
 
     final layerId = 'stops-layer-$routeId';
     final sourceId = 'stops-source-$routeId';
+    final imageId = 'stops-icon-$routeId';
 
     if (await layerExists(layerId)) {
       await map.style.removeStyleLayer(layerId);
     }
     if (await sourceExists(sourceId)) {
       await map.style.removeStyleSource(sourceId);
+    }
+    if (await map.style.hasStyleImage(imageId)) {
+      await map.style.removeStyleImage(imageId);
     }
   }
 
