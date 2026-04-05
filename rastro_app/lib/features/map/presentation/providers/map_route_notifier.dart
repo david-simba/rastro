@@ -1,3 +1,4 @@
+import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:live_map/live_map.dart';
 import 'package:polyline_codec/polyline_codec.dart';
@@ -38,7 +39,12 @@ mixin MapRouteMixin on Notifier<MapState> {
       final stopPoints = stops
           .map((s) => LatLng(lat: s.latitude, lng: s.longitude))
           .toList();
-      controller.drawStopPins(route.id, stopPoints);
+      final data = await rootBundle.load('assets/images/stop_pin.png');
+      controller.drawStopPins(
+        route.id,
+        stopPoints,
+        pinIcon: data.buffer.asUint8List(),
+      );
     }
   }
 
