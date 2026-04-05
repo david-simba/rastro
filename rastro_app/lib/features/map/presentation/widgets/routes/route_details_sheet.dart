@@ -1,67 +1,27 @@
 import 'package:design_system/design_system.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_lucide/flutter_lucide.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import 'package:rastro/features/map/presentation/providers/map_notifier.dart';
-import 'package:rastro/features/map/presentation/widgets/routes/stops_timeline.dart';
+import 'package:rastro/features/map/presentation/widgets/routes/route_stops_header.dart';
+import 'package:rastro/features/map/presentation/widgets/routes/route_details_header.dart';
+import 'package:rastro/features/map/presentation/widgets/routes/route_stops_section.dart';
 import 'package:rastro/features/routes/domain/entities/route_entity.dart';
-import 'package:rastro/features/stops/presentation/providers/stops_provider.dart';
 
-class RouteDetailsSheet extends ConsumerWidget {
+class RouteDetailsSheet extends StatelessWidget {
   final RouteEntity route;
 
   const RouteDetailsSheet({required this.route, super.key});
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    final colors = context.dsColors;
-
+  Widget build(BuildContext context) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       mainAxisSize: MainAxisSize.min,
       children: [
-        DsText(route.name, variant: TextVariant.subtitle),
-        SizedBox(height: DsLayout.spacingSm),
-        Row(
-          children: [
-            Icon(LucideIcons.map_pin, size: 14, color: colors.muted),
-            const SizedBox(width: 6),
-            Expanded(
-              child: DsText(
-                '${route.origin} → ${route.destination}',
-                variant: TextVariant.caption,
-              ),
-            ),
-          ],
-        ),
+        RouteDetailsHeader(route: route),
         SizedBox(height: DsLayout.spacingLg),
-        DsText('Paradas', variant: TextVariant.medium),
+        RouteStopsHeader(count: route.stops.length),
         SizedBox(height: DsLayout.spacingSm),
-        if (route.stops.isEmpty)
-          DsText(
-            'Paradas no disponibles para esta ruta',
-            variant: TextVariant.regular2,
-            color: colors.muted,
-          )
-        else
-          ref.watch(stopsForIdsProvider(route.stops)).when(
-            loading: () => DsTimelineSkeleton(itemCount: route.stops.length),
-            error: (_, _) => DsText(
-              'Error al cargar paradas',
-              variant: TextVariant.regular2,
-              color: colors.muted,
-            ),
-            data: (stops) {
-              final notifier = ref.read(mapNotifierProvider.notifier);
-              return StopsTimeline(
-                stops: stops,
-                onFitRoute: notifier.fitSelectedRoute,
-                onStopTap: (stop) =>
-                    notifier.flyToStop(stop.latitude, stop.longitude),
-              );
-            },
-          ),
+        RouteStopsSection(route: route),
       ],
     );
   }
