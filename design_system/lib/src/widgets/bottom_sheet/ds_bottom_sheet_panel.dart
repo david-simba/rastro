@@ -30,6 +30,7 @@ class DsBottomSheetPanelState extends State<DsBottomSheetPanel>
   late final AnimationController _entryController;
   late final AnimationController _snapController;
   late final ValueNotifier<double> _currentHeight;
+  late final ScrollController _scrollController;
   OverlayEntry? _overlayEntry;
 
   double _snapFrom = 0;
@@ -42,6 +43,7 @@ class DsBottomSheetPanelState extends State<DsBottomSheetPanel>
     super.initState();
 
     _currentHeight = ValueNotifier(widget.normalHeight);
+    _scrollController = ScrollController()..addListener(_onScroll);
 
     _entryController = AnimationController(
       vsync: this,
@@ -80,7 +82,36 @@ class DsBottomSheetPanelState extends State<DsBottomSheetPanel>
     _entryController.dispose();
     _snapController.dispose();
     _currentHeight.dispose();
+    _scrollController.dispose();
     super.dispose();
+  }
+
+  void _onScroll() {
+    if (!_scrollController.hasClients) return;
+    if (_snapController.isAnimating) return;
+    if (_currentHeight.value >= widget.maxHeight - 1) return; // at max, allow scroll
+
+    if (_scrollController.offset > 0) {
+      _scrollController.jumpTo(0);
+      _snapUpOneLevel();
+    }
+  }
+
+  void _snapUpOneLevel() {
+    final snapPoints = [widget.minHeight, widget.normalHeight, widget.maxHeight];
+    final current = _currentHeight.value;
+
+    int nearestIndex = 0;
+    double minDiff = double.infinity;
+    for (int i = 0; i < snapPoints.length; i++) {
+      final diff = (current - snapPoints[i]).abs();
+      if (diff < minDiff) {
+        minDiff = diff;
+        nearestIndex = i;
+      }
+    }
+
+    snapToExternal(snapPoints[(nearestIndex + 1).clamp(0, snapPoints.length - 1)]);
   }
 
   void snapToExternal(double height) {
@@ -181,6 +212,7 @@ class DsBottomSheetPanelState extends State<DsBottomSheetPanel>
                 ),
                 Expanded(
                   child: SingleChildScrollView(
+                    controller: _scrollController,
                     padding: const EdgeInsets.fromLTRB(
                       DsLayout.spacingLg,
                       0,
