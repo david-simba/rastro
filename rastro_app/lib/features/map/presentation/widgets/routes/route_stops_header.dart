@@ -9,18 +9,12 @@ class RouteStopsHeader extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final isDark = Theme.of(context).brightness == Brightness.dark;
-    final bg = isDark ? DsColors.blue900 : DsColors.blue50;
-    final textColor = isDark ? DsColors.blue200 : DsColors.blue700;
+    final textColor = isDark ? DsColors.zinc300 : DsColors.zinc900;
 
-    return Container(
-      width: double.infinity,
+    return Padding(
       padding: const EdgeInsets.symmetric(
-        horizontal: DsLayout.spacingMd,
+        horizontal: DsLayout.spacingXs,
         vertical: DsLayout.spacingSm,
-      ),
-      decoration: BoxDecoration(
-        color: bg,
-        borderRadius: DsLayout.borderRadiusSm,
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -29,9 +23,8 @@ class RouteStopsHeader extends StatelessWidget {
             Row(
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
-                DsText('Paradas', variant: TextVariant.medium, color: textColor),
-                const SizedBox(width: DsLayout.spacingXs),
-                DsText('$count', variant: TextVariant.medium, color: textColor),
+                DsText('Explora las $count paradas',
+                    variant: TextVariant.medium, color: textColor),
               ],
             ),
             const SizedBox(height: 2),

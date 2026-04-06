@@ -18,7 +18,7 @@ class RouteDetailsSheet extends StatelessWidget {
       mainAxisSize: MainAxisSize.min,
       children: [
         RouteDetailsHeader(route: route),
-        SizedBox(height: DsLayout.spacingLg),
+        SizedBox(height: DsLayout.spacingSm),
         RouteStopsHeader(count: route.stops.length),
         SizedBox(height: DsLayout.spacingSm),
         RouteStopsSection(route: route),
