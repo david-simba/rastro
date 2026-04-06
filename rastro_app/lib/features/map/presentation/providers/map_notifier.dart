@@ -2,10 +2,10 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:live_map/live_map.dart';
 
 import 'package:rastro/features/map/data/services/user_location_service.dart';
-import 'package:rastro/features/map/presentation/providers/map_controls_notifier.dart';
-import 'package:rastro/features/map/presentation/providers/map_route_notifier.dart';
 import 'package:rastro/features/map/presentation/providers/map_state.dart';
-import 'package:rastro/features/map/presentation/providers/map_tracking_notifier.dart';
+import 'package:rastro/features/map/presentation/providers/mixins/map_controls_notifier.dart';
+import 'package:rastro/features/map/presentation/providers/mixins/map_route_notifier.dart';
+import 'package:rastro/features/map/presentation/providers/mixins/map_tracking_notifier.dart';
 import 'package:rastro/features/stops/data/datasources/stops_firebase_datasource.dart';
 
 const _kFallbackLat = -0.2295;

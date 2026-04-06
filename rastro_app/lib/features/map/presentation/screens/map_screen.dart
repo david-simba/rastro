@@ -20,16 +20,19 @@ class MapScreen extends ConsumerStatefulWidget {
 
 class _MapScreenState extends ConsumerState<MapScreen> {
   late final ValueNotifier<double> _sheetHeight;
+  late final ProviderSubscription<MapState> _mapStateSub;
+  late final ProviderSubscription<MapSelectedItem?> _selectionSub;
   final _panelController = DsBottomSheetPanelController();
 
   @override
   void initState() {
     super.initState();
     _sheetHeight = ValueNotifier(400);
+    _mapStateSub = ref.listenManual(mapNotifierProvider, _onMapStateChanged);
+    _selectionSub = ref.listenManual(selectedItemProvider, _onSelectionChanged);
     WidgetsBinding.instance.addPostFrameCallback((_) {
       if (!mounted) return;
-      final mapState = ref.read(mapNotifierProvider);
-      if (mapState.mode == MapMode.routeSelected &&
+      if (ref.read(mapNotifierProvider).mode == MapMode.routeSelected &&
           ref.read(selectedItemProvider) == null) {
         ref.read(selectedItemProvider.notifier).selectSilent(const MapSelectedRoute());
       }
@@ -39,38 +42,39 @@ class _MapScreenState extends ConsumerState<MapScreen> {
   @override
   void dispose() {
     _sheetHeight.dispose();
+    _mapStateSub.close();
+    _selectionSub.close();
     super.dispose();
+  }
+
+  void _onMapStateChanged(MapState? prev, MapState next) {
+    if (prev?.mode != MapMode.routeSelected && next.mode == MapMode.routeSelected) {
+      ref.read(selectedItemProvider.notifier).selectSilent(const MapSelectedRoute());
+    }
+  }
+
+  void _onSelectionChanged(MapSelectedItem? _, MapSelectedItem? next) {
+    if (next == null) return;
+    if (ref.read(selectedItemProvider.notifier).isSilent) return;
+    final notifier = ref.read(mapNotifierProvider.notifier);
+    switch (next) {
+      case MapSelectedStop(:final stop):
+        notifier.flyToStop(stop.latitude, stop.longitude);
+        _panelController.snapToMin();
+      case MapSelectedRoute():
+        notifier.fitSelectedRoute();
+        if (_sheetHeight.value >= _panelController.maxHeight) {
+          _panelController.snapToNormal();
+        }
+      case MapSelectedLocation():
+        _panelController.snapToMin();
+    }
   }
 
   @override
   Widget build(BuildContext context) {
     final mapState = ref.watch(mapNotifierProvider);
     final isRouteSelected = mapState.mode == MapMode.routeSelected;
-
-    ref.listen<MapState>(mapNotifierProvider, (prev, next) {
-      if (prev?.mode != MapMode.routeSelected &&
-          next.mode == MapMode.routeSelected) {
-        ref.read(selectedItemProvider.notifier).selectSilent(const MapSelectedRoute());
-      }
-    });
-
-    ref.listen<MapSelectedItem?>(selectedItemProvider, (_, next) {
-      if (next == null) return;
-      if (ref.read(selectedItemProvider.notifier).isSilent) return;
-      final notifier = ref.read(mapNotifierProvider.notifier);
-      switch (next) {
-        case MapSelectedStop(:final stop):
-          notifier.flyToStop(stop.latitude, stop.longitude);
-          _panelController.snapToMin();
-        case MapSelectedRoute():
-          notifier.fitSelectedRoute();
-          if (_sheetHeight.value >= _panelController.maxHeight) {
-            _panelController.snapToNormal();
-          }
-        case MapSelectedLocation():
-          _panelController.snapToMin();
-      }
-    });
 
     return Stack(
       children: [
