@@ -69,6 +69,12 @@ class EventDebugList extends StatelessWidget {
       RouteAssigned(:final modelId, :final routePoints) =>
         'RouteAssigned: $modelId (${routePoints.length} pts)',
       RouteUpdateNeeded(:final modelId) => 'RouteUpdateNeeded: $modelId',
+      RouteClearRequested(:final modelId) => 'RouteClearRequested: $modelId',
+      CameraFitRoute(:final points) => 'CameraFitRoute: ${points.length} pts',
+      StopPinsDrawRequested(:final routeId, :final points) =>
+        'StopPinsDrawRequested: $routeId (${points.length} stops)',
+      StopPinsClearRequested(:final routeId) =>
+        'StopPinsClearRequested: $routeId',
     };
   }
 }

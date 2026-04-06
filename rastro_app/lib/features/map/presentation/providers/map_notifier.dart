@@ -1,98 +1,54 @@
-import 'dart:async';
-
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:live_map/live_map.dart';
 
-import 'package:rastro/features/map/data/datasources/simulation_datasource.dart';
-import 'package:rastro/features/map/data/mappers/position_mapper.dart';
-import 'package:rastro/features/map/data/repositories/map_repository_impl.dart';
-import 'package:rastro/features/map/domain/entities/vehicle_position.dart';
-import 'package:rastro/features/map/domain/repositories/i_map_repository.dart';
+import 'package:rastro/features/map/data/services/user_location_service.dart';
 import 'package:rastro/features/map/presentation/providers/map_state.dart';
+import 'package:rastro/features/map/presentation/providers/mixins/map_controls_notifier.dart';
+import 'package:rastro/features/map/presentation/providers/mixins/map_route_notifier.dart';
+import 'package:rastro/features/map/presentation/providers/mixins/map_tracking_notifier.dart';
+import 'package:rastro/features/stops/data/datasources/stops_firebase_datasource.dart';
 
-final mapRepositoryProvider = Provider<IMapRepository>((ref) {
-  final datasource = SimulationDatasource();
-  ref.onDispose(datasource.dispose);
-  return MapRepositoryImpl(datasource);
-});
+const _kFallbackLat = -0.2295;
+const _kFallbackLng = -78.5243;
 
 final mapNotifierProvider = NotifierProvider<MapNotifier, MapState>(
   MapNotifier.new,
 );
 
-class MapNotifier extends Notifier<MapState> {
+class MapNotifier extends Notifier<MapState>
+    with MapControlsMixin, MapRouteMixin, MapTrackingMixin {
   late final LiveMapController _controller;
-  late final IMapRepository _repository;
-  StreamSubscription<VehiclePosition>? _positionSub;
+  late final _locationService = UserLocationService();
+
+  @override
+  LiveMapController get controller => _controller;
+
+  @override
+  UserLocationService get locationService => _locationService;
+
+  @override
+  StopsFirebaseDatasource get stopsDatasource => const StopsFirebaseDatasource();
 
   @override
   MapState build() {
     _controller = LiveMapController();
-    _repository = ref.read(mapRepositoryProvider);
-
-    ref.onDispose(() {
-      _positionSub?.cancel();
-      _repository.stopTracking();
-    });
-
+    _initUserLocation();
     return MapState.initial();
   }
 
-  LiveMapController get controller => _controller;
+  LiveMapConfig get mapConfig => LiveMapConfig(
+    initialLatitude: state.userPosition?.lat ?? _kFallbackLat,
+    initialLongitude: state.userPosition?.lng ?? _kFallbackLng,
+    dimensionMode: MapDimensionMode.twoD,
+    showUserLocation: true,
+  );
 
-  LiveMapConfig get mapConfig {
-    final initial = _repository.initialPosition;
-    final waypoints = _repository.waypoints;
-
-    return LiveMapConfig(
-      initialZoom: 19,
-      initialLatitude: initial.latitude,
-      initialLongitude: initial.longitude,
-      dimensionMode: state.dimensionMode,
-      initialModels: [PositionMapper.toMapModel(initial)],
-      waypoints: waypoints.map(PositionMapper.toMapModel).toList(),
-      modelConfig: const ModelConfig(
-        modelPath: 'assets/models/optimized-bus.glb',
-        scale: [2.5, 2.5, 2.5],
-        rotation: [0, 0, 0],
-        zoomScale: ZoomScaleConfig(
-          minZoom: 10.0,
-          maxZoom: 20.0,
-          minScaleMultiplier: 1,
-          maxScaleMultiplier: 16.0,
-        ),
-      ),
+  Future<void> _initUserLocation() async {
+    final position = await locationService.getCurrentPosition();
+    state = state.copyWith(
+      userPosition: () => position != null
+          ? LatLng(lat: position.latitude, lng: position.longitude)
+          : const LatLng(lat: _kFallbackLat, lng: _kFallbackLng),
     );
-  }
-
-  void startTracking() {
-    _repository.startTracking();
-    _positionSub = _repository.watchPositions().listen((position) {
-      _controller.dispatch(TrackingPositionReceived(
-        modelId: position.id,
-        latitude: position.latitude,
-        longitude: position.longitude,
-        bearing: position.bearing,
-      ));
-      _controller.dispatch(CameraMoveTo(
-        latitude: position.latitude,
-        longitude: position.longitude,
-        bearing: position.bearing,
-      ));
-    });
-  }
-
-  void stopTracking() {
-    _positionSub?.cancel();
-    _positionSub = null;
-    _repository.stopTracking();
-  }
-
-  void toggleDimension() {
-    final next = state.dimensionMode == MapDimensionMode.twoD
-        ? MapDimensionMode.threeD
-        : MapDimensionMode.twoD;
-    state = state.copyWith(dimensionMode: next);
-    _controller.toggleDimensionMode(next);
   }
 }

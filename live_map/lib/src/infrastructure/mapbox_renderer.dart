@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'dart:convert';
+import 'dart:typed_data';
 
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -27,7 +28,7 @@ class MapboxRenderer {
 
   static const String _sourceId = 'model-source';
   static const String _layerId = 'model-layer';
-  static const Duration _animDuration = Duration(seconds: 5);
+  static const Duration _animDuration = Duration(seconds: 1);
 
   /// Euclidean-degree threshold (~50 m) used to detect route deviation.
   static const double _deviationThreshold = 0.0005;
@@ -35,6 +36,7 @@ class MapboxRenderer {
   late final Ticker _ticker;
   Duration _lastTickElapsed = Duration.zero;
   final Map<String, ModelInterpolator> _lerps = {};
+  final Map<String, ({List<LatLng> points, Uint8List? icon})> _stopPins = {};
   bool _isComputingGeoJson = false;
   bool _disposed = false;
 
@@ -49,6 +51,11 @@ class MapboxRenderer {
       _store.eventBus.on<TrackingPositionReceived>(_onTrackingPositionReceived),
       _store.eventBus.on<MapStyleLoaded>(_onMapStyleLoaded),
       _store.eventBus.on<DimensionModeChanged>(_onDimensionModeChanged),
+      _store.eventBus.on<RouteAssigned>(_onRouteAssigned),
+      _store.eventBus.on<RouteClearRequested>(_onRouteClearRequested),
+      _store.eventBus.on<CameraFitRoute>(_onCameraFitRoute),
+      _store.eventBus.on<StopPinsDrawRequested>(_onStopPinsDrawRequested),
+      _store.eventBus.on<StopPinsClearRequested>(_onStopPinsClearRequested),
     ]);
   }
 
@@ -59,8 +66,19 @@ class MapboxRenderer {
   Future<void> _onMapStyleLoaded(MapStyleLoaded event) async {
     final state = _store.state;
     try {
-      if (state.waypoints.isNotEmpty) {
-        await _adapter.drawWaypoints(state.waypoints);
+      // Redraw any routes that were assigned before the style finished loading.
+      for (final entry in _routeManager.allRoutes.entries) {
+        await _adapter.drawRoute(entry.key, entry.value);
+      }
+      for (final model in state.models.models) {
+        final route = _routeManager.getRoute(model.id);
+        if (route != null) {
+          await _adapter.drawRoute(model.id, route);
+        }
+      }
+      // Redraw stop pins that were drawn before the style finished loading.
+      for (final entry in _stopPins.entries) {
+        await _adapter.drawStopPins(entry.key, entry.value.points, pinIcon: entry.value.icon);
       }
       if (state.modelConfig != null) {
         _store.dispatch(const ModelLayerRequested());
@@ -131,6 +149,34 @@ class MapboxRenderer {
       debugPrint('MapboxRenderer: error loading model layer: $e');
       _store.dispatch(ModelLayerFailed(error: e.toString()));
     }
+  }
+
+  Future<void> _onRouteAssigned(RouteAssigned event) async {
+    _routeManager.saveRoute(event.modelId, event.routePoints);
+    await _adapter.drawRoute(event.modelId, event.routePoints);
+  }
+
+  Future<void> _onRouteClearRequested(RouteClearRequested event) async {
+    _routeManager.clearRoute(event.modelId);
+    await _adapter.clearRoute(event.modelId);
+  }
+
+  Future<void> _onCameraFitRoute(CameraFitRoute event) async {
+    await _adapter.fitBounds(
+      event.points,
+      padding: event.padding,
+      bottomPadding: event.bottomPadding,
+    );
+  }
+
+  Future<void> _onStopPinsDrawRequested(StopPinsDrawRequested event) async {
+    _stopPins[event.routeId] = (points: event.points, icon: event.pinIcon);
+    await _adapter.drawStopPins(event.routeId, event.points, pinIcon: event.pinIcon);
+  }
+
+  Future<void> _onStopPinsClearRequested(StopPinsClearRequested event) async {
+    _stopPins.remove(event.routeId);
+    await _adapter.clearStopPins(event.routeId);
   }
 
   void _onTrackingPositionReceived(TrackingPositionReceived event) {

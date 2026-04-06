@@ -5,35 +5,44 @@ class DsFloatingButton extends StatelessWidget {
   final VoidCallback onPressed;
   final IconData icon;
   final ButtonVariant variant;
-  final Color color;
+  final Color? color;
+  final Color? iconColor;
   final double? size;
+  final double? iconSize;
 
   const DsFloatingButton({
     required this.onPressed,
     required this.icon,
     this.variant = ButtonVariant.filled,
-    this.color = DsColors.blue500,
+    this.color,
+    this.iconColor,
     this.size,
+    this.iconSize,
     super.key,
   });
 
   @override
   Widget build(BuildContext context) {
+    final tokens = context.dsColors;
     final isOutlined = variant == ButtonVariant.outlined;
-    final fgColor = isOutlined ? color : DsColors.white;
+    final resolvedColor = color ?? tokens.surface;
+    final resolvedIconColor = iconColor ?? tokens.onSurface;
+
+    final bgColor = isOutlined ? Colors.transparent : resolvedColor;
+    final fgColor = isOutlined ? resolvedColor : resolvedIconColor;
 
     return SizedBox(
       width: size ?? DsLayout.floatingButtonSize,
       height: size ?? DsLayout.floatingButtonSize,
       child: FloatingActionButton(
         onPressed: onPressed,
-        backgroundColor: isOutlined ? Colors.transparent : color,
+        backgroundColor: bgColor,
         foregroundColor: fgColor,
         shape: isOutlined
-            ? CircleBorder(side: BorderSide(color: color))
+            ? CircleBorder(side: BorderSide(color: resolvedColor))
             : const CircleBorder(),
-        elevation: isOutlined ? 0 : 4,
-        child: Icon(icon, color: fgColor),
+        elevation: isOutlined ? 0 : 0.75,
+        child: Icon(icon, color: fgColor, size: iconSize),
       ),
     );
   }

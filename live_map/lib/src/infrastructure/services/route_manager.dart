@@ -17,6 +17,7 @@ class RouteManager {
   }
 
   List<LatLng>? getRoute(String modelId) => _routes[modelId];
+  Map<String, List<LatLng>> get allRoutes => Map.unmodifiable(_routes);
 
   void clearRoute(String modelId) {
     _routes.remove(modelId);

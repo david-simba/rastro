@@ -1,3 +1,5 @@
+import 'dart:typed_data';
+
 import 'package:live_map/src/domain/types/map_types.dart';
 
 sealed class LiveMapEvent {
@@ -139,4 +141,48 @@ final class RouteUpdateNeeded extends LiveMapEvent {
     required this.modelId,
     required this.currentPosition,
   });
+}
+
+/// Dispatched by the consumer to remove a previously drawn route line from
+/// the map and clear it from [RouteManager].
+final class RouteClearRequested extends LiveMapEvent {
+  final String modelId;
+
+  const RouteClearRequested({required this.modelId});
+}
+
+/// Dispatched to animate the camera to fit all [points] within the viewport.
+final class CameraFitRoute extends LiveMapEvent {
+  final List<LatLng> points;
+  final double padding;
+  final double? bottomPadding;
+
+  const CameraFitRoute({
+    required this.points,
+    this.padding = 60.0,
+    this.bottomPadding,
+  });
+}
+
+/// Dispatched to draw a pin for each stop point on the map.
+///
+/// If [pinIcon] is provided (raw PNG bytes), a symbol layer is used with
+/// that image. Otherwise falls back to a circle layer.
+final class StopPinsDrawRequested extends LiveMapEvent {
+  final String routeId;
+  final List<LatLng> points;
+  final Uint8List? pinIcon;
+
+  const StopPinsDrawRequested({
+    required this.routeId,
+    required this.points,
+    this.pinIcon,
+  });
+}
+
+/// Dispatched to remove all stop pins for a given route.
+final class StopPinsClearRequested extends LiveMapEvent {
+  final String routeId;
+
+  const StopPinsClearRequested({required this.routeId});
 }

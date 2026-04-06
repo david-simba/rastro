@@ -131,14 +131,8 @@ class _LiveMapWidgetState extends State<LiveMapWidget> {
 
   void _onMapCreated(MapboxMap map) {
     _adapter.bind(map);
-    map.scaleBar.updateSettings(
-      ScaleBarSettings(
-        enabled: false,
-      ),
-    );
-    map.compass.updateSettings(
-      CompassSettings(enabled: false),
-    );
+    map.scaleBar.updateSettings(ScaleBarSettings(enabled: false));
+    map.compass.updateSettings(CompassSettings(enabled: false));
     _store.dispatch(const MapCreated());
   }
 
@@ -175,8 +169,11 @@ class _LiveMapWidgetState extends State<LiveMapWidget> {
     ));
   }
 
-  void _onStyleLoaded(StyleLoadedEventData data) {
+  Future<void> _onStyleLoaded(StyleLoadedEventData data) async {
     _store.dispatch(const MapStyleLoaded());
+    if (widget.config.showUserLocation) {
+      await _adapter.enableLocationPuck();
+    }
   }
 
   @override

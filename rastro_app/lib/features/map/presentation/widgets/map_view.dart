@@ -11,7 +11,12 @@ class MapView extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final userPosition = ref.watch(
+      mapNotifierProvider.select((s) => s.userPosition),
+    );
+
     final notifier = ref.read(mapNotifierProvider.notifier);
+    if (userPosition == null) return const SizedBox.shrink();
 
     return LiveMapWidget(
       config: notifier.mapConfig,

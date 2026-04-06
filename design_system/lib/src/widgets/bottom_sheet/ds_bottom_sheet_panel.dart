@@ -1,0 +1,235 @@
+import 'package:design_system/design_system.dart';
+import 'package:design_system/src/widgets/bottom_sheet/ds_bottom_sheet_header.dart';
+import 'package:design_system/src/widgets/bottom_sheet/ds_bottom_sheet_panel_controller.dart';
+import 'package:flutter/material.dart';
+
+class DsBottomSheetPanel extends StatefulWidget {
+  final Widget child;
+  final double minHeight;
+  final double normalHeight;
+  final double maxHeight;
+  final void Function(double height)? onHeightChanged;
+  final DsBottomSheetPanelController? controller;
+
+  const DsBottomSheetPanel({
+    required this.child,
+    this.minHeight = 164,
+    this.normalHeight = 420,
+    this.maxHeight = 650,
+    this.onHeightChanged,
+    this.controller,
+    super.key,
+  });
+
+  @override
+  State<DsBottomSheetPanel> createState() => DsBottomSheetPanelState();
+}
+
+class DsBottomSheetPanelState extends State<DsBottomSheetPanel>
+    with TickerProviderStateMixin {
+  late final AnimationController _entryController;
+  late final AnimationController _snapController;
+  late final ValueNotifier<double> _currentHeight;
+  late final ScrollController _scrollController;
+  OverlayEntry? _overlayEntry;
+
+  double _snapFrom = 0;
+  double _snapTo = 0;
+
+  static const double _snapVelocityThreshold = 600;
+
+  @override
+  void initState() {
+    super.initState();
+
+    _currentHeight = ValueNotifier(widget.normalHeight);
+    _scrollController = ScrollController()..addListener(_onScroll);
+
+    _entryController = AnimationController(
+      vsync: this,
+      duration: const Duration(milliseconds: 400),
+    );
+
+    _snapController = AnimationController(
+      vsync: this,
+      duration: const Duration(milliseconds: 600),
+    );
+
+    _snapController.addListener(() {
+      final t = Curves.easeOut.transform(_snapController.value);
+      _currentHeight.value = _snapFrom + (_snapTo - _snapFrom) * t;
+    });
+
+    _currentHeight.addListener(() {
+      widget.onHeightChanged?.call(_currentHeight.value);
+    });
+
+    widget.controller?.attach(this);
+
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (!mounted) return;
+      _overlayEntry = OverlayEntry(builder: _buildPanel);
+      Overlay.of(context, rootOverlay: true).insert(_overlayEntry!);
+      _entryController.forward();
+    });
+  }
+
+  @override
+  void dispose() {
+    widget.controller?.detach();
+    _overlayEntry?.remove();
+    _overlayEntry = null;
+    _entryController.dispose();
+    _snapController.dispose();
+    _currentHeight.dispose();
+    _scrollController.dispose();
+    super.dispose();
+  }
+
+  void _onScroll() {
+    if (!_scrollController.hasClients) return;
+    if (_snapController.isAnimating) return;
+    if (_currentHeight.value >= widget.maxHeight - 1) return; // at max, allow scroll
+
+    if (_scrollController.offset > 0) {
+      _scrollController.jumpTo(0);
+      _snapUpOneLevel();
+    }
+  }
+
+  void _snapUpOneLevel() {
+    final snapPoints = [widget.minHeight, widget.normalHeight, widget.maxHeight];
+    final current = _currentHeight.value;
+
+    int nearestIndex = 0;
+    double minDiff = double.infinity;
+    for (int i = 0; i < snapPoints.length; i++) {
+      final diff = (current - snapPoints[i]).abs();
+      if (diff < minDiff) {
+        minDiff = diff;
+        nearestIndex = i;
+      }
+    }
+
+    snapToExternal(snapPoints[(nearestIndex + 1).clamp(0, snapPoints.length - 1)]);
+  }
+
+  void snapToExternal(double height) {
+    if (_snapController.isAnimating) _snapController.stop();
+    _snapFrom = _currentHeight.value;
+    _snapTo = height.clamp(widget.minHeight, widget.maxHeight);
+    _snapController.forward(from: 0);
+  }
+
+  void _onDragUpdate(DragUpdateDetails details) {
+    if (_snapController.isAnimating) _snapController.stop();
+    _currentHeight.value = (_currentHeight.value - details.delta.dy)
+        .clamp(widget.minHeight, widget.maxHeight);
+  }
+
+  void _onDragEnd(DragEndDetails details) {
+    final velocity = details.primaryVelocity ?? 0;
+    final snapPoints = [widget.minHeight, widget.normalHeight, widget.maxHeight];
+    final current = _currentHeight.value;
+
+    int nearestIndex = 0;
+    double minDiff = double.infinity;
+    for (int i = 0; i < snapPoints.length; i++) {
+      final diff = (current - snapPoints[i]).abs();
+      if (diff < minDiff) {
+        minDiff = diff;
+        nearestIndex = i;
+      }
+    }
+
+    final double target;
+    if (velocity < -_snapVelocityThreshold) {
+      target = snapPoints[(nearestIndex + 1).clamp(0, snapPoints.length - 1)];
+    } else if (velocity > _snapVelocityThreshold) {
+      target = snapPoints[(nearestIndex - 1).clamp(0, snapPoints.length - 1)];
+    } else {
+      target = snapPoints[nearestIndex];
+    }
+
+    _snapFrom = _currentHeight.value;
+    _snapTo = target;
+    _snapController.forward(from: 0);
+  }
+
+  Widget _buildPanel(BuildContext overlayContext) {
+    final screenHeight = MediaQuery.of(overlayContext).size.height;
+    final textDirection = Directionality.of(context);
+
+    return Positioned(
+      left: 0,
+      right: 0,
+      bottom: 0,
+      child: Directionality(
+        textDirection: textDirection,
+        child: Material(
+          type: MaterialType.transparency,
+          child: ValueListenableBuilder<double>(
+            valueListenable: _currentHeight,
+            builder: (_, height, child) {
+              return AnimatedBuilder(
+                animation: _entryController,
+                builder: (_, _) {
+                  final entryOffset =
+                      (1 - Curves.easeOut.transform(_entryController.value)) *
+                          screenHeight;
+                  return Transform.translate(
+                    offset: Offset(0, entryOffset),
+                    child: Container(
+                      height: height,
+                      width: double.infinity,
+                      decoration: BoxDecoration(
+                        color: overlayContext.dsColors.surface,
+                        borderRadius: const BorderRadius.vertical(
+                          top: Radius.circular(DsLayout.radiusMd),
+                        ),
+                        boxShadow: [
+                          BoxShadow(
+                            color: Colors.black.withValues(alpha: 0.12),
+                            blurRadius: 16,
+                            offset: const Offset(0, -4),
+                          ),
+                        ],
+                      ),
+                      child: child,
+                    ),
+                  );
+                },
+              );
+            },
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                GestureDetector(
+                  behavior: HitTestBehavior.opaque,
+                  onVerticalDragUpdate: _onDragUpdate,
+                  onVerticalDragEnd: _onDragEnd,
+                  child: const DsBottomSheetHeader(showCloseButton: false),
+                ),
+                Expanded(
+                  child: SingleChildScrollView(
+                    controller: _scrollController,
+                    padding: const EdgeInsets.fromLTRB(
+                      DsLayout.spacingLg,
+                      0,
+                      DsLayout.spacingLg,
+                      DsLayout.spacingLg,
+                    ),
+                    child: widget.child,
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+
+  @override
+  Widget build(BuildContext context) => const SizedBox.shrink();
+}

@@ -1,3 +1,5 @@
+import 'dart:typed_data';
+
 import 'package:live_map/src/domain/types/map_types.dart';
 import 'package:live_map/src/core/live_map_event.dart';
 import 'package:live_map/src/core/state/live_map_state.dart';
@@ -43,5 +45,37 @@ class LiveMapController {
 
   void toggleDimensionMode(MapDimensionMode mode) {
     dispatch(DimensionModeChanged(dimensionMode: mode));
+  }
+
+  /// Assigns a pre-fetched route to [modelId] and draws it on the map.
+  ///
+  /// Use [DirectionsService.fetchRoute] to obtain [routePoints] from the
+  /// Mapbox Directions API before calling this method.
+  void assignRoute(String modelId, List<LatLng> routePoints) {
+    dispatch(RouteAssigned(modelId: modelId, routePoints: routePoints));
+  }
+
+  /// Removes the route line for [modelId] from the map.
+  void clearRoute(String modelId) {
+    dispatch(RouteClearRequested(modelId: modelId));
+  }
+
+  /// Animates the camera to fit all [points] within the viewport.
+  void fitRoute(List<LatLng> points, {double padding = 60.0, double? bottomPadding}) {
+    dispatch(CameraFitRoute(points: points, padding: padding, bottomPadding: bottomPadding));
+  }
+
+  /// Draws a pin on the map for each stop point belonging to [routeId].
+  ///
+  /// Pass [pinIcon] as raw PNG bytes to render a custom image instead of the
+  /// default circle. The image is decoded and registered with the map style
+  /// automatically.
+  void drawStopPins(String routeId, List<LatLng> points, {Uint8List? pinIcon}) {
+    dispatch(StopPinsDrawRequested(routeId: routeId, points: points, pinIcon: pinIcon));
+  }
+
+  /// Removes all stop pins associated with [routeId] from the map.
+  void clearStopPins(String routeId) {
+    dispatch(StopPinsClearRequested(routeId: routeId));
   }
 }

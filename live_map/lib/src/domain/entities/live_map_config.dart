@@ -11,10 +11,12 @@ class LiveMapConfig {
   final double initialLongitude;
   final double initialZoom;
   final List<MapModel> initialModels;
-  final List<MapModel> waypoints;
 
   /// Camera pitch (degrees) applied when [dimensionMode] is [MapDimensionMode.threeD].
   final double pitch3D;
+
+  /// Whether to show the native platform location puck (blue dot).
+  final bool showUserLocation;
 
   const LiveMapConfig({
     required this.dimensionMode,
@@ -23,7 +25,7 @@ class LiveMapConfig {
     required this.initialLongitude,
     this.initialZoom = 15.0,
     this.initialModels = const [],
-    this.waypoints = const [],
     this.pitch3D = 50.0,
+    this.showUserLocation = false,
   });
 }

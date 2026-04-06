@@ -3,12 +3,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:live_map/live_map.dart';
 
-import 'package:rastro/core/providers/core_providers.dart';
 import 'package:rastro/features/map/presentation/providers/map_notifier.dart';
-import 'package:rastro/features/map/presentation/widgets/map_controls.dart';
+import 'package:rastro/features/map/presentation/providers/map_selection_provider.dart';
+import 'package:rastro/features/map/presentation/providers/map_state.dart';
 import 'package:rastro/features/map/presentation/widgets/map_view.dart';
-import 'package:rastro/features/search/presentation/search_controller_provider.dart';
-import 'package:rastro/features/search/presentation/search_notifier.dart';
+import 'package:rastro/features/map/presentation/widgets/overlays/map_default_overlay.dart';
+import 'package:rastro/features/map/presentation/widgets/overlays/map_route_overlay.dart';
+import 'package:rastro/features/map/presentation/widgets/routes/route_details_sheet.dart';
 
 class MapScreen extends ConsumerStatefulWidget {
   const MapScreen({super.key});
@@ -18,48 +19,83 @@ class MapScreen extends ConsumerStatefulWidget {
 }
 
 class _MapScreenState extends ConsumerState<MapScreen> {
+  late final ValueNotifier<double> _sheetHeight;
+  late final ProviderSubscription<MapState> _mapStateSub;
+  late final ProviderSubscription<MapSelectedItem?> _selectionSub;
+  final _panelController = DsBottomSheetPanelController();
+
   @override
   void initState() {
     super.initState();
+    _sheetHeight = ValueNotifier(400);
+    _mapStateSub = ref.listenManual(mapNotifierProvider, _onMapStateChanged);
+    _selectionSub = ref.listenManual(selectedItemProvider, _onSelectionChanged);
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      ref.read(mapNotifierProvider.notifier).startTracking();
+      if (!mounted) return;
+      if (ref.read(mapNotifierProvider).mode == MapMode.routeSelected &&
+          ref.read(selectedItemProvider) == null) {
+        ref.read(selectedItemProvider.notifier).selectSilent(const MapSelectedRoute());
+      }
     });
   }
 
   @override
+  void dispose() {
+    _sheetHeight.dispose();
+    _mapStateSub.close();
+    _selectionSub.close();
+    super.dispose();
+  }
+
+  void _onMapStateChanged(MapState? prev, MapState next) {
+    if (prev?.mode != MapMode.routeSelected && next.mode == MapMode.routeSelected) {
+      ref.read(selectedItemProvider.notifier).selectSilent(const MapSelectedRoute());
+    }
+  }
+
+  void _onSelectionChanged(MapSelectedItem? _, MapSelectedItem? next) {
+    if (next == null) return;
+    if (ref.read(selectedItemProvider.notifier).isSilent) return;
+    final notifier = ref.read(mapNotifierProvider.notifier);
+    switch (next) {
+      case MapSelectedStop(:final stop):
+        notifier.flyToStop(stop.latitude, stop.longitude);
+        _panelController.snapToMin();
+      case MapSelectedRoute():
+        notifier.fitSelectedRoute();
+        if (_sheetHeight.value >= _panelController.maxHeight) {
+          _panelController.snapToNormal();
+        }
+      case MapSelectedLocation():
+        _panelController.snapToMin();
+    }
+  }
+
+  @override
   Widget build(BuildContext context) {
-    final config = ref.watch(appConfigProvider);
     final mapState = ref.watch(mapNotifierProvider);
-    final controller = ref.watch(searchControllerProvider);
+    final isRouteSelected = mapState.mode == MapMode.routeSelected;
 
     return Stack(
       children: [
-        MapView(onModelTap: _showVehicleInfo),
-        Positioned(
-          top: 50,
-          left: 20,
-          right: 20,
-          child: DsSearchBar(
-            hintText: "Buscar bus, parada, ruta...",
-            controller: controller,
-            onChanged: (query) {
-              ref.read(searchProvider.notifier).search(query);
-            },
+        MapView(onModelTap: (model) => _showVehicleInfo(context, model)),
+        if (!isRouteSelected) const MapDefaultOverlay(),
+        if (isRouteSelected)
+          MapRouteOverlay(
+            sheetHeight: _sheetHeight,
+            panelController: _panelController,
           ),
-        ),
-        Positioned(
-          top: 120,
-          right: 20,
-          child: MapControls(
-            showDebug: config.isDevelopment,
-            dimensionMode: mapState.dimensionMode,
+        if (mapState.selectedRoute != null)
+          DsBottomSheetPanel(
+            controller: _panelController,
+            onHeightChanged: (h) => _sheetHeight.value = h,
+            child: RouteDetailsSheet(route: mapState.selectedRoute!),
           ),
-        ),
       ],
     );
   }
 
-  void _showVehicleInfo(MapModel model) {
+  void _showVehicleInfo(BuildContext context, MapModel model) {
     DsBottomSheet.show(
       context: context,
       child: Column(
