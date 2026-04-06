@@ -2,6 +2,7 @@ import 'package:design_system/design_system.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:live_map/live_map.dart';
+import 'dart:io';
 
 import 'package:rastro/features/map/presentation/providers/map_notifier.dart';
 import 'package:rastro/features/map/presentation/providers/map_selection_provider.dart';
@@ -88,6 +89,7 @@ class _MapScreenState extends ConsumerState<MapScreen> {
         if (mapState.selectedRoute != null)
           DsBottomSheetPanel(
             controller: _panelController,
+            minHeight: Platform.isIOS ? 112 : 124,
             onHeightChanged: (h) => _sheetHeight.value = h,
             child: RouteDetailsSheet(route: mapState.selectedRoute!),
           ),
