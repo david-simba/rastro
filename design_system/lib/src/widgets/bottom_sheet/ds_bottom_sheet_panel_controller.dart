@@ -6,6 +6,8 @@ class DsBottomSheetPanelController {
   void attach(DsBottomSheetPanelState state) => _state = state;
   void detach() => _state = null;
 
+  double get maxHeight => _state?.widget.maxHeight ?? double.infinity;
+
   void snapToMin() => _state?.snapToExternal(_state!.widget.minHeight);
   void snapToNormal() => _state?.snapToExternal(_state!.widget.normalHeight);
   void snapToMax() => _state?.snapToExternal(_state!.widget.maxHeight);
