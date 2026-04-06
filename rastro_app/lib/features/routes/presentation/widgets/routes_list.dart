@@ -38,7 +38,7 @@ class RoutesList extends ConsumerWidget {
           itemBuilder: (_, i) => DsListCard(
             title: routes[i].name,
             subtitle: '${routes[i].origin} → ${routes[i].destination}',
-            accentColor: DsColors.blue500,
+            accentColor: hexToColor(routes[i].accentColor!),
             trailing: Icon(LucideIcons.chevron_right, color: DsColors.zinc300),
             onPress: () {
               ref.read(mapNotifierProvider.notifier).selectRoute(routes[i]);
@@ -49,4 +49,11 @@ class RoutesList extends ConsumerWidget {
       },
     );
   }
+}
+
+Color hexToColor(String hex) {
+  final buffer = StringBuffer();
+  if (hex.length == 7) buffer.write('ff');
+  buffer.write(hex.replaceFirst('#', ''));
+  return Color(int.parse(buffer.toString(), radix: 16));
 }
