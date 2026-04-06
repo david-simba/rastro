@@ -26,7 +26,7 @@ class MapboxAdapter {
         center: Point(coordinates: Position(lng, lat)),
         zoom: zoom,
       ),
-      null,
+      MapAnimationOptions(duration: 1200),
     );
   }
 
@@ -269,14 +269,18 @@ class MapboxAdapter {
     final sourceId = 'stops-source-$routeId';
     final imageId = 'stops-icon-$routeId';
 
-    if (await layerExists(layerId)) {
-      await map.style.removeStyleLayer(layerId);
-    }
-    if (await sourceExists(sourceId)) {
-      await map.style.removeStyleSource(sourceId);
-    }
-    if (await map.style.hasStyleImage(imageId)) {
-      await map.style.removeStyleImage(imageId);
+    try {
+      if (await layerExists(layerId)) {
+        await map.style.removeStyleLayer(layerId);
+      }
+      if (await sourceExists(sourceId)) {
+        await map.style.removeStyleSource(sourceId);
+      }
+      if (await map.style.hasStyleImage(imageId)) {
+        await map.style.removeStyleImage(imageId);
+      }
+    } catch (_) {
+      // Map was disposed before cleanup completed — safe to ignore.
     }
   }
 
@@ -288,11 +292,15 @@ class MapboxAdapter {
     final layerId = 'route-layer-$routeId';
     final sourceId = 'route-source-$routeId';
 
-    if (await layerExists(layerId)) {
-      await map.style.removeStyleLayer(layerId);
-    }
-    if (await sourceExists(sourceId)) {
-      await map.style.removeStyleSource(sourceId);
+    try {
+      if (await layerExists(layerId)) {
+        await map.style.removeStyleLayer(layerId);
+      }
+      if (await sourceExists(sourceId)) {
+        await map.style.removeStyleSource(sourceId);
+      }
+    } catch (_) {
+      // Map was disposed before cleanup completed — safe to ignore.
     }
   }
 
@@ -333,7 +341,7 @@ class MapboxAdapter {
         bearing: camera.bearing,
         pitch: camera.pitch,
       ),
-      null,
+      MapAnimationOptions(duration: 1200),
     );
   }
 

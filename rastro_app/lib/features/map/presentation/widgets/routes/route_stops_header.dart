@@ -36,7 +36,7 @@ class RouteStopsHeader extends StatelessWidget {
             ),
             const SizedBox(height: 2),
             DsText(
-              'Interactúa con las paradas para ver su ubicación',
+              'Selecciona una parada en la lista para ubicarla en el mapa',
               variant: TextVariant.caption,
               color: textColor,
             ),

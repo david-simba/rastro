@@ -6,15 +6,23 @@ import 'package:go_router/go_router.dart';
 
 import 'package:rastro/core/routing/app_routes.dart';
 import 'package:rastro/features/map/presentation/providers/map_notifier.dart';
+import 'package:rastro/features/map/presentation/providers/map_selection_provider.dart';
+import 'package:rastro/features/map/presentation/widgets/overlays/map_selection_card.dart';
 
 class MapRouteOverlay extends ConsumerWidget {
   final ValueNotifier<double> sheetHeight;
+  final DsBottomSheetPanelController panelController;
 
-  const MapRouteOverlay({required this.sheetHeight, super.key});
+  const MapRouteOverlay({
+    required this.sheetHeight,
+    required this.panelController,
+    super.key,
+  });
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final notifier = ref.read(mapNotifierProvider.notifier);
+    final selectedItem = ref.watch(selectedItemProvider);
 
     return Stack(
       children: [
@@ -27,6 +35,7 @@ class MapRouteOverlay extends ConsumerWidget {
             iconSize: 20,
             iconColor: DsColors.blue500,
             onPressed: () {
+              ref.read(selectedItemProvider.notifier).clear();
               notifier.clearSelection();
               context.go(AppRoutes.routes);
             },
@@ -43,9 +52,18 @@ class MapRouteOverlay extends ConsumerWidget {
             size: 42,
             icon: LucideIcons.locate_fixed,
             iconColor: DsColors.blue500,
-            onPressed: ref.read(mapNotifierProvider.notifier).centerOnUser,
+            onPressed: () {
+              ref.read(selectedItemProvider.notifier).select(const MapSelectedLocation());
+              notifier.centerOnUser();
+            },
           ),
         ),
+        if (selectedItem != null)
+          Positioned(
+            top: 50,
+            right: 20,
+            child: MapSelectionCard(item: selectedItem),
+          ),
       ],
     );
   }

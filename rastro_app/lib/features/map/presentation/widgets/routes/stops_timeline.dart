@@ -6,6 +6,7 @@ import 'package:rastro/features/stops/domain/entities/stop_entity.dart';
 
 class StopsTimeline extends StatelessWidget {
   final List<StopEntity> stops;
+  final String? selectedStopId;
   final VoidCallback onFitRoute;
   final void Function(StopEntity stop) onStopTap;
 
@@ -13,6 +14,7 @@ class StopsTimeline extends StatelessWidget {
     required this.stops,
     required this.onFitRoute,
     required this.onStopTap,
+    this.selectedStopId,
     super.key,
   });
 
@@ -34,6 +36,7 @@ class StopsTimeline extends StatelessWidget {
         final i = entry.key;
         final stop = entry.value;
         final isLast = i == stops.length - 1;
+        final isSelected = stop.id == selectedStopId;
 
         final nodeType = i == 0
             ? DsTimelineNodeType.start
@@ -42,9 +45,12 @@ class StopsTimeline extends StatelessWidget {
                 : DsTimelineNodeType.mid;
 
         return DsTimelineItemData(
-          dot: DsTimelineNodeDot(type: nodeType),
+          dot: DsTimelineNodeDot(
+            type: nodeType,
+            isHighlighted: isSelected,
+          ),
           label: stop.name,
-          labelColor: colors.onSurface,
+          labelColor: isSelected ? DsColors.blue500 : colors.onSurface,
           onTap: () => onStopTap(stop),
         );
       }),
