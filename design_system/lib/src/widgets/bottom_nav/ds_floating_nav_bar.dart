@@ -3,17 +3,15 @@ import 'dart:io';
 import 'package:design_system/design_system.dart';
 import 'package:flutter/material.dart';
 
-const Duration _kAnimDuration = Duration(milliseconds: 200);
-const Curve _kAnimCurve = Curves.easeInOut;
-const double _kIconSize = 20.0;
+const double _kIconSize = 16.0;
 
-class DsFloatingNavBar extends StatelessWidget {
-  const DsFloatingNavBar({
+class DsNavigationBar extends StatelessWidget {
+  const DsNavigationBar({
     super.key,
     required this.currentIndex,
     required this.items,
     required this.onItemSelected,
-  }) : assert(items.length >= 2, 'DsFloatingNavBar requires at least 2 items.');
+  }) : assert(items.length >= 2);
 
   final int currentIndex;
   final List<BottomNavItemData> items;
@@ -27,9 +25,10 @@ class DsFloatingNavBar extends StatelessWidget {
       bottomPadding: bottomPadding,
       child: Row(
         mainAxisAlignment: MainAxisAlignment.center,
+        mainAxisSize: MainAxisSize.min,
         children: List.generate(
           items.length,
-          (i) => _NavItem(
+              (i) => _NavItem(
             item: items[i],
             isSelected: i == currentIndex,
             onTap: () => onItemSelected(i),
@@ -41,22 +40,26 @@ class DsFloatingNavBar extends StatelessWidget {
 }
 
 class _NavBarBackground extends StatelessWidget {
-  const _NavBarBackground({required this.child, required this.bottomPadding});
+  const _NavBarBackground({
+    required this.child,
+    required this.bottomPadding,
+  });
+
   final Widget child;
   final double bottomPadding;
 
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: EdgeInsets.only(bottom: bottomPadding, top: DsLayout.spacingXs),
-      decoration: BoxDecoration(
-        color: context.dsColors.surface,
-        borderRadius: BorderRadius.only(
-          topLeft: Radius.circular(10),
-          topRight: Radius.circular(10)
-        )
+      color: context.dsColors.surface,
+      padding: EdgeInsets.only(
+        bottom: bottomPadding,
+        top: DsLayout.spacingXs,
       ),
-      child: SizedBox(height: DsLayout.navBarHeight, child: Center(child: child)),
+      child: SizedBox(
+        height: DsLayout.navBarHeight,
+        child: Center(child: child),
+      ),
     );
   }
 }
@@ -74,49 +77,42 @@ class _NavItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
     final inactiveColor = context.dsColors.muted;
+
+    final selectedBgColor = isDark ? DsColors.blue500 : DsColors.blue50;
+    final selectedContentColor = isDark ? DsColors.white : DsColors.blue500;
 
     return GestureDetector(
       onTap: onTap,
       behavior: HitTestBehavior.opaque,
-      child: AnimatedContainer(
-        duration: _kAnimDuration,
-        curve: _kAnimCurve,
-        alignment: Alignment.center,
-        padding: const EdgeInsets.symmetric(horizontal: DsLayout.spacingXxl),
-        margin: const EdgeInsets.all(DsLayout.radiusXs),
+      child: Container(
+        margin: const EdgeInsets.symmetric(
+          horizontal: DsLayout.spacingXs,
+          vertical: DsLayout.spacingXs,
+        ),
+        padding: const EdgeInsets.symmetric(
+          vertical: DsLayout.spacingSm,
+          horizontal: DsLayout.spacingXxl,
+        ),
         decoration: BoxDecoration(
-          color: isSelected ? DsColors.blue500 : Colors.transparent,
+          color: isSelected ? selectedBgColor : Colors.transparent,
           borderRadius: DsLayout.borderRadiusLg,
         ),
-        child: Row(
+        child: Column(
           mainAxisSize: MainAxisSize.min,
+          mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Icon(
               isSelected ? item.activeIcon : item.icon,
               size: _kIconSize,
-              color: isSelected ? DsColors.white : inactiveColor,
+              color: isSelected ? selectedContentColor : inactiveColor,
             ),
-            ClipRect(
-              child: AnimatedSize(
-                duration: _kAnimDuration,
-                curve: _kAnimCurve,
-                child: isSelected
-                    ? Padding(
-                        padding: const EdgeInsets.only(left: DsLayout.spacingSm),
-                        child: AnimatedOpacity(
-                          opacity: isSelected ? 1.0 : 0.0,
-                          duration: _kAnimDuration,
-                          curve: _kAnimCurve,
-                          child: DsText(
-                            item.label,
-                            color: DsColors.white,
-                            variant: TextVariant.medium2,
-                          ),
-                        ),
-                      )
-                    : const SizedBox.shrink(),
-              ),
+            const SizedBox(height: 2),
+            DsText(
+              item.label,
+              variant: isSelected ? TextVariant.medium2 : TextVariant.regular2,
+              color: isSelected ? selectedContentColor : inactiveColor,
             ),
           ],
         ),

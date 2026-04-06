@@ -24,7 +24,7 @@ class DsLayout {
 
   static const double buttonHeight        = 46;
   static const double floatingButtonSize  = 52;
-  static const double navBarHeight        = 56;
+  static const double navBarHeight        = 62;
   static const double searchBarHeight     = 52;
   static const double bottomSheetHandle   = 4;
 }

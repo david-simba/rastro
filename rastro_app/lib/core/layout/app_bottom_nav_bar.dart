@@ -29,7 +29,7 @@ class AppBottomNavBar extends StatelessWidget {
   Widget build(BuildContext context) {
     final location = GoRouterState.of(context).uri.path;
 
-    return DsFloatingNavBar(
+    return DsNavigationBar(
       currentIndex: _indexFromLocation(location),
       items: _navItems,
       onItemSelected: (index) => context.go(AppRoutes.tabs[index].path),
