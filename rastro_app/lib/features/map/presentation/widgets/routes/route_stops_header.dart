@@ -3,8 +3,9 @@ import 'package:flutter/material.dart';
 
 class RouteStopsHeader extends StatelessWidget {
   final int count;
+  final VoidCallback? onFitRoute;
 
-  const RouteStopsHeader({required this.count, super.key});
+  const RouteStopsHeader({required this.count, this.onFitRoute, super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -25,11 +26,18 @@ class RouteStopsHeader extends StatelessWidget {
               children: [
                 DsText('Explora las $count paradas',
                     variant: TextVariant.medium, color: textColor),
+                const SizedBox(width: DsLayout.spacingSm),
+                if (onFitRoute != null)
+                  DsTextButton(
+                    text: 'Ver ruta completa',
+                    onPressed: onFitRoute!,
+                    variant: TextVariant.medium2,
+                  ),
               ],
             ),
             const SizedBox(height: 2),
             DsText(
-              'Selecciona una parada en la lista para ubicarla en el mapa',
+              'Selecciona una parada de la lista para ubicarla en el mapa',
               variant: TextVariant.caption,
               color: textColor,
             ),

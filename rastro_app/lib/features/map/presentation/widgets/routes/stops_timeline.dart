@@ -7,12 +7,10 @@ import 'package:rastro/features/stops/domain/entities/stop_entity.dart';
 class StopsTimeline extends StatelessWidget {
   final List<StopEntity> stops;
   final String? selectedStopId;
-  final VoidCallback onFitRoute;
   final void Function(StopEntity stop) onStopTap;
 
   const StopsTimeline({
     required this.stops,
-    required this.onFitRoute,
     required this.onStopTap,
     this.selectedStopId,
     super.key,
@@ -22,39 +20,37 @@ class StopsTimeline extends StatelessWidget {
   Widget build(BuildContext context) {
     final colors = context.dsColors;
 
-    final items = <DsTimelineItemData>[
-      DsTimelineItemData(
-        dot: const DsTimelineIconDot(
-          icon: LucideIcons.route,
-          color: DsColors.blue500,
-        ),
-        label: 'Ver ruta completa',
-        labelColor: DsColors.blue500,
-        onTap: onFitRoute,
-      ),
-      ...stops.asMap().entries.map((entry) {
-        final i = entry.key;
-        final stop = entry.value;
-        final isLast = i == stops.length - 1;
-        final isSelected = stop.id == selectedStopId;
+    final items = stops.asMap().entries.map((entry) {
+      final i = entry.key;
+      final stop = entry.value;
+      final isFirst = i == 0;
+      final isLast = i == stops.length - 1;
+      final isSelected = stop.id == selectedStopId;
 
-        final nodeType = i == 0
-            ? DsTimelineNodeType.start
-            : isLast
-                ? DsTimelineNodeType.end
-                : DsTimelineNodeType.mid;
+      final Widget dot = isFirst
+          ? const DsTimelineIconDot(
+              icon: LucideIcons.bus_front,
+              color: DsColors.green500,
+            )
+          : isLast
+              ? const DsTimelineIconDot(
+                  icon: LucideIcons.flag,
+                  color: DsColors.red400,
+                )
+              : DsTimelineNodeDot(
+                  type: DsTimelineNodeType.mid,
+                  isHighlighted: isSelected,
+                );
 
-        return DsTimelineItemData(
-          dot: DsTimelineNodeDot(
-            type: nodeType,
-            isHighlighted: isSelected,
-          ),
-          label: stop.name,
-          labelColor: isSelected ? DsColors.blue500 : colors.onSurface,
-          onTap: () => onStopTap(stop),
-        );
-      }),
-    ];
+      return DsTimelineItemData(
+        dot: dot,
+        label: stop.name,
+        labelColor: isSelected ? DsColors.blue500 : colors.onSurface,
+        lineColor: isSelected ? DsColors.blue500 : colors.border,
+        borderColor: isSelected ? DsColors.blue500 : colors.border,
+        onTap: () => onStopTap(stop),
+      );
+    }).toList();
 
     return DsTimeline(items: items);
   }

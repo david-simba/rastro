@@ -5,11 +5,13 @@ class DsTextButton extends StatelessWidget {
   final String text;
   final VoidCallback onPressed;
   final Color color;
+  final TextVariant variant;
 
   const DsTextButton({
     required this.text,
     required this.onPressed,
     this.color = DsColors.blue500,
+    this.variant = TextVariant.medium,
     super.key,
   });
 
@@ -23,7 +25,7 @@ class DsTextButton extends StatelessWidget {
         minimumSize: Size.zero,
         tapTargetSize: MaterialTapTargetSize.shrinkWrap,
       ),
-      child: DsText(text, variant: TextVariant.medium, color: color),
+      child: DsText(text, variant: variant, color: color),
     );
   }
 }

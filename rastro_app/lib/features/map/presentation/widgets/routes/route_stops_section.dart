@@ -31,8 +31,6 @@ class RouteStopsSection extends ConsumerWidget {
       data: (stops) => StopsTimeline(
         stops: stops,
         selectedStopId: selectedStopId,
-        onFitRoute: () =>
-            ref.read(selectedItemProvider.notifier).select(const MapSelectedRoute()),
         onStopTap: (stop) =>
             ref.read(selectedItemProvider.notifier).select(MapSelectedStop(stop)),
       ),

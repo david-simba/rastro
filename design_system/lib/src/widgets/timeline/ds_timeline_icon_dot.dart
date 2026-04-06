@@ -13,14 +13,14 @@ class DsTimelineIconDot extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      width: 26,
-      height: 26,
+      width: 28,
+      height: 28,
       decoration: BoxDecoration(
         color: color.withAlpha(2),
         shape: BoxShape.circle,
         border: Border.all(color: color, width: 1.5),
       ),
-      child: Icon(icon, size: 14, color: color),
+      child: Icon(icon, size: 16, color: color),
     );
   }
 }

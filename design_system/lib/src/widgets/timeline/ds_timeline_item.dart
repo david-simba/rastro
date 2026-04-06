@@ -5,6 +5,8 @@ class DsTimelineItem extends StatelessWidget {
   final bool isFirst;
   final bool isLast;
   final Color lineColor;
+  final Color? borderColor;
+  final bool plain;
   final Widget dot;
   final String label;
   final Color labelColor;
@@ -18,6 +20,8 @@ class DsTimelineItem extends StatelessWidget {
     required this.label,
     required this.labelColor,
     required this.onTap,
+    this.borderColor,
+    this.plain = false,
     super.key,
   });
 
@@ -31,7 +35,7 @@ class DsTimelineItem extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
             SizedBox(
-              width: 28,
+              width: 36,
               child: Column(
                 children: [
                   if (!isFirst)
@@ -41,7 +45,7 @@ class DsTimelineItem extends StatelessWidget {
                       ),
                     )
                   else
-                    const SizedBox(height: 8),
+                    const SizedBox(height: 12),
                   dot,
                   if (!isLast)
                     Expanded(
@@ -50,20 +54,37 @@ class DsTimelineItem extends StatelessWidget {
                       ),
                     )
                   else
-                    const SizedBox(height: 10),
+                    const SizedBox(height: 12),
                 ],
               ),
             ),
             const SizedBox(width: 10),
             Expanded(
-              child: Padding(
-                padding: const EdgeInsets.symmetric(vertical: 10),
-                child: DsText(
-                  label,
-                  variant: TextVariant.regular2,
-                  color: labelColor,
-                ),
-              ),
+              child: plain
+                  ? Padding(
+                      padding: const EdgeInsets.symmetric(vertical: 12),
+                      child: DsText(
+                        label,
+                        variant: TextVariant.regular2,
+                        color: labelColor,
+                      ),
+                    )
+                  : Container(
+                      margin: const EdgeInsets.symmetric(vertical: 4),
+                      padding: const EdgeInsets.all(DsLayout.spacingSm),
+                      decoration: BoxDecoration(
+                        border: Border.all(
+                          color: borderColor ?? lineColor.withAlpha(50),
+                          width: 0.75,
+                        ),
+                        borderRadius: DsLayout.borderRadiusSm,
+                      ),
+                      child: DsText(
+                        label,
+                        variant: TextVariant.regular2,
+                        color: labelColor,
+                      ),
+                    ),
             ),
           ],
         ),

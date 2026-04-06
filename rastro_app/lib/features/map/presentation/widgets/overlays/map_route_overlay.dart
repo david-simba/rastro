@@ -44,7 +44,7 @@ class MapRouteOverlay extends ConsumerWidget {
         ValueListenableBuilder<double>(
           valueListenable: sheetHeight,
           builder: (_, height, child) => Positioned(
-            bottom: height + 16,
+            bottom: height + 24,
             right: 20,
             child: child!,
           ),
