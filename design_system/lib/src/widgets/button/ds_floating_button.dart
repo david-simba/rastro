@@ -8,6 +8,7 @@ class DsFloatingButton extends StatelessWidget {
   final Color? color;
   final Color? iconColor;
   final double? size;
+  final double? iconSize;
 
   const DsFloatingButton({
     required this.onPressed,
@@ -16,6 +17,7 @@ class DsFloatingButton extends StatelessWidget {
     this.color,
     this.iconColor,
     this.size,
+    this.iconSize,
     super.key,
   });
 
@@ -40,7 +42,7 @@ class DsFloatingButton extends StatelessWidget {
             ? CircleBorder(side: BorderSide(color: resolvedColor))
             : const CircleBorder(),
         elevation: isOutlined ? 0 : 0.75,
-        child: Icon(icon, color: fgColor),
+        child: Icon(icon, color: fgColor, size: iconSize),
       ),
     );
   }
