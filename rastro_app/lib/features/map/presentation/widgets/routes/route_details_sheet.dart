@@ -8,8 +8,9 @@ import 'package:rastro/features/routes/domain/entities/route_entity.dart';
 
 class RouteDetailsSheet extends StatelessWidget {
   final RouteEntity route;
+  final VoidCallback? onStopTap;
 
-  const RouteDetailsSheet({required this.route, super.key});
+  const RouteDetailsSheet({required this.route, this.onStopTap, super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -21,7 +22,7 @@ class RouteDetailsSheet extends StatelessWidget {
         SizedBox(height: DsLayout.spacingLg),
         RouteStopsHeader(count: route.stops.length),
         SizedBox(height: DsLayout.spacingSm),
-        RouteStopsSection(route: route),
+        RouteStopsSection(route: route, onStopTap: onStopTap),
       ],
     );
   }

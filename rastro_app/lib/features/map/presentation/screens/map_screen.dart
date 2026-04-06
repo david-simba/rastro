@@ -19,6 +19,7 @@ class MapScreen extends ConsumerStatefulWidget {
 
 class _MapScreenState extends ConsumerState<MapScreen> {
   late final ValueNotifier<double> _sheetHeight;
+  final _panelController = DsBottomSheetPanelController();
 
   @override
   void initState() {
@@ -44,8 +45,12 @@ class _MapScreenState extends ConsumerState<MapScreen> {
         if (isRouteSelected) MapRouteOverlay(sheetHeight: _sheetHeight),
         if (mapState.selectedRoute != null)
           DsBottomSheetPanel(
+            controller: _panelController,
             onHeightChanged: (h) => _sheetHeight.value = h,
-            child: RouteDetailsSheet(route: mapState.selectedRoute!),
+            child: RouteDetailsSheet(
+              route: mapState.selectedRoute!,
+              onStopTap: _panelController.snapToMin,
+            ),
           ),
       ],
     );

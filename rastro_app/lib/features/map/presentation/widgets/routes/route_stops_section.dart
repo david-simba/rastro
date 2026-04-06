@@ -9,8 +9,9 @@ import 'package:rastro/features/stops/presentation/providers/stops_provider.dart
 
 class RouteStopsSection extends ConsumerWidget {
   final RouteEntity route;
+  final VoidCallback? onStopTap;
 
-  const RouteStopsSection({required this.route, super.key});
+  const RouteStopsSection({required this.route, this.onStopTap, super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -28,8 +29,10 @@ class RouteStopsSection extends ConsumerWidget {
         return StopsTimeline(
           stops: stops,
           onFitRoute: notifier.fitSelectedRoute,
-          onStopTap: (stop) =>
-              notifier.flyToStop(stop.latitude, stop.longitude),
+          onStopTap: (stop) {
+            notifier.flyToStop(stop.latitude, stop.longitude);
+            onStopTap?.call();
+          },
         );
       },
     );
