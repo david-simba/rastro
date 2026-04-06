@@ -26,7 +26,7 @@ class MapboxAdapter {
         center: Point(coordinates: Position(lng, lat)),
         zoom: zoom,
       ),
-      MapAnimationOptions(duration: 1200),
+      MapAnimationOptions(duration: 2000),
     );
   }
 

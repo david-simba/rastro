@@ -13,7 +13,7 @@ class DsBottomSheetPanel extends StatefulWidget {
 
   const DsBottomSheetPanel({
     required this.child,
-    this.minHeight = 164,
+    this.minHeight = 124,
     this.normalHeight = 420,
     this.maxHeight = 650,
     this.onHeightChanged,
