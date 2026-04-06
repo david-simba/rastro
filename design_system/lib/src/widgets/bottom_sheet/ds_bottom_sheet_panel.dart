@@ -1,5 +1,6 @@
 import 'package:design_system/design_system.dart';
 import 'package:design_system/src/widgets/bottom_sheet/ds_bottom_sheet_header.dart';
+import 'package:design_system/src/widgets/bottom_sheet/ds_bottom_sheet_panel_controller.dart';
 import 'package:flutter/material.dart';
 
 class DsBottomSheetPanel extends StatefulWidget {
@@ -8,6 +9,7 @@ class DsBottomSheetPanel extends StatefulWidget {
   final double normalHeight;
   final double maxHeight;
   final void Function(double height)? onHeightChanged;
+  final DsBottomSheetPanelController? controller;
 
   const DsBottomSheetPanel({
     required this.child,
@@ -15,14 +17,15 @@ class DsBottomSheetPanel extends StatefulWidget {
     this.normalHeight = 400,
     this.maxHeight = 700,
     this.onHeightChanged,
+    this.controller,
     super.key,
   });
 
   @override
-  State<DsBottomSheetPanel> createState() => _DsBottomSheetPanelState();
+  State<DsBottomSheetPanel> createState() => DsBottomSheetPanelState();
 }
 
-class _DsBottomSheetPanelState extends State<DsBottomSheetPanel>
+class DsBottomSheetPanelState extends State<DsBottomSheetPanel>
     with TickerProviderStateMixin {
   late final AnimationController _entryController;
   late final AnimationController _snapController;
@@ -47,7 +50,7 @@ class _DsBottomSheetPanelState extends State<DsBottomSheetPanel>
 
     _snapController = AnimationController(
       vsync: this,
-      duration: const Duration(milliseconds: 300),
+      duration: const Duration(milliseconds: 600),
     );
 
     _snapController.addListener(() {
@@ -59,6 +62,8 @@ class _DsBottomSheetPanelState extends State<DsBottomSheetPanel>
       widget.onHeightChanged?.call(_currentHeight.value);
     });
 
+    widget.controller?.attach(this);
+
     WidgetsBinding.instance.addPostFrameCallback((_) {
       if (!mounted) return;
       _overlayEntry = OverlayEntry(builder: _buildPanel);
@@ -69,6 +74,7 @@ class _DsBottomSheetPanelState extends State<DsBottomSheetPanel>
 
   @override
   void dispose() {
+    widget.controller?.detach();
     _overlayEntry?.remove();
     _overlayEntry = null;
     _entryController.dispose();
@@ -77,9 +83,15 @@ class _DsBottomSheetPanelState extends State<DsBottomSheetPanel>
     super.dispose();
   }
 
+  void snapToExternal(double height) {
+    if (_snapController.isAnimating) _snapController.stop();
+    _snapFrom = _currentHeight.value;
+    _snapTo = height.clamp(widget.minHeight, widget.maxHeight);
+    _snapController.forward(from: 0);
+  }
+
   void _onDragUpdate(DragUpdateDetails details) {
     if (_snapController.isAnimating) _snapController.stop();
-    // Drag up (negative dy) increases height, drag down decreases it
     _currentHeight.value = (_currentHeight.value - details.delta.dy)
         .clamp(widget.minHeight, widget.maxHeight);
   }
@@ -89,7 +101,6 @@ class _DsBottomSheetPanelState extends State<DsBottomSheetPanel>
     final snapPoints = [widget.minHeight, widget.normalHeight, widget.maxHeight];
     final current = _currentHeight.value;
 
-    // Find nearest snap point index
     int nearestIndex = 0;
     double minDiff = double.infinity;
     for (int i = 0; i < snapPoints.length; i++) {
@@ -102,13 +113,10 @@ class _DsBottomSheetPanelState extends State<DsBottomSheetPanel>
 
     final double target;
     if (velocity < -_snapVelocityThreshold) {
-      // Fast upward → advance one level up
       target = snapPoints[(nearestIndex + 1).clamp(0, snapPoints.length - 1)];
     } else if (velocity > _snapVelocityThreshold) {
-      // Fast downward → go one level down
       target = snapPoints[(nearestIndex - 1).clamp(0, snapPoints.length - 1)];
     } else {
-      // Slow drag → snap to nearest
       target = snapPoints[nearestIndex];
     }
 

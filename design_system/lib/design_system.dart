@@ -32,6 +32,7 @@ export 'src/widgets/toast/toast_variant.dart';
 export 'src/widgets/loader/ds_loader.dart';
 export 'src/widgets/empty_state/ds_empty_state.dart';
 export 'src/widgets/bottom_sheet/ds_bottom_sheet_panel.dart';
+export 'src/widgets/bottom_sheet/ds_bottom_sheet_panel_controller.dart';
 export 'src/widgets/timeline/ds_timeline.dart';
 export 'src/widgets/timeline/ds_timeline_skeleton.dart';
 export 'src/widgets/timeline/ds_timeline_icon_dot.dart';
