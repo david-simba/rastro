@@ -5,6 +5,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
 import 'package:rastro/core/routing/app_routes.dart';
+import 'package:rastro/core/utils/color_utils.dart';
 import 'package:rastro/features/map/presentation/providers/map_notifier.dart';
 import 'package:rastro/features/routes/presentation/providers/routes_notifier.dart';
 
@@ -49,11 +50,4 @@ class RoutesList extends ConsumerWidget {
       },
     );
   }
-}
-
-Color hexToColor(String hex) {
-  final buffer = StringBuffer();
-  if (hex.length == 7) buffer.write('ff');
-  buffer.write(hex.replaceFirst('#', ''));
-  return Color(int.parse(buffer.toString(), radix: 16));
 }
