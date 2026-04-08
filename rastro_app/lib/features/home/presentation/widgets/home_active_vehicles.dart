@@ -2,6 +2,8 @@ import 'package:design_system/design_system.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_lucide/flutter_lucide.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
+import 'package:rastro/core/routing/app_routes.dart';
 import 'package:rastro/core/utils/color_utils.dart';
 import 'package:rastro/features/routes/presentation/providers/routes_notifier.dart';
 import 'package:rastro/features/vehicles/presentation/providers/vehicles_notifier.dart';
@@ -66,6 +68,14 @@ class HomeActiveVehicles extends ConsumerWidget {
                           ? hexToColor(route!.accentColor!)
                           : null,
                       trailing: _statusBadge(vehicle.status),
+                      onPress: () => context.go(
+                        AppRoutes.map,
+                        extra: {
+                          'vehicleId': vehicle.id,
+                          'lat': vehicle.lat,
+                          'lng': vehicle.lng,
+                        },
+                      ),
                     );
                   }),
                 ],

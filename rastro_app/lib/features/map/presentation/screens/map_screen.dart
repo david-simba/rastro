@@ -13,7 +13,16 @@ import 'package:rastro/features/map/presentation/widgets/overlays/map_route_over
 import 'package:rastro/features/map/presentation/widgets/routes/route_details_sheet.dart';
 
 class MapScreen extends ConsumerStatefulWidget {
-  const MapScreen({super.key});
+  const MapScreen({
+    this.vehicleId,
+    this.initialLat,
+    this.initialLng,
+    super.key,
+  });
+
+  final String? vehicleId;
+  final double? initialLat;
+  final double? initialLng;
 
   @override
   ConsumerState<MapScreen> createState() => _MapScreenState();
@@ -37,7 +46,27 @@ class _MapScreenState extends ConsumerState<MapScreen> {
           ref.read(selectedItemProvider) == null) {
         ref.read(selectedItemProvider.notifier).selectSilent(const MapSelectedRoute());
       }
+      _triggerVehicleTrackingIfNeeded();
     });
+  }
+
+  void _triggerVehicleTrackingIfNeeded() {
+    if (widget.vehicleId == null) return;
+    final userPos = ref.read(mapNotifierProvider).userPosition;
+    if (userPos != null) {
+      Future.delayed(const Duration(milliseconds: 400), _startVehicleTracking);
+    }
+    // else: _onMapStateChanged handles it when userPosition becomes non-null
+  }
+
+  void _startVehicleTracking() {
+    if (!mounted) return;
+    final model = MapModel(
+      id: widget.vehicleId!,
+      latitude: widget.initialLat ?? -0.3015,
+      longitude: widget.initialLng ?? -78.53507,
+    );
+    ref.read(mapNotifierProvider.notifier).startTracking(model);
   }
 
   @override
@@ -51,6 +80,11 @@ class _MapScreenState extends ConsumerState<MapScreen> {
   void _onMapStateChanged(MapState? prev, MapState next) {
     if (prev?.mode != MapMode.routeSelected && next.mode == MapMode.routeSelected) {
       ref.read(selectedItemProvider.notifier).selectSilent(const MapSelectedRoute());
+    }
+    if (widget.vehicleId != null &&
+        prev?.userPosition == null &&
+        next.userPosition != null) {
+      Future.delayed(const Duration(milliseconds: 400), _startVehicleTracking);
     }
   }
 

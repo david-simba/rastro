@@ -8,5 +8,5 @@ class VehiclesRepositoryImpl implements IVehiclesRepository {
   final VehiclesFirebaseDatasource _datasource;
 
   @override
-  Future<List<VehicleEntity>> getVehicles() => _datasource.getVehicles();
+  Stream<List<VehicleEntity>> watchVehicles() => _datasource.watchVehicles();
 }

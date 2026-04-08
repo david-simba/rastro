@@ -41,6 +41,17 @@ class MapNotifier extends Notifier<MapState>
     initialLongitude: state.userPosition?.lng ?? _kFallbackLng,
     dimensionMode: MapDimensionMode.twoD,
     showUserLocation: true,
+    modelConfig: const ModelConfig(
+      modelPath: 'assets/models/optimized-bus.glb',
+      scale: [2.5, 2.5, 2.5],
+      rotation: [0, 0, 90],
+      zoomScale: ZoomScaleConfig(
+        minZoom: 10.0,
+        maxZoom: 20.0,
+        minScaleMultiplier: 0.5,
+        maxScaleMultiplier: 3.0,
+      ),
+    ),
   );
 
   Future<void> _initUserLocation() async {

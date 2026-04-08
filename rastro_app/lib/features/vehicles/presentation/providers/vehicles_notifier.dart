@@ -8,14 +8,6 @@ final vehiclesRepositoryProvider = Provider<IVehiclesRepository>((ref) {
   return VehiclesRepositoryImpl(const VehiclesFirebaseDatasource());
 });
 
-final vehiclesNotifierProvider =
-    AsyncNotifierProvider<VehiclesNotifier, List<VehicleEntity>>(
-  VehiclesNotifier.new,
-);
-
-class VehiclesNotifier extends AsyncNotifier<List<VehicleEntity>> {
-  @override
-  Future<List<VehicleEntity>> build() {
-    return ref.read(vehiclesRepositoryProvider).getVehicles();
-  }
-}
+final vehiclesNotifierProvider = StreamProvider<List<VehicleEntity>>((ref) {
+  return ref.watch(vehiclesRepositoryProvider).watchVehicles();
+});

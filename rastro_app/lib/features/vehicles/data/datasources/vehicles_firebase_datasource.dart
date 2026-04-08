@@ -4,17 +4,24 @@ import 'package:rastro/features/vehicles/domain/entities/vehicle_entity.dart';
 class VehiclesFirebaseDatasource {
   const VehiclesFirebaseDatasource();
 
-  Future<List<VehicleEntity>> getVehicles() async {
-    final snapshot =
-        await FirebaseFirestore.instance.collection('vehicles').get();
+  Stream<List<VehicleEntity>> watchVehicles() {
+    return FirebaseFirestore.instance
+        .collection('vehicles')
+        .snapshots()
+        .map((snap) => snap.docs.map(_fromDoc).toList());
+  }
 
-    return snapshot.docs.map((doc) {
-      final data = doc.data();
-      return VehicleEntity(
-        id: doc.id,
-        routeId: data['routeId'] as String,
-        status: data['status'] as String,
-      );
-    }).toList();
+  static VehicleEntity _fromDoc(
+    DocumentSnapshot<Map<String, dynamic>> doc,
+  ) {
+    final data = doc.data()!;
+    final location = data['location'] as Map<String, dynamic>?;
+    return VehicleEntity(
+      id: doc.id,
+      routeId: data['routeId'] as String? ?? '',
+      status: data['status'] as String? ?? 'inactive',
+      lat: (location?['lat'] as num?)?.toDouble(),
+      lng: (location?['lng'] as num?)?.toDouble(),
+    );
   }
 }

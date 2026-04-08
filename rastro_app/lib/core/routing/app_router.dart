@@ -33,9 +33,16 @@ final routerProvider = Provider<GoRouter>((ref) {
           ),
           GoRoute(
             path: AppRoutes.map,
-            pageBuilder: (context, state) => const NoTransitionPage(
-              child: MapScreen(),
-            ),
+            pageBuilder: (context, state) {
+              final extra = state.extra as Map<String, dynamic>?;
+              return NoTransitionPage(
+                child: MapScreen(
+                  vehicleId: extra?['vehicleId'] as String?,
+                  initialLat: extra?['lat'] as double?,
+                  initialLng: extra?['lng'] as double?,
+                ),
+              );
+            },
           ),
           GoRoute(
             path: AppRoutes.routes,

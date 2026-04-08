@@ -1,0 +1,54 @@
+{
+  "project_info": {
+    "project_number": "12551969474",
+    "project_id": "rastro-backend-e4a9f",
+    "storage_bucket": "rastro-backend-e4a9f.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:12551969474:android:b4ff5f42c34c254143f95b",
+        "android_client_info": {
+          "package_name": "com.rastro_dev.app"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "12551969474-bitpo3lbf8u1dnse6pjbtqojfa4sp4ib.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.rastro_dev.app",
+            "certificate_hash": "c527d0700f52110d1dc13f49f058edca10c1f502"
+          }
+        },
+        {
+          "client_id": "12551969474-9ms5tnqmbp4822heml1ihf8fa0jjk57a.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBmlpLm2mHFVCPjpStD8BW1rJEEGOcVfUk"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "12551969474-9ms5tnqmbp4822heml1ihf8fa0jjk57a.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "12551969474-bglt1tvvrgrve29tqsh5jogrvoaj9r8n.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.rastro-dev.app"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
