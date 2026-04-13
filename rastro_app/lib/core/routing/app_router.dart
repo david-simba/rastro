@@ -7,6 +7,7 @@ import 'package:rastro/core/routing/auth_redirect.dart';
 import 'package:rastro/features/auth/presentation/screens/auth_screen.dart';
 import 'package:rastro/features/home/presentation/screens/home_screen.dart';
 import 'package:rastro/features/map/presentation/screens/map_screen.dart';
+import 'package:rastro/features/routes/domain/entities/route_entity.dart';
 import 'package:rastro/features/routes/presentation/screens/routes_screen.dart';
 import 'package:rastro/features/profile/presentation/screens/profile_screen.dart';
 
@@ -33,9 +34,17 @@ final routerProvider = Provider<GoRouter>((ref) {
           ),
           GoRoute(
             path: AppRoutes.map,
-            pageBuilder: (context, state) => const NoTransitionPage(
-              child: MapScreen(),
-            ),
+            pageBuilder: (context, state) {
+              final extra = state.extra as Map<String, dynamic>?;
+              return NoTransitionPage(
+                child: MapScreen(
+                  vehicleId: extra?['vehicleId'] as String?,
+                  route: extra?['route'] as RouteEntity?,
+                  initialLat: extra?['lat'] as double?,
+                  initialLng: extra?['lng'] as double?,
+                ),
+              );
+            },
           ),
           GoRoute(
             path: AppRoutes.routes,

@@ -4,6 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:live_map/live_map.dart';
 import 'dart:io';
 
+import 'package:polyline_codec/polyline_codec.dart';
 import 'package:rastro/features/map/presentation/providers/map_notifier.dart';
 import 'package:rastro/features/map/presentation/providers/map_selection_provider.dart';
 import 'package:rastro/features/map/presentation/providers/map_state.dart';
@@ -11,9 +12,21 @@ import 'package:rastro/features/map/presentation/widgets/map_view.dart';
 import 'package:rastro/features/map/presentation/widgets/overlays/map_default_overlay.dart';
 import 'package:rastro/features/map/presentation/widgets/overlays/map_route_overlay.dart';
 import 'package:rastro/features/map/presentation/widgets/routes/route_details_sheet.dart';
+import 'package:rastro/features/routes/domain/entities/route_entity.dart';
 
 class MapScreen extends ConsumerStatefulWidget {
-  const MapScreen({super.key});
+  const MapScreen({
+    this.vehicleId,
+    this.route,
+    this.initialLat,
+    this.initialLng,
+    super.key,
+  });
+
+  final String? vehicleId;
+  final RouteEntity? route;
+  final double? initialLat;
+  final double? initialLng;
 
   @override
   ConsumerState<MapScreen> createState() => _MapScreenState();
@@ -24,6 +37,9 @@ class _MapScreenState extends ConsumerState<MapScreen> {
   late final ProviderSubscription<MapState> _mapStateSub;
   late final ProviderSubscription<MapSelectedItem?> _selectionSub;
   final _panelController = DsBottomSheetPanelController();
+
+  String? _trackingRouteId;
+  LiveMapController? _mapController;
 
   @override
   void initState() {
@@ -37,11 +53,52 @@ class _MapScreenState extends ConsumerState<MapScreen> {
           ref.read(selectedItemProvider) == null) {
         ref.read(selectedItemProvider.notifier).selectSilent(const MapSelectedRoute());
       }
+      _triggerVehicleTrackingIfNeeded();
     });
+  }
+
+  void _triggerVehicleTrackingIfNeeded() {
+    if (widget.vehicleId == null) return;
+    final userPos = ref.read(mapNotifierProvider).userPosition;
+    if (userPos != null) {
+      Future.delayed(const Duration(milliseconds: 400), _startVehicleTracking);
+    }
+  }
+
+  void _startVehicleTracking() {
+    if (!mounted) return;
+    final model = MapModel(
+      id: widget.vehicleId!,
+      latitude: widget.initialLat ?? -0.3015,
+      longitude: widget.initialLng ?? -78.53507,
+    );
+    final notifier = ref.read(mapNotifierProvider.notifier);
+    _mapController = notifier.controller;
+    notifier.startTracking(model);
+    if (widget.route != null) {
+      _drawTrackingRoute(widget.route!);
+    }
+  }
+
+  Future<void> _drawTrackingRoute(RouteEntity route) async {
+    _trackingRouteId = route.id;
+    final coords = PolylineCodec.decode(route.geometry, precision: 6);
+    if (coords.isEmpty) return;
+    final points = coords
+        .map((c) => LatLng(lat: c[0].toDouble(), lng: c[1].toDouble()))
+        .toList();
+    await Future.delayed(const Duration(milliseconds: 500));
+    if (!mounted) return;
+    if (_mapController?.isReady ?? false) {
+      _mapController!.assignRoute(route.id, points);
+    }
   }
 
   @override
   void dispose() {
+    if (_trackingRouteId != null && (_mapController?.isReady ?? false)) {
+      _mapController!.clearRoute(_trackingRouteId!);
+    }
     _sheetHeight.dispose();
     _mapStateSub.close();
     _selectionSub.close();
@@ -51,6 +108,11 @@ class _MapScreenState extends ConsumerState<MapScreen> {
   void _onMapStateChanged(MapState? prev, MapState next) {
     if (prev?.mode != MapMode.routeSelected && next.mode == MapMode.routeSelected) {
       ref.read(selectedItemProvider.notifier).selectSilent(const MapSelectedRoute());
+    }
+    if (widget.vehicleId != null &&
+        prev?.userPosition == null &&
+        next.userPosition != null) {
+      Future.delayed(const Duration(milliseconds: 400), _startVehicleTracking);
     }
   }
 

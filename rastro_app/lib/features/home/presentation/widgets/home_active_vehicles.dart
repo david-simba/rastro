@@ -2,8 +2,12 @@ import 'package:design_system/design_system.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_lucide/flutter_lucide.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
+import 'package:rastro/core/routing/app_routes.dart';
 import 'package:rastro/core/utils/color_utils.dart';
+import 'package:rastro/features/routes/domain/entities/route_entity.dart';
 import 'package:rastro/features/routes/presentation/providers/routes_notifier.dart';
+import 'package:rastro/features/vehicles/domain/entities/vehicle_entity.dart';
 import 'package:rastro/features/vehicles/presentation/providers/vehicles_notifier.dart';
 
 import 'home_separator.dart';
@@ -16,13 +20,17 @@ class HomeActiveVehicles extends ConsumerWidget {
     final vehiclesAsync = ref.watch(vehiclesNotifierProvider);
     final routesAsync = ref.watch(routesNotifierProvider);
 
+    final isLoading = vehiclesAsync.isLoading || routesAsync.isLoading;
+    final vehicles = vehiclesAsync.value ?? [];
+    final routes = routesAsync.value ?? [];
+
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         const SectionSeparator(label: 'Buses en servicio'),
         SizedBox(height: DsLayout.spacingLg),
-        vehiclesAsync.when(
-          loading: () => Column(
+        if (isLoading)
+          Column(
             children: List.generate(
               3,
               (_) => Padding(
@@ -30,49 +38,65 @@ class HomeActiveVehicles extends ConsumerWidget {
                 child: const DsListCardSkeleton(),
               ),
             ),
-          ),
-          error: (e, _) => Center(child: DsText('Error: $e')),
-          data: (vehicles) {
-            final visible = vehicles
-                .where((v) => v.status == 'active' || v.status == 'warning')
-                .toList();
+          )
+        else if (vehiclesAsync.hasError)
+          Center(child: DsText('Error: ${vehiclesAsync.error}'))
+        else
+          _buildList(context, vehicles, routes),
+      ],
+    );
+  }
 
-            if (visible.isEmpty) {
-              return const SizedBox(
-                height: 200,
-                child: DsEmptyState(
-                  icon: LucideIcons.bus_front,
-                  title: 'Sin rutas activas por el momento',
-                ),
-              );
-            }
+  Widget _buildList(
+    BuildContext context,
+    List<VehicleEntity> vehicles,
+    List<RouteEntity> routes,
+  ) {
+    final visible = vehicles
+        .where((v) => v.status == 'active' || v.status == 'warning')
+        .toList();
 
-            final routes = routesAsync.asData?.value ?? [];
-
-            return Column(
-              children: [
-                for (int i = 0; i < visible.length; i++) ...[
-                  if (i > 0) SizedBox(height: DsLayout.spacingSm),
-                  Builder(builder: (context) {
-                    final vehicle = visible[i];
-                    final route = routes.where((r) => r.id == vehicle.routeId).firstOrNull;
-
-                    return DsListCard(
-                      title: route?.name ?? vehicle.routeId,
-                      subtitle: route != null
-                          ? '${route.origin} → ${route.destination}'
-                          : null,
-                      accentColor: route?.accentColor != null
-                          ? hexToColor(route!.accentColor!)
-                          : null,
-                      trailing: _statusBadge(vehicle.status),
-                    );
-                  }),
-                ],
-              ],
-            );
-          },
+    if (visible.isEmpty) {
+      return const SizedBox(
+        height: 200,
+        child: DsEmptyState(
+          icon: LucideIcons.bus_front,
+          title: 'Sin rutas activas por el momento',
         ),
+      );
+    }
+
+    return Column(
+      children: [
+        for (int i = 0; i < visible.length; i++) ...[
+          if (i > 0) SizedBox(height: DsLayout.spacingSm),
+          Builder(builder: (context) {
+            final vehicle = visible[i];
+            final routeMatches = routes.where((r) => r.id == vehicle.routeId);
+            final RouteEntity? route =
+                routeMatches.isEmpty ? null : routeMatches.first;
+
+            return DsListCard(
+              title: route?.name ?? vehicle.routeId,
+              subtitle: route != null
+                  ? '${route.origin} → ${route.destination}'
+                  : null,
+              accentColor: route?.accentColor != null
+                  ? hexToColor(route!.accentColor!)
+                  : null,
+              trailing: _statusBadge(vehicle.status),
+              onPress: () => context.go(
+                AppRoutes.map,
+                extra: {
+                  'vehicleId': vehicle.id,
+                  'route': route,
+                  'lat': vehicle.lat,
+                  'lng': vehicle.lng,
+                },
+              ),
+            );
+          }),
+        ],
       ],
     );
   }
