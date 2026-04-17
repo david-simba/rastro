@@ -18,7 +18,7 @@ class AboutScreen extends StatelessWidget {
           ),
           onPressed: () => Navigator.pop(context),
         ),
-        title: DsText('Acerca de la app', variant: TextVariant.title),
+        title: DsText('Acerca de la app', variant: TextVariant.subtitle),
         backgroundColor: dsColors.background,
         surfaceTintColor: Colors.transparent,
         elevation: 0,

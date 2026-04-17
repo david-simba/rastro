@@ -38,51 +38,61 @@ class ProfileScreen extends ConsumerWidget {
                   _SectionLabel('Preferencias'),
                   SizedBox(height: DsLayout.spacingMd),
                   DsSettingsRow(
-                    title: 'Tema oscuro',
-                    accentColor: accent,
-                    trailing: DsToggle(
-                      value: isDark,
-                      onIcon: Icons.dark_mode,
-                      offIcon: Icons.light_mode,
-                      onChanged: (on) => ref
-                          .read(themeModeProvider.notifier)
-                          .setMode(on ? ThemeMode.dark : ThemeMode.light),
-                    ),
+                    items: [
+                      DsSettingsRowItem(
+                        title: 'Tema oscuro',
+                        accentColor: accent,
+                        trailing: DsToggle(
+                          value: isDark,
+                          onIcon: Icons.dark_mode,
+                          offIcon: Icons.light_mode,
+                          onChanged: (on) => ref
+                              .read(themeModeProvider.notifier)
+                              .setMode(on ? ThemeMode.dark : ThemeMode.light),
+                        ),
+                      ),
+                    ],
                   ),
                   SizedBox(height: DsLayout.spacingXxl),
                   _SectionLabel('Información y Soporte'),
                   SizedBox(height: DsLayout.spacingMd),
                   DsSettingsRow(
-                    title: 'Envía tus comentarios',
-                    description: 'Ayudanos a mejorar la app',
-                    accentColor: accent,
-                    trailingIcon: Icons.arrow_forward_ios,
-                    onPress: () => context.go(AppRoutes.feedback),
-                  ),
-                  SizedBox(height: DsLayout.spacingXs),
-                  DsSettingsRow(
-                    title: 'Acerca de la app',
-                    description: 'Versión, licencias y más',
-                    accentColor: accent,
-                    trailingIcon: Icons.arrow_forward_ios,
-                    onPress: () => context.go(AppRoutes.about),
+                    items: [
+                      DsSettingsRowItem(
+                        title: 'Envía tus comentarios',
+                        description: 'Ayudanos a mejorar la app',
+                        accentColor: accent,
+                        trailingIcon: Icons.arrow_forward_ios,
+                        onPress: () => context.go(AppRoutes.feedback),
+                      ),
+                      DsSettingsRowItem(
+                        title: 'Acerca de la app',
+                        description: 'Versión, licencias y más',
+                        accentColor: accent,
+                        trailingIcon: Icons.arrow_forward_ios,
+                        onPress: () => context.go(AppRoutes.about),
+                      ),
+                    ],
                   ),
                   SizedBox(height: DsLayout.spacingXxl),
                   _SectionLabel('Cuenta'),
                   SizedBox(height: DsLayout.spacingMd),
                   DsSettingsRow(
-                    title: 'Cerrar sesión',
-                    accentColor: accent,
-                    trailingIcon: Icons.logout,
-                    onPress: () => ref.read(authNotifierProvider.notifier).signOut(),
-                  ),
-                  SizedBox(height: DsLayout.spacingXs),
-                  DsSettingsRow(
-                    title: 'Eliminar cuenta',
-                    accentColor: DsColors.red400,
-                    trailingIcon: Icons.delete_outline,
-                    trailingColor: DsColors.red400,
-                    onPress: () => _confirmDeleteAccount(context, ref),
+                    items: [
+                      DsSettingsRowItem(
+                        title: 'Cerrar sesión',
+                        accentColor: accent,
+                        trailingIcon: Icons.logout,
+                        onPress: () => ref.read(authNotifierProvider.notifier).signOut(),
+                      ),
+                      DsSettingsRowItem(
+                        title: 'Eliminar cuenta',
+                        accentColor: DsColors.red500,
+                        trailingIcon: Icons.delete_outline,
+                        trailingColor: DsColors.red500,
+                        onPress: () => _confirmDeleteAccount(context, ref),
+                      ),
+                    ],
                   ),
                   SizedBox(height: DsLayout.spacingXxl + 80),
                 ],

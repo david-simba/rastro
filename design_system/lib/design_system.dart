@@ -38,4 +38,4 @@ export 'src/widgets/timeline/ds_timeline_skeleton.dart';
 export 'src/widgets/timeline/ds_timeline_icon_dot.dart';
 export 'src/widgets/timeline/ds_timeline_node_dot.dart';
 export 'src/widgets/toggle/ds_toggle.dart';
-export 'src/widgets/settings_row/ds_settings_row.dart';
+export 'src/widgets/settings_row/ds_settings_row.dart' show DsSettingsRow, DsSettingsRowItem;
