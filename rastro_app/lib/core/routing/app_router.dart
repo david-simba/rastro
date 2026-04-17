@@ -10,6 +10,8 @@ import 'package:rastro/features/map/presentation/screens/map_screen.dart';
 import 'package:rastro/features/routes/domain/entities/route_entity.dart';
 import 'package:rastro/features/routes/presentation/screens/routes_screen.dart';
 import 'package:rastro/features/profile/presentation/screens/profile_screen.dart';
+import 'package:rastro/features/profile/presentation/screens/feedback_screen.dart';
+import 'package:rastro/features/profile/presentation/screens/about_screen.dart';
 
 final routerProvider = Provider<GoRouter>((ref) {
   final notifier = AuthRouterNotifier(ref);
@@ -57,6 +59,16 @@ final routerProvider = Provider<GoRouter>((ref) {
             pageBuilder: (context, state) => const NoTransitionPage(
               child: ProfileScreen(),
             ),
+            routes: [
+              GoRoute(
+                path: 'feedback',
+                builder: (context, state) => const FeedbackScreen(),
+              ),
+              GoRoute(
+                path: 'about',
+                builder: (context, state) => const AboutScreen(),
+              ),
+            ],
           ),
         ],
       ),

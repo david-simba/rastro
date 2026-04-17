@@ -11,6 +11,7 @@ class DsSettingsRow extends StatelessWidget {
   final String? description;
   final IconData? trailingIcon;
   final Color? trailingColor;
+  final Color? accentColor;
   final Widget? trailing;
   final VoidCallback? onPress;
 
@@ -19,6 +20,7 @@ class DsSettingsRow extends StatelessWidget {
     this.description,
     this.trailingIcon,
     this.trailingColor,
+    this.accentColor,
     this.trailing,
     this.onPress,
     super.key,
@@ -36,30 +38,43 @@ class DsSettingsRow extends StatelessWidget {
           color: dsColors.surface,
           borderRadius: DsLayout.borderRadiusSm,
         ),
-        padding: const EdgeInsets.symmetric(
-          horizontal: DsLayout.spacingLg,
-          vertical: DsLayout.spacingMd,
-        ),
-        child: Row(
-          children: [
-            Expanded(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  DsText(title, variant: TextVariant.regular, color: dsColors.onSurface),
-                  if (description != null) ...[
-                    const SizedBox(height: DsLayout.spacingXs),
-                    DsText(description!, variant: TextVariant.regular2, color: dsColors.muted),
-                  ],
-                ],
+        clipBehavior: Clip.antiAlias,
+        child: IntrinsicHeight(
+          child: Row(
+            children: [
+              if (accentColor != null)
+                Container(width: 4, color: accentColor),
+              Expanded(
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: DsLayout.spacingLg,
+                    vertical: DsLayout.spacingMd,
+                  ),
+                  child: Row(
+                    children: [
+                      Expanded(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            DsText(title, variant: TextVariant.regular, color: dsColors.onSurface),
+                            if (description != null) ...[
+                              const SizedBox(height: DsLayout.spacingXs),
+                              DsText(description!, variant: TextVariant.regular2, color: dsColors.muted),
+                            ],
+                          ],
+                        ),
+                      ),
+                      if (effectiveTrailing != null) ...[
+                        const SizedBox(width: DsLayout.spacingMd),
+                        effectiveTrailing,
+                      ],
+                    ],
+                  ),
+                ),
               ),
-            ),
-            if (effectiveTrailing != null) ...[
-              const SizedBox(width: DsLayout.spacingMd),
-              effectiveTrailing,
             ],
-          ],
+          ),
         ),
       ),
     );

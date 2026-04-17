@@ -21,6 +21,8 @@ abstract final class AppRoutes {
   static const map = '/map';
   static const routes = '/routes';
   static const profile = '/profile';
+  static const feedback = '/profile/feedback';
+  static const about = '/profile/about';
 
   static const List<AppRouteItem> tabs = [
     AppRouteItem(

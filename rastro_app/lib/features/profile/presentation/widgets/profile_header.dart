@@ -18,23 +18,29 @@ class ProfileHeader extends StatelessWidget {
     return DsGradientCard(
       colors: [DsColors.blue700, DsColors.blue500],
       begin: Alignment.topLeft,
-      end: Alignment.bottomCenter,
+      end: Alignment.bottomRight,
       rounded: false,
       child: Padding(
-        padding: EdgeInsets.only(top: paddingTop),
-        child: SizedBox(
-          width: double.infinity,
-          height: 224,
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              DsAvatar(name: name, size: 72),
-              SizedBox(height: DsLayout.spacingMd),
-              DsText(name, variant: TextVariant.title),
-              SizedBox(height: DsLayout.spacingXs),
-              DsText(email, variant: TextVariant.regular2, color: DsColors.blue200),
-            ],
-          ),
+        padding: EdgeInsets.fromLTRB(
+          DsLayout.spacingXxl,
+          paddingTop + DsLayout.spacingXxl,
+          DsLayout.spacingXxl,
+          DsLayout.spacingLg,
+        ),
+        child: Row(
+          children: [
+            DsAvatar(name: name, size: 48),
+            SizedBox(width: DsLayout.spacingLg),
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                DsText(name, variant: TextVariant.title),
+                SizedBox(height: DsLayout.spacingXs),
+                DsText(email, variant: TextVariant.regular2, color: DsColors.blue200),
+              ],
+            ),
+          ],
         ),
       ),
     );

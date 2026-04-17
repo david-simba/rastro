@@ -1,11 +1,9 @@
 import 'package:design_system/design_system.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:rastro/core/providers/core_providers.dart';
 import 'package:rastro/features/home/presentation/widgets/home_active_vehicles.dart';
 import 'package:rastro/features/home/presentation/widgets/home_banner_card.dart';
 import 'package:rastro/features/home/presentation/widgets/home_header.dart';
-import 'package:rastro/features/home/presentation/widgets/home_nearby_stops.dart';
 import 'package:rastro/features/home/presentation/widgets/home_quick_actions.dart';
 
 class HomeScreen extends ConsumerWidget {
@@ -15,7 +13,6 @@ class HomeScreen extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final isDev = ref.watch(appConfigProvider).isDevelopment;
 
     return Scaffold(
       body: SafeArea(

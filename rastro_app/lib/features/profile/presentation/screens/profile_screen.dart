@@ -1,8 +1,10 @@
 import 'package:design_system/design_system.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
 
 import 'package:rastro/core/providers/theme_provider.dart';
+import 'package:rastro/core/routing/app_routes.dart';
 import 'package:rastro/features/auth/presentation/providers/auth_notifier.dart';
 import 'package:rastro/features/auth/presentation/providers/auth_session_provider.dart';
 import 'package:rastro/features/profile/presentation/widgets/profile_header.dart';
@@ -17,6 +19,7 @@ class ProfileScreen extends ConsumerWidget {
     final user = ref.watch(authSessionProvider).asData?.value;
     final themeMode = ref.watch(themeModeProvider);
     final isDark = themeMode == ThemeMode.dark;
+    final accent = isDark ? DsColors.zinc700 : DsColors.zinc200;
 
     return Scaffold(
       body: Column(
@@ -36,6 +39,7 @@ class ProfileScreen extends ConsumerWidget {
                   SizedBox(height: DsLayout.spacingMd),
                   DsSettingsRow(
                     title: 'Tema oscuro',
+                    accentColor: accent,
                     trailing: DsToggle(
                       value: isDark,
                       onIcon: Icons.dark_mode,
@@ -46,18 +50,38 @@ class ProfileScreen extends ConsumerWidget {
                     ),
                   ),
                   SizedBox(height: DsLayout.spacingXxl),
+                  _SectionLabel('Información y Soporte'),
+                  SizedBox(height: DsLayout.spacingMd),
+                  DsSettingsRow(
+                    title: 'Envía tus comentarios',
+                    description: 'Ayudanos a mejorar la app',
+                    accentColor: accent,
+                    trailingIcon: Icons.arrow_forward_ios,
+                    onPress: () => context.go(AppRoutes.feedback),
+                  ),
+                  SizedBox(height: DsLayout.spacingXs),
+                  DsSettingsRow(
+                    title: 'Acerca de la app',
+                    description: 'Versión, licencias y más',
+                    accentColor: accent,
+                    trailingIcon: Icons.arrow_forward_ios,
+                    onPress: () => context.go(AppRoutes.about),
+                  ),
+                  SizedBox(height: DsLayout.spacingXxl),
                   _SectionLabel('Cuenta'),
                   SizedBox(height: DsLayout.spacingMd),
                   DsSettingsRow(
                     title: 'Cerrar sesión',
+                    accentColor: accent,
                     trailingIcon: Icons.logout,
                     onPress: () => ref.read(authNotifierProvider.notifier).signOut(),
                   ),
-                  SizedBox(height: DsLayout.spacingSm),
+                  SizedBox(height: DsLayout.spacingXs),
                   DsSettingsRow(
                     title: 'Eliminar cuenta',
+                    accentColor: DsColors.red400,
                     trailingIcon: Icons.delete_outline,
-                    trailingColor: DsColors.red500,
+                    trailingColor: DsColors.red400,
                     onPress: () => _confirmDeleteAccount(context, ref),
                   ),
                   SizedBox(height: DsLayout.spacingXxl + 80),
@@ -69,6 +93,7 @@ class ProfileScreen extends ConsumerWidget {
       ),
     );
   }
+
 
   Future<void> _confirmDeleteAccount(BuildContext context, WidgetRef ref) async {
     final confirmed = await showDialog<bool>(
