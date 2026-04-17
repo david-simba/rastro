@@ -32,10 +32,6 @@ class HomeScreen extends ConsumerWidget {
               const HomeQuickActions(),
               SizedBox(height: DsLayout.spacingXl),
               const HomeActiveVehicles(),
-              if (isDev) ...[
-                SizedBox(height: DsLayout.spacingXl),
-                const HomeNearbyStops(),
-              ],
               SizedBox(height: DsLayout.spacingXxl),
             ],
           ),

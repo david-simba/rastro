@@ -57,6 +57,15 @@ class AuthNotifier extends Notifier<AuthState> {
     state = const AuthInitial();
   }
 
+  Future<void> sendPasswordReset(String email) async {
+    await fb.FirebaseAuth.instance.sendPasswordResetEmail(email: email);
+  }
+
+  Future<void> deleteAccount() async {
+    await fb.FirebaseAuth.instance.currentUser?.delete();
+    state = const AuthInitial();
+  }
+
   void reset() => state = const AuthInitial();
 
   static String _errorMessage(NetworkError error) => switch (error) {

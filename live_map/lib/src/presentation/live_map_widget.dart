@@ -84,7 +84,7 @@ class _LiveMapWidgetState extends State<LiveMapWidget> {
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
-    final brightness = MediaQuery.platformBrightnessOf(context);
+    final brightness = Theme.of(context).brightness;
     if (brightness != _brightness) {
       _brightness = brightness;
       _adapter.loadStyle(_styleUri);

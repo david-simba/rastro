@@ -5,9 +5,11 @@ import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:live_map/live_map.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import 'package:rastro/core/config/app_config.dart';
 import 'package:rastro/core/providers/core_providers.dart';
+import 'package:rastro/core/providers/theme_provider.dart';
 import 'package:rastro/core/routing/app_router.dart';
 
 Future<void> main() async {
@@ -23,9 +25,16 @@ Future<void> main() async {
 
   LiveMapWidget.setAccessToken(config.mapboxToken);
 
+  final prefs = await SharedPreferences.getInstance();
+
+  final container = ProviderContainer(
+    overrides: [appConfigProvider.overrideWithValue(config)],
+  );
+  await container.read(themeModeProvider.notifier).init(prefs);
+
   runApp(
-    ProviderScope(
-      overrides: [appConfigProvider.overrideWithValue(config)],
+    UncontrolledProviderScope(
+      container: container,
       child: const RastroApp(),
     ),
   );
@@ -47,7 +56,7 @@ class RastroApp extends ConsumerWidget {
       darkTheme: DsTheme.dark.copyWith(
         textTheme: DsTheme.dark.textTheme.apply(fontFamily: 'Inter'),
       ),
-      themeMode: ThemeMode.system,
+      themeMode: ref.watch(themeModeProvider),
       routerConfig: router,
     );
   }
