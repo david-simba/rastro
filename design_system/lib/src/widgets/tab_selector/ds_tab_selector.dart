@@ -15,6 +15,8 @@ class DsTabSelector extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final dsColors = context.dsColors;
+
     return Row(
       mainAxisSize: MainAxisSize.min,
       children: List.generate(tabs.length, (index) {
@@ -25,19 +27,18 @@ class DsTabSelector extends StatelessWidget {
             onTap: () => onTabSelected(index),
             child: AnimatedContainer(
               duration: const Duration(milliseconds: 200),
-              padding: const EdgeInsets.symmetric(
-                horizontal: DsLayout.spacingXxl,
-                vertical: DsLayout.spacingSm,
-              ),
+              height: 32,
+              padding: const EdgeInsets.symmetric(horizontal: DsLayout.spacingXxl),
               decoration: BoxDecoration(
-                color: isSelected ? DsColors.blue500 : DsColors.white,
+                color: isSelected ? DsColors.blue500 : dsColors.surface,
                 borderRadius: DsLayout.borderRadiusFull,
-                border: isSelected ? null : Border.all(color: DsColors.zinc200, width: 1),
+                border: isSelected ? null : Border.all(color: dsColors.border, width: 1),
               ),
+              alignment: Alignment.center,
               child: DsText(
                 tabs[index],
                 variant: isSelected ? TextVariant.medium2 : TextVariant.regular2,
-                color: isSelected ? DsColors.white : DsColors.zinc700,
+                color: isSelected ? DsColors.white : dsColors.muted,
               ),
             ),
           ),
