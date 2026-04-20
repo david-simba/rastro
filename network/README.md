@@ -1,39 +1,56 @@
-<!--
-This README describes the package. If you publish this package to pub.dev,
-this README's contents appear on the landing page for your package.
+# network
 
-For information about how to write a good package README, see the guide for
-[writing package pages](https://dart.dev/tools/pub/writing-package-pages).
+HTTP client package for the Rastro backend. Wraps Dio and exposes a clean, exception-free API using a `Result` type.
 
-For general information about developing packages, see the Dart guide for
-[creating packages](https://dart.dev/guides/libraries/create-packages)
-and the Flutter guide for
-[developing packages and plugins](https://flutter.dev/to/develop-packages).
--->
+## What it does
 
-TODO: Put a short description of the package here that helps potential users
-know whether this package might be useful for them.
+- Provides `ApiClient` with `get`, `post`, `put`, and `delete` methods.
+- Every method returns `Result<T, NetworkError>` — no try/catch needed at call sites.
+- Includes three built-in interceptors: auth token injection, request logging, and automatic retry with exponential back-off.
+- Maps all HTTP and transport errors to a typed `NetworkError` hierarchy.
 
-## Features
-
-TODO: List what your package can do. Maybe include images, gifs, or videos.
-
-## Getting started
-
-TODO: List prerequisites and provide or point to information on how to
-start using the package.
-
-## Usage
-
-TODO: Include short and useful examples for package users. Add longer examples
-to `/example` folder.
+## How to use it
 
 ```dart
-const like = 'sample';
+// 1. Build the client (usually in a Riverpod provider)
+final client = ApiClient(
+  ApiClientConfig(
+    baseUrl: 'https://api.rastro.app',
+    interceptors: [
+      LoggingInterceptor(),
+      AuthInterceptor(myTokenProvider),
+      RetryInterceptor(dio: dio),
+    ],
+  ),
+);
+
+// 2. Make a request
+final result = await client.get('/routes', fromJson: RouteDto.fromJson);
+
+// 3. Handle the result
+result.when(
+  success: (route) => print(route),
+  failure: (error) => switch (error) {
+    UnauthorizedError() => redirectToLogin(),
+    NoConnectionError() => showOfflineBanner(),
+    _ => showGenericError(),
+  },
+);
 ```
 
-## Additional information
+## Error types
 
-TODO: Tell users more about the package: where to find more information, how to
-contribute to the package, how to file issues, what response they can expect
-from the package authors, and more.
+| Type | When |
+|---|---|
+| `UnauthorizedError` | HTTP 401 |
+| `NotFoundError` | HTTP 404 |
+| `ServerError` | HTTP 5xx |
+| `NoConnectionError` | No internet |
+| `TimeoutError` | Request or connection timed out |
+| `UnknownError` | Any other failure |
+
+## Importing
+
+```dart
+import 'package:network/network.dart';
+```
