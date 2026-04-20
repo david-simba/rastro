@@ -2,6 +2,8 @@
 
 Real-time public transit tracker for mobile. Shows live bus positions on a 3D map, lets users explore routes and stops, and handles authentication — all in a multi-package Flutter monorepo.
 
+<img width="1920" height="1440" alt="271shots_so" src="https://github.com/user-attachments/assets/a027dff6-563d-46d0-914b-30fb2732fe71" />
+
 ## Packages
 
 | Package | Description |
